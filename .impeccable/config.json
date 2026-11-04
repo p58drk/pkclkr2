@@ -56,6 +56,42 @@
         ],
         "createdAt": "2026-11-04T23:28:28.591Z",
         "reason": "assistant: archived decision sketch; the gradient is a sprite placeholder, not a background glow"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:42:28.016Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-04T23:42:28.040Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:42:28.059Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-04T23:42:28.078Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
       }
     ]
   }
