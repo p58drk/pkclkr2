@@ -92,6 +92,159 @@
         ],
         "createdAt": "2026-11-04T23:42:28.078Z",
         "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.715Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.737Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.755Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "hard-offset-shadow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.773Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.792Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.810Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.828Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "hard-offset-shadow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.846Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.864Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.882Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.900Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "hard-offset-shadow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.919Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.937Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.956Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.974Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "hard-offset-shadow",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-04T23:43:01.993Z",
+        "reason": "assistant: archived decision-round sketch written before DESIGN.md existed; not shipped"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          "src/components/redesign/shell.html"
+        ],
+        "createdAt": "2026-11-04T23:43:02.011Z",
+        "reason": "assistant: detector renders the partial without its stylesheet, so text falls back to black; the shipped CSS sets it"
       }
     ]
   }

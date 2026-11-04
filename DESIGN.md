@@ -12,6 +12,7 @@ colors:
   n7-secondary: "#a5a4b1"
   n9-ink: "#ecebf2"
   line-seam: "#24242b"
+  scrim: "#000000"
   ok: "#8fd468"
   warn: "#f2c94c"
   bad: "#f07167"
@@ -78,12 +79,25 @@ typography:
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.4
+  meta:
+    fontFamily: "Figtree, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "14px"
+    fontWeight: 500
+    lineHeight: 1.35
+  caption:
+    fontFamily: "Figtree, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "12px"
+    fontWeight: 400
+    lineHeight: 1.3
   label:
     fontFamily: "Figtree, system-ui, -apple-system, Segoe UI, sans-serif"
     fontSize: "11px"
     fontWeight: 500
     lineHeight: 1
 rounded:
+  hairline: "2px"
+  track: "3px"
+  tag: "6px"
   s: "8px"
   m: "12px"
   bar: "16px"
