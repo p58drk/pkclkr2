@@ -1,0 +1,187 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// Integrated automation: native replacements for the community userscripts
+// (Ephenia/Pokeclicker-Scripts, GPL-3.0), rewritten against the current game API.
+// One scheduler, one settings store, one UI (Menu > Automation).
+import Settings from '../../settings/Settings';
+
+export type Lang = 'fr' | 'en';
+export type Group = 'vanilla' | 'custom' | 'debug';
+type Text = Record<Lang, string>;
+
+export interface AutomationOption {
+    key: string;
+    label: Text;
+    type: 'number' | 'boolean' | 'select';
+    default: any;
+    min?: number;
+    max?: number;
+    step?: number;
+    choices?: { value: any; label: Text }[];
+}
+
+export interface AutomationContext {
+    g: any; // script-level globals (App, player, ...)
+    w: any; // window
+    opt: (key: string) => any;
+}
+
+export interface AutomationFeatureDef {
+    id: string;
+    group: Group;
+    name: Text;
+    description: Text;
+    // Warn before enabling (rule-changing or save-altering features).
+    warning?: Text;
+    intervalMs?: number;
+    options?: AutomationOption[];
+    available?: (ctx: AutomationContext) => boolean;
+    tick?: (ctx: AutomationContext) => void;
+    enable?: (ctx: AutomationContext) => void;
+    disable?: (ctx: AutomationContext) => void;
+    status?: (ctx: AutomationContext) => string;
+}
+
+const STORE_KEY = 'rd.automation';
+
+type Stored = Record<string, { enabled: boolean; options: Record<string, any> }>;
+
+function readStore(): Stored {
+    try {
+        return JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+    } catch {
+        return {};
+    }
+}
+
+export function lang(): Lang {
+    try {
+        return Settings.getSetting('translation.language')?.observableValue?.() === 'fr' ? 'fr' : 'en';
+    } catch {
+        return 'en';
+    }
+}
+
+export class AutomationFeature {
+    readonly enabled: KnockoutObservable<boolean>;
+    readonly options: Record<string, KnockoutObservable<any>> = {};
+    readonly expanded = ko.observable(false);
+    readonly lastError = ko.observable<string>('');
+    lastRun = 0;
+
+    constructor(public readonly def: AutomationFeatureDef, stored: Stored[string] | undefined) {
+        this.enabled = ko.observable(!!stored?.enabled);
+        (def.options ?? []).forEach((o) => {
+            const saved = stored?.options?.[o.key];
+            this.options[o.key] = ko.observable(saved !== undefined ? saved : o.default);
+            this.options[o.key].subscribe(() => Automation.persist());
+        });
+        this.enabled.subscribe((on) => {
+            Automation.persist();
+            const ctx = Automation.context(this);
+            if (!ctx) return;
+            try {
+                if (on) def.enable?.(ctx); else def.disable?.(ctx);
+                this.lastError('');
+            } catch (e) {
+                this.lastError(String((e as Error)?.message || e));
+            }
+        });
+    }
+
+    get id() { return this.def.id; }
+    name() { return this.def.name[lang()]; }
+    description() { return this.def.description[lang()]; }
+    warning() { return this.def.warning?.[lang()] ?? ''; }
+    optionLabel(o: AutomationOption) { return o.label[lang()]; }
+    choiceLabel(c: { label: Text }) { return c.label[lang()]; }
+
+    available = ko.pureComputed(() => {
+        Automation.ready();
+        const ctx = Automation.context(this);
+        if (!ctx) return false;
+        try { return this.def.available ? this.def.available(ctx) : true; } catch { return false; }
+    });
+
+    statusText = ko.pureComputed(() => {
+        Automation.ready();
+        if (!this.enabled() || !this.def.status) return '';
+        const ctx = Automation.context(this);
+        try { return ctx ? this.def.status(ctx) : ''; } catch { return ''; }
+    });
+
+    toggle() {
+        if (!this.enabled() && this.def.warning && !window.confirm(`${this.name()}\n\n${this.warning()}`)) {
+            return;
+        }
+        this.enabled(!this.enabled());
+    }
+}
+
+export default class Automation {
+    static readonly features: AutomationFeature[] = [];
+    static readonly ready = ko.observable(false);
+    private static globals: any = null;
+    private static timer: number | undefined;
+
+    static register(def: AutomationFeatureDef) {
+        const stored = readStore()[def.id];
+        Automation.features.push(new AutomationFeature(def, stored));
+    }
+
+    static byGroup(group: Group) {
+        return Automation.features.filter((f) => f.def.group === group);
+    }
+
+    static active = ko.pureComputed(() => Automation.features.filter((f) => f.enabled() && f.available()));
+
+    static persist() {
+        const data: Stored = {};
+        Automation.features.forEach((f) => {
+            const options: Record<string, any> = {};
+            Object.entries(f.options).forEach(([k, o]) => { options[k] = o(); });
+            data[f.id] = { enabled: f.enabled.peek(), options };
+        });
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+    }
+
+    static context(feature: AutomationFeature): AutomationContext | null {
+        if (!Automation.globals) return null;
+        return {
+            g: Automation.globals,
+            w: window,
+            opt: (key: string) => feature.options[key]?.peek(),
+        };
+    }
+
+    static start(globals: any) {
+        Automation.globals = globals;
+        Automation.ready(true);
+        // Re-apply rule patches of features that were left on.
+        Automation.features.forEach((f) => {
+            if (!f.enabled.peek()) return;
+            const ctx = Automation.context(f);
+            try { f.def.enable?.(ctx); } catch (e) { f.lastError(String((e as Error)?.message || e)); }
+        });
+        window.clearInterval(Automation.timer);
+        Automation.timer = window.setInterval(() => Automation.tick(), 20);
+    }
+
+    private static tick() {
+        const now = Date.now();
+        Automation.features.forEach((f) => {
+            if (!f.def.tick || !f.enabled.peek()) return;
+            const every = f.def.intervalMs ?? 1000;
+            if (now - f.lastRun < every) return;
+            f.lastRun = now;
+            const ctx = Automation.context(f);
+            if (!ctx) return;
+            try {
+                if (f.def.available && !f.def.available(ctx)) return;
+                f.def.tick(ctx);
+                if (f.lastError.peek()) f.lastError('');
+            } catch (e) {
+                f.lastError(String((e as Error)?.message || e));
+            }
+        });
+    }
+}

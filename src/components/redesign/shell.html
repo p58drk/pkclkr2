@@ -48,6 +48,17 @@
         <!-- Combat dock: the fight, Poké Balls and currencies. Docked on desktop, top of the Combat page on mobile. -->
         <section id="rd-dock" aria-label="Combat">
             <div id="rd-dock-fight" class="rd-slot"></div>
+            <button type="button" class="rd-autopill" data-bind="click: () => RedesignShell.go('menu'), css: { 'is-on': RedesignAutomation.Automation.active().length > 0 }">
+                <span class="rd-autopill-dot" aria-hidden="true"></span>
+                <!-- ko if: RedesignAutomation.Automation.active().length -->
+                <b>Auto</b>
+                <span class="rd-autopill-text" data-bind="text: RedesignAutomation.summary()"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: RedesignAutomation.Automation.active().length -->
+                <span class="rd-autopill-text" data-bind="text: RedesignShell.label('automationOff')"></span>
+                <!-- /ko -->
+                <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
+            </button>
             <div id="rd-dock-currency" class="rd-slot"></div>
             <div id="rd-dock-balls" class="rd-slot"></div>
         </section>
@@ -92,7 +103,52 @@
             <h2 class="rd-page-title" data-bind="text: RedesignShell.label('menu')"></h2>
 
             <h3 class="rd-section-title" data-bind="text: RedesignShell.label('automation')"></h3>
-            <div id="rd-menu-automation"></div>
+            <div id="rd-menu-automation" data-bind="foreach: RedesignAutomation.groups">
+                <!-- ko if: $data.id !== 'vanilla' -->
+                <h4 class="rd-group-title" data-bind="text: $data.title"></h4>
+                <!-- /ko -->
+                <div class="rd-list" data-bind="foreach: $data.features">
+                    <div class="rd-auto" data-bind="css: { 'is-on': enabled(), 'is-unavailable': !available(), 'is-open': expanded() }">
+                        <div class="rd-auto-row">
+                            <button type="button" class="rd-auto-main" data-bind="click: () => expanded(!expanded()), attr: { 'aria-expanded': expanded() ? 'true' : 'false' }">
+                                <span class="rd-auto-name" data-bind="text: name()"></span>
+                                <span class="rd-auto-sub">
+                                    <!-- ko if: lastError() --><span class="rd-auto-error" data-bind="text: lastError()"></span><!-- /ko -->
+                                    <!-- ko ifnot: lastError() --><span data-bind="text: statusText() || description()"></span><!-- /ko -->
+                                </span>
+                            </button>
+                            <button type="button" role="switch" class="rd-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false', 'aria-label': name() }"><i></i></button>
+                        </div>
+                        <!-- ko if: expanded() -->
+                        <div class="rd-auto-detail">
+                            <p class="rd-auto-desc" data-bind="text: description()"></p>
+                            <!-- ko if: warning() --><p class="rd-auto-warning" data-bind="text: warning()"></p><!-- /ko -->
+                            <!-- ko foreach: def.options || [] -->
+                            <label class="rd-opt" data-bind="css: 'rd-opt-' + $data.type">
+                                <span class="rd-opt-label" data-bind="text: $parent.optionLabel($data)"></span>
+                                <!-- ko if: $data.type === 'number' -->
+                                <span class="rd-opt-range">
+                                    <input type="range" data-bind="value: $parent.options[$data.key], valueUpdate: 'input', attr: { min: $data.min, max: $data.max, step: $data.step || 1 }">
+                                    <output class="rd-num" data-bind="text: $parent.options[$data.key]()"></output>
+                                </span>
+                                <!-- /ko -->
+                                <!-- ko if: $data.type === 'boolean' -->
+                                <input type="checkbox" data-bind="checked: $parent.options[$data.key]">
+                                <!-- /ko -->
+                                <!-- ko if: $data.type === 'select' -->
+                                <select class="custom-select" data-bind="value: $parent.options[$data.key]">
+                                    <!-- ko foreach: $data.choices -->
+                                    <option data-bind="value: $data.value, text: $parents[1].choiceLabel($data)"></option>
+                                    <!-- /ko -->
+                                </select>
+                                <!-- /ko -->
+                            </label>
+                            <!-- /ko -->
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
 
             <h3 class="rd-section-title" data-bind="text: RedesignShell.label('interface')"></h3>
             <div class="rd-list">

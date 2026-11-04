@@ -6,6 +6,7 @@
 // additions stay reachable after a merge.
 import GameLoadState from '../utilities/GameLoadState';
 import { label, LabelKey } from './labels';
+import Automation from './automation/Automation';
 
 const w = window as any;
 
@@ -22,6 +23,9 @@ const resolveScriptGlobals = (): any => {
         DungeonRunner: get('DungeonRunner'),
         TemporaryBattleBattle: get('TemporaryBattleBattle'),
         AchievementHandler: get('AchievementHandler'),
+        BreedingController: get('BreedingController'),
+        FarmController: get('FarmController'),
+        PartyController: get('PartyController'),
     };
 };
 
@@ -219,7 +223,14 @@ export default class RedesignShell {
     }
 
     static boot() {
-        if (!RedesignShell.enabled) return;
+        if (!RedesignShell.enabled) {
+            // Automation still runs under the classic interface.
+            GameLoadState.onLoadState(GameLoadState.states.running, () => {
+                RedesignShell.refs(resolveScriptGlobals());
+                Automation.start(RedesignShell.refs());
+            });
+            return;
+        }
         document.documentElement.classList.add('rd');
 
         const onReady = () => {
@@ -241,6 +252,7 @@ export default class RedesignShell {
             RedesignShell.refs(resolveScriptGlobals());
             RedesignShell.relocate();
         });
+        GameLoadState.onLoadState(GameLoadState.states.running, () => Automation.start(RedesignShell.refs()));
         GameLoadState.onLoadState(GameLoadState.states.appliedBindings, () => {
             RedesignShell.applyFoeColours(w.Battle?.enemyPokemon?.());
             w.Battle?.enemyPokemon?.subscribe((foe) => RedesignShell.applyFoeColours(foe));
