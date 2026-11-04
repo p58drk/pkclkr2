@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>Combat · standard Material</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--s0:#141218;--s1:#1d1b20;--s2:#211f26;--s3:#2b2930;--on:#e6e0e9;--onv:#cac4d0;--pri:#d0bcff;--pric:#4f378b}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;height:844px;overflow:hidden;background:var(--s0);color:var(--on);font:400 14px/1.43 "Roboto Flex",system-ui,sans-serif}
+.top{padding:52px 16px 8px;display:flex;align-items:center;gap:12px}
+.top h1{flex:1;font:400 22px "Roboto Flex"}.top span{width:40px;height:40px;border-radius:50%;background:var(--s3)}
+.chips{display:flex;gap:8px;padding:4px 16px 12px}
+.chips div{padding:6px 12px;border-radius:8px;border:1px solid #49454f;font-size:13px;color:var(--onv)}
+.chips .on{background:var(--pric);border-color:var(--pric);color:var(--on)}
+.card{margin:0 16px 12px;padding:16px;border-radius:16px;background:var(--s2)}
+.fight{display:flex;gap:16px;align-items:center}
+.sprite{width:104px;height:104px;border-radius:50%;background:radial-gradient(circle at 42% 40%,#c590dc 0 30%,#7e3f9e 31% 56%,transparent 57%)}
+.fight h2{font:500 22px "Roboto Flex"}.fight small{color:var(--onv)}
+.lin{height:4px;border-radius:2px;background:var(--s3);margin:10px 0 4px}.lin i{display:block;width:62%;height:100%;border-radius:2px;background:var(--pri)}
+.btns{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;height:40px;border-radius:20px;display:grid;place-items:center;font:500 14px "Roboto Flex"}
+.tonal{background:var(--s3)}.fill{background:var(--pri);color:#381e72}
+.list div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--s3)}
+.list div:last-child{border:0}.list span{color:var(--onv)}
+.title{font:500 14px "Roboto Flex";color:var(--onv);margin-bottom:6px}
+nav{position:absolute;left:0;right:0;bottom:0;height:88px;padding:12px 0 24px;display:flex;background:var(--s1)}
+nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--onv);font:500 12px "Roboto Flex";text-decoration:none}
+nav a i{width:56px;height:30px;border-radius:15px;display:grid;place-items:center}
+nav a i:after{content:"";width:20px;height:20px;border:2px solid currentColor;border-radius:5px}
+nav a.cur{color:var(--on)}nav a.cur i{background:var(--pric)}
+</style></head><body>
+<div class="top"><h1>Route 4</h1><span></span></div>
+<div class="chips"><div class="on">Kanto</div><div>412 vaincus</div><div>Auto ✓</div></div>
+<section class="card">
+  <div class="fight">
+    <div class="sprite" role="img" aria-label="Abo"></div>
+    <div style="flex:1"><h2>Abo</h2><small>Poison · capturé</small>
+      <div class="lin"><i></i></div><small>PV 1 284 / 2 070</small></div>
+  </div>
+  <div class="btns"><div class="btn tonal">Changer de route</div><div class="btn fill">Attaquer</div></div>
+</section>
+<section class="card list">
+  <p class="title">Poké Balls</p>
+  <div><span>Poké Ball</span><b>1 240</b></div>
+  <div><span>Super Ball</span><b>312</b></div>
+  <div><span>Hyper Ball</span><b>48</b></div>
+</section>
+<section class="card list">
+  <p class="title">Monnaies</p>
+  <div><span>Pokédollars</span><b>1 284 560</b></div>
+  <div><span>Jetons de donjon</span><b>3 412</b></div>
+</section>
+<nav>
+  <a class="cur" href="#"><i></i>Combat</a><a href="#"><i></i>Progrès</a><a href="#"><i></i>Objets</a><a href="#"><i></i>Pokémon</a><a href="#"><i></i>Activités</a>
+</nav>
+</body></html>

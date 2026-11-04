@@ -1,0 +1,51 @@
+// Fork: per-page module treatments.
+
+html.rd {
+    // Empty pages say what unlocks them instead of showing nothing.
+    .rd-empty {
+        display: none;
+        margin: 8px 16px;
+        padding: 24px 0;
+        color: var(--n7);
+        font-size: 15px;
+        max-width: 48ch;
+    }
+    #rd-slot-activities:not(:has(> .card:not([style*='display: none']))) + .rd-empty { display: block; }
+
+    // ----- Battle items: a row of item columns, active effect marked by a tonal cell -----
+    #battleItemContainer {
+        > div > .btn[style*='position: absolute'] { right: 8px !important; }
+        .table { table-layout: fixed; }
+        .table td {
+            border: 0 !important;
+            text-align: center;
+            padding: 6px 2px !important;
+            font: 600 15px var(--font-fig);
+        }
+        .table tr + tr td { padding-top: 2px !important; }
+        td.bg-primary { background: var(--n3) !important; border-radius: var(--radius-s); }
+        td.bg-warning { background: color-mix(in oklab, var(--warn) 18%, transparent) !important; border-radius: var(--radius-s); }
+        img { width: 32px; height: 32px; image-rendering: pixelated; }
+        code { color: var(--n7); font: 600 13px var(--font-fig); }
+    }
+
+    // ----- Pokémon list -----
+    #pokemonListContainer {
+        .card-header { display: none; }
+        .table td, .table th { padding: 8px 12px; }
+    }
+
+    // Upstream squeezes small tables to 0.1rem on phones; give rows room to tap.
+    .rd-slot .table-sm td, .rd-slot .table-sm th { padding: 8px 8px !important; }
+
+    // Tables inside modules keep the page gutter.
+    .rd-slot .card-body .table td:first-child,
+    .rd-slot .card-body .table th:first-child { padding-left: 16px !important; }
+    .rd-slot .card-body .table td:last-child,
+    .rd-slot .card-body .table th:last-child { padding-right: 16px !important; }
+    #battleItemContainer .table td:first-child,
+    #battleItemContainer .table td:last-child { padding-left: 2px !important; padding-right: 2px !important; }
+
+    // Module bodies that upstream makes resizable get a quiet handle.
+    .rd-slot [data-bind*='resizable'] { resize: vertical; }
+}

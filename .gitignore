@@ -13,3 +13,9 @@ report.*.json
 docs/
 coverage/
 .stylelintcache
+
+# fork-local
+upstream/
+.impeccable/live/
+.impeccable/review/
+dist/

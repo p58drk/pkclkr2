@@ -1,0 +1,85 @@
+// Fork: modals. Bottom sheets on phones, centred panels from 700px.
+
+html.rd {
+    .modal-backdrop { background: #000; &.show { opacity: .6; } }
+
+    .modal-content {
+        background: var(--n1);
+        border: 0;
+        border-radius: 20px;
+        color: var(--n9);
+        text-align: left;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, .6);
+    }
+    .modal-header {
+        align-items: center;
+        min-height: 60px;
+        padding: 12px 12px 12px 20px;
+        border-bottom: 1px solid var(--line);
+        background: transparent !important;
+        color: var(--n9);
+        .modal-title, h5, h4 { font: 700 22px/1.15 var(--font-fig); color: var(--n9); }
+        .close {
+            margin: 0 0 0 auto;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: var(--radius);
+            &:hover { background: var(--n2); }
+        }
+    }
+    .modal-body { background: transparent; color: var(--n9); }
+    .modal-footer {
+        border-top: 1px solid var(--line);
+        background: transparent;
+        gap: 8px;
+        > * { margin: 0; }
+    }
+
+    // Phones: every modal is a sheet that rises from the bottom edge.
+    @media (max-width: 699.98px) {
+        .modal { padding: 0 !important; }
+        .modal-dialog,
+        .modal-dialog.modal-lg,
+        .modal-dialog.modal-xl,
+        .modal-dialog.modal-sm {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            min-height: 0;
+            max-height: 94vh;
+            display: flex;
+            transform: translateY(24px);
+            transition: transform .32s var(--ease) !important;
+        }
+        .modal.show .modal-dialog { transform: none; }
+        .modal-dialog-centered { align-items: stretch; }
+        .modal-content {
+            width: 100%;
+            max-height: 94vh;
+            border-radius: 20px 20px 0 0;
+            padding-bottom: var(--safe-b);
+            overflow: hidden;
+            &::before {
+                content: '';
+                display: block;
+                width: 36px;
+                height: 4px;
+                margin: 8px auto 0;
+                border-radius: 2px;
+                background: var(--n4);
+                flex: none;
+            }
+        }
+        .modal-body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+        .modal-footer { flex-wrap: wrap; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .modal-dialog { transition: none !important; transform: none !important; }
+    }
+}

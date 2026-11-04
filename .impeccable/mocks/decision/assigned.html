@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>Combat · anatomie de carte</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--n0:#0e0e11;--n1:#131317;--n2:#1c1c22;--n3:#2a2a33;--n5:#7d7c88;--n7:#9a99a6;--n9:#ecebf2;
+--poison:#a45bc6;--fire:#e8613c;--water:#3d8fe0;--grass:#5bb04e;--elec:#f2c531}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;height:844px;overflow:hidden;background:var(--n1);color:var(--n9);font:500 14px/1.35 Figtree,system-ui,sans-serif}
+.num{font-family:"Barlow Semi Condensed",sans-serif;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;justify-content:space-between;padding:54px 20px 10px}
+.where{display:flex;flex-direction:column}
+.where small{color:var(--n7);font-size:12px;letter-spacing:.04em}
+.where b{font:700 24px/1 "Barlow Semi Condensed";letter-spacing:.01em}
+.menu{width:44px;height:44px;display:grid;place-items:center;color:var(--n7)}
+.menu i{display:block;width:20px;height:2px;background:currentColor;box-shadow:0 6px 0 currentColor,0 -6px 0 currentColor}
+.field{position:relative;height:300px;margin:4px 0 0;display:flex;flex-direction:column;justify-content:space-between;padding:14px 20px 16px}
+.halo{position:absolute;inset:0;background:radial-gradient(60% 55% at 50% 52%,color-mix(in oklab,var(--poison) 34%,transparent),transparent 72%)}
+.foe{position:relative;display:flex;align-items:baseline;justify-content:space-between}
+.foe .name{font:700 30px/1 "Barlow Semi Condensed"}
+.foe .hp{font:600 15px/1 "Barlow Semi Condensed";color:var(--n7)}
+.foe .hp b{font-size:34px;color:var(--n9);margin-left:4px}
+.types{position:relative;display:flex;gap:8px;margin-top:8px;align-items:center;color:var(--n7);font-size:12px}
+.energy{width:18px;height:18px;border-radius:50%;background:var(--poison);box-shadow:inset 0 0 0 2px color-mix(in oklab,var(--poison) 60%,#fff)}
+.sprite{position:absolute;left:50%;top:54%;width:132px;height:132px;transform:translate(-50%,-50%);
+background:radial-gradient(circle at 40% 38%,#c590dc 0 28%,#7e3f9e 29% 52%,transparent 53%),radial-gradient(circle at 64% 64%,#8d4bb0 0 30%,transparent 31%);border-radius:50%}
+.bar{position:relative;height:6px;background:var(--n3);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;width:62%;background:var(--poison)}
+.tapzone{position:relative;display:flex;justify-content:space-between;color:var(--n7);font-size:12px;margin-top:8px}
+.stats{display:grid;grid-template-columns:1fr 1fr;padding:6px 20px 14px;gap:2px 16px;border-bottom:1px solid var(--n2)}
+.stats div{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0}
+.stats span{color:var(--n7);font-size:13px}.stats b{font:600 18px "Barlow Semi Condensed"}
+.row{padding:14px 20px 4px;color:var(--n7);font-size:12px;letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between}
+.balls{display:flex;padding:4px 12px 12px}
+.ball{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0;border-radius:12px}
+.ball.sel{background:var(--n2)}
+.ball .dot{width:22px;height:22px;border-radius:50%;background:linear-gradient(var(--c) 0 46%,var(--n0) 46% 54%,#e9e9ee 54%)}
+.ball b{font:600 16px "Barlow Semi Condensed"}.ball small{color:var(--n7);font-size:11px}
+.money{display:flex;flex-direction:column;padding:0 20px}
+.money div{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--n2)}
+.money span{color:var(--n7)}.money b{font:600 19px "Barlow Semi Condensed"}
+.auto{position:absolute;left:12px;right:12px;bottom:92px;height:40px;display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:20px;background:var(--n2);font-size:13px;color:var(--n7)}
+.auto .on{width:8px;height:8px;border-radius:50%;background:var(--grass)}
+.auto b{color:var(--n9);font-weight:600}
+nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 26px;display:flex;background:var(--n0)}
+nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--n5);font-size:11px;text-decoration:none}
+nav a i{width:22px;height:22px;border:2px solid currentColor;border-radius:7px}
+nav a.cur{color:var(--n9)}nav a.cur i{background:var(--n9);border-color:var(--n9)}
+</style></head><body>
+<header>
+  <div class="where"><small>Kanto · Route 4 · 412 vaincus</small><b>Route 4</b></div>
+  <button class="menu" aria-label="Menu"><i></i></button>
+</header>
+<section class="field">
+  <div class="halo"></div>
+  <div>
+    <div class="foe"><span class="name">Abo</span><span class="hp num">PV<b>1 284</b></span></div>
+    <div class="types"><span class="energy"></span>Poison · déjà capturé ●</div>
+  </div>
+  <div class="sprite" role="img" aria-label="Abo"></div>
+  <div>
+    <div class="bar"><i></i></div>
+    <div class="tapzone"><span>Touchez pour attaquer</span><span class="num">1 284 / 2 070</span></div>
+  </div>
+</section>
+<section class="stats">
+  <div><span>Clic</span><b class="num">1 120</b></div>
+  <div><span>Équipe /s</span><b class="num">48 300</b></div>
+</section>
+<div class="row"><span>Poké Balls</span><span>Capture : nouveaux ✶</span></div>
+<section class="balls">
+  <div class="ball sel" style="--c:#e2453a"><span class="dot"></span><b class="num">1 240</b><small>Poké</small></div>
+  <div class="ball" style="--c:#3d8fe0"><span class="dot"></span><b class="num">312</b><small>Super</small></div>
+  <div class="ball" style="--c:#f2c531"><span class="dot"></span><b class="num">48</b><small>Hyper</small></div>
+  <div class="ball" style="--c:#a45bc6"><span class="dot"></span><b class="num">1</b><small>Master</small></div>
+</section>
+<section class="money">
+  <div><span>Pokédollars</span><b class="num">1 284 560</b></div>
+  <div><span>Jetons de donjon</span><b class="num">3 412</b></div>
+  <div><span>Points de quête</span><b class="num">860</b></div>
+</section>
+<div class="auto"><span class="on"></span><b>Auto</b> clic 20/s · éclosion 4/4 · mine</div>
+<nav>
+  <a class="cur" href="#"><i></i>Combat</a><a href="#"><i></i>Progrès</a><a href="#"><i></i>Objets</a><a href="#"><i></i>Pokémon</a><a href="#"><i></i>Activités</a>
+</nav>
+</body></html>

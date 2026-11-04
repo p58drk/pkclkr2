@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "src/components/redesign/shell.html"
+        ],
+        "createdAt": "2026-11-04T23:02:35.033Z",
+        "reason": "assistant: img src is set by a Knockout attr binding at runtime (foe sprite)"
+      }
+    ]
+  }
+}

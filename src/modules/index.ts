@@ -9,3 +9,6 @@ import './koBindingHandlers';
 
 // Load everything else
 import './temporaryWindowInjection';
+
+// Fork: redesign layer (shell, skin, integrated automation)
+import './redesign';

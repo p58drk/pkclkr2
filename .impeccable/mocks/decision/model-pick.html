@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>Combat · carnet de terrain</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--g0:#f2f3ef;--g1:#e3e5df;--g2:#c9ccc3;--ink:#1d211c;--mute:#535a50;--leaf:#2f6f4e;--rust:#b5482b}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;height:844px;overflow:hidden;background:var(--g0);color:var(--ink);font:400 14px/1.4 "Public Sans",system-ui,sans-serif;font-variant-numeric:tabular-nums}
+header{padding:54px 20px 12px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid var(--ink)}
+header small{display:block;color:var(--mute);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+header b{font:800 26px/1.05 "Public Sans"}
+header .no{font:700 13px "Public Sans";color:var(--mute)}
+.fight{display:grid;grid-template-columns:120px 1fr;gap:16px;padding:18px 20px;border-bottom:1px solid var(--g2)}
+.sprite{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 42% 40%,#c590dc 0 30%,#7e3f9e 31% 56%,transparent 57%)}
+.fight h2{font:800 24px/1 "Public Sans"}
+.fight em{display:block;color:var(--mute);font-size:13px;margin:4px 0 10px}
+.hp{display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
+.hp b{color:var(--ink);font-size:20px}
+.meter{height:8px;background:var(--g1);margin-top:6px}.meter i{display:block;height:100%;width:62%;background:var(--leaf)}
+.tap{margin-top:12px;font-size:13px;color:var(--mute)}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--g2)}
+.kv div{padding:12px 20px 12px;border-right:1px solid var(--g2)}.kv div:last-child{border:0}
+.kv span{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.kv b{font:700 18px "Public Sans"}
+h3{padding:16px 20px 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);display:flex;justify-content:space-between}
+table{width:100%;border-collapse:collapse}
+td{padding:9px 0;border-bottom:1px solid var(--g1);font-size:14px}
+td:first-child{padding-left:20px;width:56px;color:var(--mute)}td:last-child{padding-right:20px;text-align:right}
+.tick{display:inline-block;width:18px;text-align:center;font-weight:800;color:var(--leaf)}
+.new{color:var(--rust);font-weight:700}
+.balls{display:flex;gap:0;padding:0 20px;border-bottom:1px solid var(--g2)}
+.balls div{flex:1;padding:10px 0;text-align:center;border-bottom:3px solid transparent}
+.balls .sel{border-color:var(--ink)}
+.balls b{display:block;font:700 17px "Public Sans"}.balls small{color:var(--mute);font-size:12px}
+nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:10px 6px 26px;display:flex;border-top:2px solid var(--ink);background:var(--g0)}
+nav a{flex:1;text-align:center;color:var(--mute);font-size:12px;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:4px}
+nav a i{width:22px;height:22px;border:2px solid currentColor;border-radius:50%}
+nav a.cur{color:var(--ink);font-weight:700}nav a.cur i{background:var(--ink)}
+</style></head><body>
+<header>
+  <div><small>Kanto · Carnet</small><b>Route 4</b></div>
+  <span class="no">412 vaincus · Menu ≡</span>
+</header>
+<section class="fight">
+  <div class="sprite" role="img" aria-label="Abo"></div>
+  <div>
+    <h2>Abo</h2><em>n° 023 · Poison · capturé ✓</em>
+    <div class="hp"><span>PV</span><b>1 284</b></div>
+    <div class="meter"><i></i></div>
+    <p class="tap">Touchez la zone pour attaquer</p>
+  </div>
+</section>
+<section class="kv">
+  <div><span>Clic</span><b>1 120</b></div>
+  <div><span>Équipe/s</span><b>48 300</b></div>
+  <div><span>₽</span><b>1,28 M</b></div>
+</section>
+<section class="balls">
+  <div class="sel"><b>1 240</b><small>Poké</small></div>
+  <div><b>312</b><small>Super</small></div>
+  <div><b>48</b><small>Hyper</small></div>
+  <div><b>1</b><small>Master</small></div>
+</section>
+<h3><span>Liste de vie · aujourd'hui</span><span>142 / 151</span></h3>
+<table>
+  <tr><td>021</td><td><span class="tick">✓</span> Piafabec</td><td>×38</td></tr>
+  <tr><td>023</td><td><span class="tick">✓</span> Abo</td><td>×12</td></tr>
+  <tr><td>027</td><td><span class="tick">✓</span> Sabelette</td><td>×9</td></tr>
+  <tr><td>056</td><td><span class="tick new">✶</span> <span class="new">Férosinge chromatique</span></td><td class="new">nouveau</td></tr>
+  <tr><td>—</td><td>Auto-clic 20/s · éclosion 4/4</td><td>actif</td></tr>
+</table>
+<nav>
+  <a class="cur" href="#"><i></i>Combat</a><a href="#"><i></i>Progrès</a><a href="#"><i></i>Objets</a><a href="#"><i></i>Pokémon</a><a href="#"><i></i>Activités</a>
+</nav>
+</body></html>

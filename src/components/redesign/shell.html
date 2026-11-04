@@ -1,0 +1,137 @@
+<!-- Fork: redesign shell. Upstream modules are moved into the rd-* slots at boot (see modules/redesign/Shell.ts).
+     Never use `if`/`ifnot`/`with` bindings around slots: they would destroy the relocated modules. -->
+<div id="rd-shell">
+    <header id="rd-top">
+        <div class="rd-where">
+            <small>
+                <span data-bind="text: RedesignShell.regionName()"></span>
+                <!-- ko if: RedesignShell.routeKills() !== null -->
+                · <span class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.routeKills())"></span>
+                <span data-bind="text: RedesignShell.label('defeated')"></span>
+                <!-- /ko -->
+            </small>
+            <b data-bind="text: RedesignShell.locationName()"></b>
+        </div>
+        <button type="button" class="rd-icon-btn rd-top-menu" data-bind="click: () => RedesignShell.go('menu'), attr: { 'aria-label': RedesignShell.label('menu') }, css: { 'is-active': RedesignShell.page() === 'menu' }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-menu"></use></svg>
+        </button>
+    </header>
+
+    <nav id="rd-nav" aria-label="Pages">
+        <button type="button" data-bind="click: () => RedesignShell.go('combat'), css: { 'is-active': RedesignShell.page() === 'combat' }, attr: { 'aria-current': RedesignShell.page() === 'combat' ? 'page' : null }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-swords"></use></svg>
+            <span data-bind="text: RedesignShell.label('combat')"></span>
+        </button>
+        <button type="button" data-bind="click: () => RedesignShell.go('progress'), css: { 'is-active': RedesignShell.page() === 'progress' }, attr: { 'aria-current': RedesignShell.page() === 'progress' ? 'page' : null }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-trophy"></use></svg>
+            <span data-bind="text: RedesignShell.label('progress')"></span>
+        </button>
+        <button type="button" data-bind="click: () => RedesignShell.go('items'), css: { 'is-active': RedesignShell.page() === 'items' }, attr: { 'aria-current': RedesignShell.page() === 'items' ? 'page' : null }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-backpack"></use></svg>
+            <span data-bind="text: RedesignShell.label('items')"></span>
+        </button>
+        <button type="button" data-bind="click: () => RedesignShell.go('pokemon'), css: { 'is-active': RedesignShell.page() === 'pokemon' }, attr: { 'aria-current': RedesignShell.page() === 'pokemon' ? 'page' : null }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-layout-grid"></use></svg>
+            <span data-bind="text: RedesignShell.label('pokemon')"></span>
+        </button>
+        <button type="button" data-bind="click: () => RedesignShell.go('activities'), css: { 'is-active': RedesignShell.page() === 'activities' }, attr: { 'aria-current': RedesignShell.page() === 'activities' ? 'page' : null }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-sprout"></use></svg>
+            <span data-bind="text: RedesignShell.label('activities')"></span>
+        </button>
+        <button type="button" class="rd-nav-menu" data-bind="click: () => RedesignShell.go('menu'), css: { 'is-active': RedesignShell.page() === 'menu' }, attr: { 'aria-current': RedesignShell.page() === 'menu' ? 'page' : null }">
+            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-menu"></use></svg>
+            <span data-bind="text: RedesignShell.label('menu')"></span>
+        </button>
+    </nav>
+
+    <main id="rd-main" data-bind="attr: { 'data-page': RedesignShell.page() }">
+        <!-- Combat dock: the fight, Poké Balls and currencies. Docked on desktop, top of the Combat page on mobile. -->
+        <section id="rd-dock" aria-label="Combat">
+            <div id="rd-dock-fight" class="rd-slot"></div>
+            <div id="rd-dock-currency" class="rd-slot"></div>
+            <div id="rd-dock-balls" class="rd-slot"></div>
+        </section>
+
+        <section class="rd-page" id="rd-page-combat">
+            <h2 class="rd-page-title" data-bind="text: RedesignShell.label('map')"></h2>
+            <div id="rd-slot-combat" class="rd-slot"></div>
+        </section>
+
+        <section class="rd-page" id="rd-page-progress">
+            <h2 class="rd-page-title" data-bind="text: RedesignShell.label('progress')"></h2>
+            <div class="rd-actions">
+                <button type="button" class="rd-action" data-toggle="modal" href="#achievementsModal" onclick="AchievementHandler.filterAchievementList(true);">
+                    <span data-bind="text: RedesignShell.label('achievementsAll')"></span>
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
+                </button>
+                <button type="button" class="rd-action" data-toggle="modal" href="#QuestModal">
+                    <span data-bind="text: RedesignShell.label('questsAll')"></span>
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
+                </button>
+            </div>
+            <div id="rd-slot-progress" class="rd-slot"></div>
+        </section>
+
+        <section class="rd-page" id="rd-page-items">
+            <h2 class="rd-page-title" data-bind="text: RedesignShell.label('items')"></h2>
+            <div id="rd-slot-items" class="rd-slot"></div>
+        </section>
+
+        <section class="rd-page" id="rd-page-pokemon">
+            <h2 class="rd-page-title" data-bind="text: RedesignShell.label('pokemon')"></h2>
+            <div id="rd-slot-pokemon" class="rd-slot"></div>
+        </section>
+
+        <section class="rd-page" id="rd-page-activities">
+            <h2 class="rd-page-title" data-bind="text: RedesignShell.label('activities')"></h2>
+            <div id="rd-slot-activities" class="rd-slot"></div>
+            <p class="rd-empty" data-bind="text: RedesignShell.label('activitiesEmpty')"></p>
+        </section>
+
+        <section class="rd-page" id="rd-page-menu">
+            <h2 class="rd-page-title" data-bind="text: RedesignShell.label('menu')"></h2>
+
+            <h3 class="rd-section-title" data-bind="text: RedesignShell.label('automation')"></h3>
+            <div id="rd-menu-automation"></div>
+
+            <h3 class="rd-section-title" data-bind="text: RedesignShell.label('interface')"></h3>
+            <div class="rd-list">
+                <button type="button" class="rd-row" data-bind="click: () => Settings.getSetting('sound.muted').toggle()">
+                    <svg aria-hidden="true"><use data-bind="attr: { href: Settings.getSetting('sound.muted').observableValue() ? 'assets/images/redesign/icons.svg#i-volume-x' : 'assets/images/redesign/icons.svg#i-volume-2' }"></use></svg>
+                    <span data-bind="text: RedesignShell.label('sound')"></span>
+                    <span class="rd-row-value" data-bind="text: Settings.getSetting('sound.muted').observableValue() ? 'Off' : 'On'"></span>
+                </button>
+                <button type="button" class="rd-row" data-bind="click: () => Save.store(player, true)">
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-save"></use></svg>
+                    <span data-bind="text: RedesignShell.label('save')"></span>
+                </button>
+                <button type="button" class="rd-row" data-bind="click: () => RedesignShell.setClassic(true)">
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-refresh-cw"></use></svg>
+                    <span>
+                        <span data-bind="text: RedesignShell.label('classicUI')"></span>
+                        <small class="rd-row-hint" data-bind="text: RedesignShell.label('classicUIHint')"></small>
+                    </span>
+                </button>
+            </div>
+
+            <h3 class="rd-section-title" data-bind="text: RedesignShell.label('gameMenu')"></h3>
+            <div id="rd-menu-game"></div>
+        </section>
+    </main>
+
+    <!-- Mini combat bar: the fight stays one tap away on every other page (mobile). -->
+    <div id="rd-mini" data-bind="css: { 'has-foe': !!RedesignShell.foe() }">
+        <!-- ko if: RedesignShell.foe() -->
+        <button type="button" class="rd-mini-hit" data-bind="click: () => RedesignShell.attack(), attr: { 'aria-label': RedesignShell.label('attack') }">
+            <img alt="" data-bind="attr: { src: RedesignShell.foe().getImage() }">
+        </button>
+        <button type="button" class="rd-mini-info" data-bind="click: () => RedesignShell.go('combat'), attr: { 'aria-label': RedesignShell.label('goToCombat') }">
+            <span class="rd-mini-line">
+                <span class="rd-mini-name" data-bind="text: RedesignShell.foe().displayName"></span>
+                <span class="rd-num rd-mini-hp" data-bind="text: RedesignShell.formatNumber(RedesignShell.foe().health())"></span>
+            </span>
+            <span class="rd-hpbar"><i data-bind="style: { width: RedesignShell.foe().healthPercentage() + '%' }"></i></span>
+        </button>
+        <!-- /ko -->
+    </div>
+</div>

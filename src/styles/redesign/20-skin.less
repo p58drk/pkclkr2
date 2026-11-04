@@ -1,0 +1,294 @@
+// Fork: redesign skin over Bootstrap 4 and the upstream modules.
+// No white surfaces, no coloured fills on controls: state colour lives in text and small marks.
+
+html.rd {
+    a { color: var(--n9); text-underline-offset: 3px; }
+    a:hover { color: var(--n9); }
+    hr { border-color: var(--line); }
+    .text-muted, small.text-muted { color: var(--n7) !important; }
+    .text-success { color: var(--ok) !important; }
+    .text-danger { color: var(--bad) !important; }
+    .text-warning { color: var(--warn) !important; }
+    .text-primary, .text-info, .text-secondary, .text-dark, .text-body { color: var(--n9) !important; }
+    .text-white, .text-light { color: var(--n9) !important; }
+    .border, .border-secondary, .border-primary, .border-dark, .border-light,
+    .border-top, .border-bottom, .border-left, .border-right { border-color: var(--line) !important; }
+
+    ::selection { background: color-mix(in oklab, var(--foe) 45%, var(--n3)); color: var(--n9); }
+    :focus-visible { outline: 2px solid var(--n9); outline-offset: 2px; }
+    * { scrollbar-width: thin; scrollbar-color: var(--n4) transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-thumb { background: var(--n4); border-radius: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+
+    // ----- Modules: cards become open sections -----
+    .card {
+        background: transparent;
+        border: 0 !important;
+        border-radius: 0;
+        margin: 0 0 4px !important;
+        color: var(--n9);
+        text-align: left;
+    }
+    .card-header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-height: 48px;
+        padding: 0 16px !important;
+        background: transparent !important;
+        border: 0;
+        border-bottom: 1px solid var(--line) !important;
+        border-radius: 0 !important;
+        color: var(--n7);
+        font: 600 13px/1.2 var(--font-fig);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        text-align: left;
+        cursor: pointer;
+        > span, > div { color: inherit; }
+    }
+    .card-header[aria-expanded='false'] { color: var(--n6); }
+    // Header tools (help, settings, view toggles) sit at the right of the header.
+    .card > .btn[style*='position: absolute'],
+    .card > .btn[style*='position:absolute'],
+    .card > img.clickable[style*='position: absolute'],
+    .card-header .btn[style*='position: absolute'] {
+        top: 4px !important;
+        height: 40px !important;
+        min-width: 40px;
+        padding: 0 10px !important;
+        background: transparent !important;
+        color: var(--n7) !important;
+        border-radius: var(--radius-s) !important;
+        font: 600 15px var(--font-fig) !important;
+        letter-spacing: 0;
+        &:hover { background: var(--n2) !important; color: var(--n9) !important; }
+    }
+    .card > img.clickable[style*='position: absolute'] { filter: invert(.75); padding: 10px !important; }
+    .card-body, .card-footer {
+        background: transparent;
+        border-color: var(--line);
+        color: var(--n9);
+    }
+    .card-footer { border-top: 1px solid var(--line); }
+    // Nested cards (inside modals and modules) stay flat too.
+    .card .card { margin: 0 !important; }
+
+    // ----- Buttons: neutral tonal, one level of emphasis -----
+    .btn {
+        border: 0;
+        border-radius: var(--radius-s);
+        background: var(--n2);
+        color: var(--n9);
+        font-family: var(--font-ui);
+        font-weight: 500;
+        box-shadow: none !important;
+        transition: background-color .15s var(--ease), color .15s var(--ease);
+        &:hover { background: var(--n3); color: var(--n9); }
+        &:active, &.active { background: var(--n4) !important; color: var(--n9) !important; }
+        &:disabled, &.disabled { background: var(--n2); color: var(--n6); opacity: 1; }
+    }
+    .btn-primary, .btn-secondary, .btn-info, .btn-light, .btn-dark, .btn-default,
+    .btn-success, .btn-danger, .btn-warning,
+    .btn-outline-primary, .btn-outline-secondary, .btn-outline-info, .btn-outline-light, .btn-outline-dark,
+    .btn-outline-success, .btn-outline-danger, .btn-outline-warning {
+        background: var(--n2);
+        border: 0;
+        color: var(--n9);
+        &:hover, &:focus { background: var(--n3); color: var(--n9); }
+    }
+    // Meaning stays readable without a coloured fill.
+    .btn-success, .btn-outline-success { color: var(--ok); &:hover, &:focus { color: var(--ok); } }
+    .btn-danger, .btn-outline-danger { color: var(--bad); &:hover, &:focus { color: var(--bad); } }
+    .btn-warning, .btn-outline-warning { color: var(--warn); &:hover, &:focus { color: var(--warn); } }
+    .btn-link { background: transparent; color: var(--n9); text-decoration: underline; }
+    .btn-group > .btn:not(:last-child) { margin-right: 1px; }
+    .close {
+        color: var(--n9);
+        text-shadow: none;
+        opacity: .7;
+        &:hover { color: var(--n9); opacity: 1; }
+    }
+
+    // ----- Badges -----
+    .badge {
+        background: var(--n3);
+        color: var(--n9);
+        font: 600 12px/1.2 var(--font-fig);
+        letter-spacing: .02em;
+        border-radius: 6px;
+        padding: 3px 7px;
+    }
+    .badge-success { color: var(--ok); }
+    .badge-danger { color: var(--bad); }
+    .badge-warning { color: var(--warn); }
+    .badge-primary, .badge-secondary, .badge-info, .badge-light, .badge-dark { color: var(--n9); background: var(--n3); }
+
+    // ----- Backgrounds used as status -----
+    .bg-white, .bg-light, .bg-primary, .bg-secondary, .bg-info, .bg-dark, .bg-transparent,
+    .table-primary, .table-secondary, .table-info, .table-light, .table-dark, .table-active {
+        background-color: transparent !important;
+        color: inherit !important;
+    }
+    .bg-success, .table-success { background-color: color-mix(in oklab, var(--ok) 14%, transparent) !important; color: var(--n9) !important; }
+    .bg-danger, .table-danger { background-color: color-mix(in oklab, var(--bad) 14%, transparent) !important; color: var(--n9) !important; }
+    .bg-warning, .table-warning { background-color: color-mix(in oklab, var(--warn) 14%, transparent) !important; color: var(--n9) !important; }
+
+    // ----- Progress bars: data colour is allowed -----
+    .progress {
+        height: 6px;
+        background: var(--n3) !important;
+        border-radius: 3px;
+        overflow: hidden;
+        font: 600 12px var(--font-fig);
+        color: var(--n9);
+    }
+    .progress-bar { background-color: var(--n7) !important; color: var(--n1); }
+    .progress-bar.bg-success { background-color: var(--ok) !important; }
+    .progress-bar.bg-danger { background-color: var(--bad) !important; }
+    .progress-bar.bg-warning { background-color: var(--warn) !important; }
+    .progress-bar.bg-info, .progress-bar.bg-primary { background-color: #8fb6f2 !important; }
+
+    // ----- Tables: hairline rows, no stripes -----
+    .table {
+        color: var(--n9);
+        background: transparent;
+        margin-bottom: 0;
+        th, td {
+            border-top: 1px solid var(--line);
+            border-color: var(--line);
+            vertical-align: middle;
+            background: transparent;
+        }
+        thead th {
+            border-top: 0;
+            border-bottom: 1px solid var(--line);
+            color: var(--n7);
+            font: 600 12px var(--font-fig);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+    }
+    .table-striped tbody tr:nth-of-type(odd) { background: transparent; }
+    .table-hover tbody tr:hover { background: var(--n2); color: var(--n9); }
+    .table-bordered, .table-bordered th, .table-bordered td { border-color: var(--line); }
+    .thead-dark th, .thead-light th { background: transparent; color: var(--n7); border-color: var(--line); }
+
+    // ----- Forms -----
+    .form-control, .custom-select, select, input[type='text'], input[type='number'], input[type='search'], textarea {
+        background-color: var(--n2);
+        border: 1px solid var(--n3);
+        border-radius: var(--radius-s);
+        color: var(--n9);
+        &:focus { background-color: var(--n2); border-color: var(--n6); color: var(--n9); box-shadow: none; }
+        &::placeholder { color: var(--n7); }
+        &:disabled { background-color: var(--n1); color: var(--n6); }
+    }
+    .custom-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3e%3cpath fill='none' stroke='%23a5a4b1' stroke-width='1.6' d='M1 1l4 4 4-4'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+    }
+    .input-group-text {
+        background: var(--n3);
+        border: 1px solid var(--n3);
+        color: var(--n7);
+    }
+    .custom-control-label::before { background-color: var(--n3); border-color: var(--n4); }
+    .custom-control-input:checked ~ .custom-control-label::before { background-color: var(--n9); border-color: var(--n9); }
+    .custom-switch .custom-control-input:checked ~ .custom-control-label::after { background-color: var(--n1); }
+    input[type='range'] { accent-color: var(--n9); }
+    input[type='checkbox'], input[type='radio'] { accent-color: var(--n9); }
+
+    // ----- Navigation tabs and pills -----
+    .nav-tabs {
+        border-bottom: 1px solid var(--line);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        .nav-link {
+            border: 0;
+            border-bottom: 2px solid transparent;
+            border-radius: 0;
+            background: transparent;
+            color: var(--n7);
+            white-space: nowrap;
+            &:hover { color: var(--n9); }
+            &.active { color: var(--n9); background: transparent; border-bottom-color: var(--n9); }
+            &.disabled { color: var(--n6); }
+        }
+    }
+    .nav-pills .nav-link {
+        color: var(--n7);
+        border-radius: 20px;
+        &.active { background: var(--n3); color: var(--n9); }
+    }
+
+    // ----- Dropdowns, list groups, popovers, tooltips -----
+    .dropdown-menu {
+        background: var(--n2);
+        border: 0;
+        border-radius: var(--radius);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .5);
+        color: var(--n9);
+        padding: 6px;
+    }
+    .dropdown-item {
+        color: var(--n9);
+        border-radius: var(--radius-s);
+        &:hover, &:focus { background: var(--n3); color: var(--n9); }
+        &.active, &:active { background: var(--n4); color: var(--n9); }
+        &.disabled { color: var(--n6); }
+    }
+    .dropdown-divider { border-color: var(--line); }
+    .list-group-item {
+        background: transparent;
+        border-color: var(--line);
+        color: var(--n9);
+        &.active { background: var(--n3); border-color: var(--line); color: var(--n9); }
+    }
+    .list-group-item-action:hover { background: var(--n2); color: var(--n9); }
+    .popover {
+        background: var(--n2);
+        border: 0;
+        border-radius: var(--radius);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .5);
+        font-family: var(--font-ui);
+        .popover-header { background: transparent; color: var(--n9); border-bottom: 1px solid var(--line); }
+        .popover-body { color: var(--n9); }
+        .arrow::after { border-top-color: var(--n2); border-bottom-color: var(--n2); }
+        .arrow::before { border-color: transparent; }
+    }
+    .tooltip-inner {
+        background: var(--n3);
+        color: var(--n9);
+        border-radius: var(--radius-s);
+        font: 500 13px/1.35 var(--font-ui);
+        padding: 8px 10px;
+        max-width: 280px;
+    }
+    .tooltip .arrow::before { border-top-color: var(--n3) !important; border-bottom-color: var(--n3) !important; }
+
+    // ----- Alerts and notifications -----
+    .alert {
+        background: var(--n2);
+        border: 0;
+        border-radius: var(--radius);
+        color: var(--n9);
+    }
+    .alert-success { color: var(--ok); }
+    .alert-danger { color: var(--bad); }
+    .alert-warning { color: var(--warn); }
+    #toaster .toast, #toaster .alert, [data-notify='container'] {
+        background: var(--n2) !important;
+        color: var(--n9) !important;
+        border: 0 !important;
+        border-radius: var(--radius) !important;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, .5) !important;
+    }
+    .toast-header {
+        background: transparent;
+        color: var(--n9);
+        border-bottom: 1px solid var(--line);
+    }
+}
