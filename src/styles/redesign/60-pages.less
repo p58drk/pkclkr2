@@ -56,24 +56,25 @@ html.rd {
         .input-group-append { background: transparent !important; }
         div:has(> .pokemon-row) {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-            gap: 2px;
-            padding: 0 12px;
+            grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+            gap: 0;
+            padding: 0 4px;
         }
         .pokemon-row {
             position: relative;
             flex-direction: column;
             align-items: stretch !important;
-            padding: 6px 4px 8px !important;
+            padding: 4px 2px 6px !important;
             border: 0 !important;
             border-radius: var(--radius);
             font-size: 12px;
             text-align: center;
             &:hover { background: var(--n2); }
-            > img { width: 64px; height: 64px; max-height: none !important; margin: 0 auto; object-fit: contain; image-rendering: pixelated; }
+            > img { width: 56px; height: 56px; max-height: none !important; margin: 0 auto; object-fit: contain; image-rendering: pixelated; }
             > .flex-grow-1 > .d-flex { flex-direction: column; justify-content: center; gap: 0; }
             .ml-auto { margin: 0 !important; justify-content: center; text-align: center !important; }
-            knockout[data-bind*='displayName'] { font: 500 13px/1.2 var(--font-ui); color: var(--n9); }
+            knockout[data-bind*='displayName'] { font: 500 12px/1.2 var(--font-ui); color: var(--n9); }
+            .attack-label { display: none; }
             knockout[data-bind='text: level'], knockout[data-bind*='attack.toLocaleString'] { font: 600 14px var(--font-fig); font-variant-numeric: tabular-nums; }
             sup { font-size: 0; position: absolute; top: 6px; right: 8px; }
             sup::after { content: '✶'; font-size: 14px; color: var(--warn); }

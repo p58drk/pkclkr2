@@ -117,6 +117,17 @@ html.rd {
             &:hover { color: var(--n9); }
         }
         .rd-nav-menu { display: none; }
+        // Solid ground under the floating pill / mini bar so scrolled content never shows around them.
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 100%;
+            height: ~"calc(var(--mini-h) + 16px)";
+            background: var(--n1);
+            pointer-events: none;
+        }
     }
 
     // ----- Main scroll area and pages -----
@@ -226,7 +237,7 @@ html.rd {
         left: 8px;
         right: 8px;
         bottom: ~"calc(var(--nav-h) + var(--safe-b) + 8px)";
-        z-index: 65;
+        z-index: 72;
         display: none;
         height: var(--mini-h);
         border-radius: 16px;
@@ -278,7 +289,7 @@ html.rd {
         border-radius: 2px;
         background: var(--n4);
         overflow: hidden;
-        i { display: block; height: 100%; background: var(--foe); transition: width .2s linear; }
+        i { display: block; height: 100%; background: var(--foe); }
     }
 
     // ----- Tablet: centred column -----
@@ -337,6 +348,7 @@ html.rd {
             top: var(--top-h);
             align-self: start;
             max-height: ~"calc(100vh - var(--top-h))";
+            min-height: ~"calc(100vh - var(--top-h))";
             overflow-y: auto;
             border-right: 1px solid var(--line);
             padding-bottom: 24px;

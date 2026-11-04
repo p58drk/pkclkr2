@@ -52,9 +52,9 @@ html.rd {
     #battleContainer knockout[data-bind*='pokemonGenderTemplate'],
     #battleContainer .gender, #battleContainer [class*='gender'] { filter: grayscale(1) brightness(1.4); }
 
-    // Currency pop-ups stay inside their figure instead of flying over the dock.
-    #currencyContainer .currency-wrapper > div { position: relative; overflow: hidden; }
-    .animated-currency { pointer-events: none; }
+    // Currency pop-ups overprint the figures they belong to (and fire 20 times a second
+    // under the auto clicker): the figures themselves carry the change in the redesign.
+    .animated-currency { display: none !important; }
 
     // ----- Poké Balls: one column per filter, ball over count -----
     #pokeballSelector {
