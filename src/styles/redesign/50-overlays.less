@@ -68,5 +68,28 @@ html.rd {
         text-shadow: none;
         border-radius: var(--radius-s);
     }
-    .introjs-helperLayer { box-shadow: 0 0 0 1px var(--n7), 0 0 0 5000px rgba(0, 0, 0, .55) !important; }
+    // The highlighted area stays as it is (intro.js paints it white by default).
+    .introjs-helperLayer {
+        background: transparent !important;
+        border: 0 !important;
+        border-radius: var(--radius) !important;
+        box-shadow: 0 0 0 2px var(--n9), 0 0 0 5000px rgba(0, 0, 0, .6) !important;
+        opacity: 1 !important;
+    }
+    .introjs-tooltipReferenceLayer { background: transparent !important; }
+    .introjs-tooltip { max-width: min(320px, ~"calc(100vw - 24px)"); }
+    .introjs-tooltiptext { color: var(--n9); font: 500 15px/1.4 var(--font-ui); }
+    .introjs-arrow { display: none !important; }
+    .introjs-tooltipbuttons { border-top: 1px solid var(--line); }
+
+    // While a window is open on a phone, notifications move to the top edge so they
+    // never cover the sheet's content or its buttons.
+    @media (max-width: 1099.98px) {
+        body.modal-open #toaster {
+            top: ~"calc(var(--safe-t) + 8px)";
+            bottom: auto;
+            flex-direction: column;
+            .toast:nth-child(n+3) { display: none; }
+        }
+    }
 }

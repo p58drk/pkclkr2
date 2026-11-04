@@ -5,6 +5,7 @@
 // below does not know about falls back to the Activities page, so upstream
 // additions stay reachable after a merge.
 import GameLoadState from '../utilities/GameLoadState';
+import Information from '../utilities/Information';
 import { label, LabelKey, typeLabel } from './labels';
 import Automation from './automation/Automation';
 
@@ -75,6 +76,40 @@ export default class RedesignShell {
         RedesignShell.page(page);
         localStorage.setItem(STORAGE_PAGE, page);
         document.getElementById('rd-main')?.scrollTo({ top: 0 });
+    }
+
+    // Shows the page that holds an element, synchronously (Knockout defers its own
+    // update, and intro.js measures the target right away).
+    static goToElement(el: Element | null) {
+        if (!el) return;
+        const page = el.closest('.rd-page')?.id?.replace('rd-page-', '') as PageId
+            || (el.closest('#rd-dock') ? 'combat' : null);
+        if (!page || !PAGES.includes(page)) return;
+        document.getElementById('rd-main')?.setAttribute('data-page', page);
+        RedesignShell.go(page);
+        el.scrollIntoView({ block: 'center' });
+    }
+
+    // Upstream tutorial targets that the redesign hides are redirected to their new home.
+    static tutorialTarget(el: any): any {
+        if (!(el instanceof Element)) return el;
+        if (el.id === 'startMenu') {
+            const candidates = ['#rd-nav .rd-nav-menu', '#rd-top .rd-top-menu'];
+            return candidates.map((sel) => document.querySelector(sel))
+                .find((c) => c && (c as HTMLElement).offsetParent !== null) ?? el;
+        }
+        return el;
+    }
+
+    private static patchTutorials() {
+        const original = Information.show.bind(Information);
+        Information.show = (options: any = {}) => {
+            const steps = (options.steps ?? []).map((step: any) => ({ ...step, element: RedesignShell.tutorialTarget(step.element) }));
+            RedesignShell.goToElement(steps.find((step: any) => step.element instanceof Element)?.element ?? null);
+            const tour: any = original({ ...options, steps });
+            tour?.onbeforechange?.((target: Element) => RedesignShell.goToElement(target));
+            return tour;
+        };
     }
 
     static setClassic(classic: boolean) {
@@ -245,6 +280,7 @@ export default class RedesignShell {
     }
 
     static boot() {
+        if (RedesignShell.enabled) RedesignShell.patchTutorials();
         if (!RedesignShell.enabled) {
             // Automation still runs under the classic interface.
             GameLoadState.onLoadState(GameLoadState.states.running, () => {

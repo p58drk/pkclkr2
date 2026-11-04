@@ -83,3 +83,16 @@ html.rd {
         .modal-dialog { transition: none !important; transform: none !important; }
     }
 }
+
+// Starter choice and key item tiles: tonal cells instead of white frames.
+html.rd {
+    .image-starter,
+    img.key-item {
+        border: 0 !important;
+        border-radius: var(--radius);
+        background: var(--n2);
+        image-rendering: pixelated;
+    }
+    .image-starter { padding: 8px; transition: background-color .15s var(--ease); }
+    .image-starter:hover, .image-starter:focus-visible { background: var(--n3); }
+}
