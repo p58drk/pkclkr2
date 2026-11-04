@@ -1,0 +1,756 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-04T23:41:25+00:00",
+  "title": "Design System: PokeClicker (redesign layer)",
+  "extensions": {
+    "scope": "Every rule is scoped under html.rd; upstream Bootstrap 4 markup is restyled and relocated at runtime, never rewritten (mergeability with upstream).",
+    "colorMeta": {
+      "n0-pit": {
+        "role": "neutral",
+        "displayName": "Pit",
+        "canonical": "#0c0c0f",
+        "cssVar": "--n0",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n1-ground": {
+        "role": "neutral",
+        "displayName": "Ground",
+        "canonical": "#131317",
+        "cssVar": "--n1",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n2-control": {
+        "role": "neutral",
+        "displayName": "Control",
+        "canonical": "#1c1c22",
+        "cssVar": "--n2",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n3-raised": {
+        "role": "neutral",
+        "displayName": "Raised",
+        "canonical": "#26262e",
+        "cssVar": "--n3",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n4-track": {
+        "role": "neutral",
+        "displayName": "Track",
+        "canonical": "#33333d",
+        "cssVar": "--n4",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n5-idle": {
+        "role": "neutral",
+        "displayName": "Idle",
+        "canonical": "#4a4a56",
+        "cssVar": "--n5",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n6-disabled": {
+        "role": "neutral",
+        "displayName": "Disabled",
+        "canonical": "#74737f",
+        "cssVar": "--n6",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n7-secondary": {
+        "role": "neutral",
+        "displayName": "Secondary",
+        "canonical": "#a5a4b1",
+        "cssVar": "--n7",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "n9-ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#ecebf2",
+        "cssVar": "--n9",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "line-seam": {
+        "role": "neutral",
+        "displayName": "Seam",
+        "canonical": "#24242b",
+        "cssVar": "--line",
+        "tonalRamp": [
+          "#0c0c0f",
+          "#131317",
+          "#1c1c22",
+          "#26262e",
+          "#33333d",
+          "#4a4a56",
+          "#74737f",
+          "#a5a4b1"
+        ]
+      },
+      "ok": {
+        "role": "tertiary",
+        "displayName": "Fresh Green",
+        "canonical": "#8fd468",
+        "cssVar": "--ok",
+        "tonalRamp": [
+          "color-mix(in oklab, #8fd468 25%, #0c0c0f)",
+          "color-mix(in oklab, #8fd468 40%, #0c0c0f)",
+          "color-mix(in oklab, #8fd468 55%, #0c0c0f)",
+          "color-mix(in oklab, #8fd468 70%, #0c0c0f)",
+          "color-mix(in oklab, #8fd468 85%, #0c0c0f)",
+          "#8fd468",
+          "color-mix(in oklab, #8fd468 70%, #ecebf2)",
+          "color-mix(in oklab, #8fd468 45%, #ecebf2)"
+        ]
+      },
+      "warn": {
+        "role": "tertiary",
+        "displayName": "Signal Yellow",
+        "canonical": "#f2c94c",
+        "cssVar": "--warn",
+        "tonalRamp": [
+          "color-mix(in oklab, #f2c94c 25%, #0c0c0f)",
+          "color-mix(in oklab, #f2c94c 40%, #0c0c0f)",
+          "color-mix(in oklab, #f2c94c 55%, #0c0c0f)",
+          "color-mix(in oklab, #f2c94c 70%, #0c0c0f)",
+          "color-mix(in oklab, #f2c94c 85%, #0c0c0f)",
+          "#f2c94c",
+          "color-mix(in oklab, #f2c94c 70%, #ecebf2)",
+          "color-mix(in oklab, #f2c94c 45%, #ecebf2)"
+        ]
+      },
+      "bad": {
+        "role": "tertiary",
+        "displayName": "Soft Coral",
+        "canonical": "#f07167",
+        "cssVar": "--bad",
+        "tonalRamp": [
+          "color-mix(in oklab, #f07167 25%, #0c0c0f)",
+          "color-mix(in oklab, #f07167 40%, #0c0c0f)",
+          "color-mix(in oklab, #f07167 55%, #0c0c0f)",
+          "color-mix(in oklab, #f07167 70%, #0c0c0f)",
+          "color-mix(in oklab, #f07167 85%, #0c0c0f)",
+          "#f07167",
+          "color-mix(in oklab, #f07167 70%, #ecebf2)",
+          "color-mix(in oklab, #f07167 45%, #ecebf2)"
+        ]
+      },
+      "energy-normal": {
+        "role": "primary",
+        "displayName": "Normal Energy",
+        "canonical": "#a8a77a",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #a8a77a 25%, #0c0c0f)",
+          "color-mix(in oklab, #a8a77a 40%, #0c0c0f)",
+          "color-mix(in oklab, #a8a77a 55%, #0c0c0f)",
+          "color-mix(in oklab, #a8a77a 70%, #0c0c0f)",
+          "color-mix(in oklab, #a8a77a 85%, #0c0c0f)",
+          "#a8a77a",
+          "color-mix(in oklab, #a8a77a 70%, #ecebf2)",
+          "color-mix(in oklab, #a8a77a 45%, #ecebf2)"
+        ]
+      },
+      "energy-fire": {
+        "role": "primary",
+        "displayName": "Fire Energy",
+        "canonical": "#ee8130",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #ee8130 25%, #0c0c0f)",
+          "color-mix(in oklab, #ee8130 40%, #0c0c0f)",
+          "color-mix(in oklab, #ee8130 55%, #0c0c0f)",
+          "color-mix(in oklab, #ee8130 70%, #0c0c0f)",
+          "color-mix(in oklab, #ee8130 85%, #0c0c0f)",
+          "#ee8130",
+          "color-mix(in oklab, #ee8130 70%, #ecebf2)",
+          "color-mix(in oklab, #ee8130 45%, #ecebf2)"
+        ]
+      },
+      "energy-water": {
+        "role": "primary",
+        "displayName": "Water Energy",
+        "canonical": "#6390f0",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #6390f0 25%, #0c0c0f)",
+          "color-mix(in oklab, #6390f0 40%, #0c0c0f)",
+          "color-mix(in oklab, #6390f0 55%, #0c0c0f)",
+          "color-mix(in oklab, #6390f0 70%, #0c0c0f)",
+          "color-mix(in oklab, #6390f0 85%, #0c0c0f)",
+          "#6390f0",
+          "color-mix(in oklab, #6390f0 70%, #ecebf2)",
+          "color-mix(in oklab, #6390f0 45%, #ecebf2)"
+        ]
+      },
+      "energy-electric": {
+        "role": "primary",
+        "displayName": "Electric Energy",
+        "canonical": "#f7d02c",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #f7d02c 25%, #0c0c0f)",
+          "color-mix(in oklab, #f7d02c 40%, #0c0c0f)",
+          "color-mix(in oklab, #f7d02c 55%, #0c0c0f)",
+          "color-mix(in oklab, #f7d02c 70%, #0c0c0f)",
+          "color-mix(in oklab, #f7d02c 85%, #0c0c0f)",
+          "#f7d02c",
+          "color-mix(in oklab, #f7d02c 70%, #ecebf2)",
+          "color-mix(in oklab, #f7d02c 45%, #ecebf2)"
+        ]
+      },
+      "energy-grass": {
+        "role": "primary",
+        "displayName": "Grass Energy",
+        "canonical": "#7ac74c",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #7ac74c 25%, #0c0c0f)",
+          "color-mix(in oklab, #7ac74c 40%, #0c0c0f)",
+          "color-mix(in oklab, #7ac74c 55%, #0c0c0f)",
+          "color-mix(in oklab, #7ac74c 70%, #0c0c0f)",
+          "color-mix(in oklab, #7ac74c 85%, #0c0c0f)",
+          "#7ac74c",
+          "color-mix(in oklab, #7ac74c 70%, #ecebf2)",
+          "color-mix(in oklab, #7ac74c 45%, #ecebf2)"
+        ]
+      },
+      "energy-ice": {
+        "role": "primary",
+        "displayName": "Ice Energy",
+        "canonical": "#96d9d6",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #96d9d6 25%, #0c0c0f)",
+          "color-mix(in oklab, #96d9d6 40%, #0c0c0f)",
+          "color-mix(in oklab, #96d9d6 55%, #0c0c0f)",
+          "color-mix(in oklab, #96d9d6 70%, #0c0c0f)",
+          "color-mix(in oklab, #96d9d6 85%, #0c0c0f)",
+          "#96d9d6",
+          "color-mix(in oklab, #96d9d6 70%, #ecebf2)",
+          "color-mix(in oklab, #96d9d6 45%, #ecebf2)"
+        ]
+      },
+      "energy-fighting": {
+        "role": "primary",
+        "displayName": "Fighting Energy",
+        "canonical": "#c22e28",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #c22e28 25%, #0c0c0f)",
+          "color-mix(in oklab, #c22e28 40%, #0c0c0f)",
+          "color-mix(in oklab, #c22e28 55%, #0c0c0f)",
+          "color-mix(in oklab, #c22e28 70%, #0c0c0f)",
+          "color-mix(in oklab, #c22e28 85%, #0c0c0f)",
+          "#c22e28",
+          "color-mix(in oklab, #c22e28 70%, #ecebf2)",
+          "color-mix(in oklab, #c22e28 45%, #ecebf2)"
+        ]
+      },
+      "energy-poison": {
+        "role": "primary",
+        "displayName": "Poison Energy",
+        "canonical": "#a33ea1",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #a33ea1 25%, #0c0c0f)",
+          "color-mix(in oklab, #a33ea1 40%, #0c0c0f)",
+          "color-mix(in oklab, #a33ea1 55%, #0c0c0f)",
+          "color-mix(in oklab, #a33ea1 70%, #0c0c0f)",
+          "color-mix(in oklab, #a33ea1 85%, #0c0c0f)",
+          "#a33ea1",
+          "color-mix(in oklab, #a33ea1 70%, #ecebf2)",
+          "color-mix(in oklab, #a33ea1 45%, #ecebf2)"
+        ]
+      },
+      "energy-ground": {
+        "role": "primary",
+        "displayName": "Ground Energy",
+        "canonical": "#e2bf65",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #e2bf65 25%, #0c0c0f)",
+          "color-mix(in oklab, #e2bf65 40%, #0c0c0f)",
+          "color-mix(in oklab, #e2bf65 55%, #0c0c0f)",
+          "color-mix(in oklab, #e2bf65 70%, #0c0c0f)",
+          "color-mix(in oklab, #e2bf65 85%, #0c0c0f)",
+          "#e2bf65",
+          "color-mix(in oklab, #e2bf65 70%, #ecebf2)",
+          "color-mix(in oklab, #e2bf65 45%, #ecebf2)"
+        ]
+      },
+      "energy-flying": {
+        "role": "primary",
+        "displayName": "Flying Energy",
+        "canonical": "#a98ff3",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #a98ff3 25%, #0c0c0f)",
+          "color-mix(in oklab, #a98ff3 40%, #0c0c0f)",
+          "color-mix(in oklab, #a98ff3 55%, #0c0c0f)",
+          "color-mix(in oklab, #a98ff3 70%, #0c0c0f)",
+          "color-mix(in oklab, #a98ff3 85%, #0c0c0f)",
+          "#a98ff3",
+          "color-mix(in oklab, #a98ff3 70%, #ecebf2)",
+          "color-mix(in oklab, #a98ff3 45%, #ecebf2)"
+        ]
+      },
+      "energy-psychic": {
+        "role": "primary",
+        "displayName": "Psychic Energy",
+        "canonical": "#f95587",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #f95587 25%, #0c0c0f)",
+          "color-mix(in oklab, #f95587 40%, #0c0c0f)",
+          "color-mix(in oklab, #f95587 55%, #0c0c0f)",
+          "color-mix(in oklab, #f95587 70%, #0c0c0f)",
+          "color-mix(in oklab, #f95587 85%, #0c0c0f)",
+          "#f95587",
+          "color-mix(in oklab, #f95587 70%, #ecebf2)",
+          "color-mix(in oklab, #f95587 45%, #ecebf2)"
+        ]
+      },
+      "energy-bug": {
+        "role": "primary",
+        "displayName": "Bug Energy",
+        "canonical": "#a6b91a",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #a6b91a 25%, #0c0c0f)",
+          "color-mix(in oklab, #a6b91a 40%, #0c0c0f)",
+          "color-mix(in oklab, #a6b91a 55%, #0c0c0f)",
+          "color-mix(in oklab, #a6b91a 70%, #0c0c0f)",
+          "color-mix(in oklab, #a6b91a 85%, #0c0c0f)",
+          "#a6b91a",
+          "color-mix(in oklab, #a6b91a 70%, #ecebf2)",
+          "color-mix(in oklab, #a6b91a 45%, #ecebf2)"
+        ]
+      },
+      "energy-rock": {
+        "role": "primary",
+        "displayName": "Rock Energy",
+        "canonical": "#b6a136",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #b6a136 25%, #0c0c0f)",
+          "color-mix(in oklab, #b6a136 40%, #0c0c0f)",
+          "color-mix(in oklab, #b6a136 55%, #0c0c0f)",
+          "color-mix(in oklab, #b6a136 70%, #0c0c0f)",
+          "color-mix(in oklab, #b6a136 85%, #0c0c0f)",
+          "#b6a136",
+          "color-mix(in oklab, #b6a136 70%, #ecebf2)",
+          "color-mix(in oklab, #b6a136 45%, #ecebf2)"
+        ]
+      },
+      "energy-ghost": {
+        "role": "primary",
+        "displayName": "Ghost Energy",
+        "canonical": "#735797",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #735797 25%, #0c0c0f)",
+          "color-mix(in oklab, #735797 40%, #0c0c0f)",
+          "color-mix(in oklab, #735797 55%, #0c0c0f)",
+          "color-mix(in oklab, #735797 70%, #0c0c0f)",
+          "color-mix(in oklab, #735797 85%, #0c0c0f)",
+          "#735797",
+          "color-mix(in oklab, #735797 70%, #ecebf2)",
+          "color-mix(in oklab, #735797 45%, #ecebf2)"
+        ]
+      },
+      "energy-dragon": {
+        "role": "primary",
+        "displayName": "Dragon Energy",
+        "canonical": "#6f35fc",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #6f35fc 25%, #0c0c0f)",
+          "color-mix(in oklab, #6f35fc 40%, #0c0c0f)",
+          "color-mix(in oklab, #6f35fc 55%, #0c0c0f)",
+          "color-mix(in oklab, #6f35fc 70%, #0c0c0f)",
+          "color-mix(in oklab, #6f35fc 85%, #0c0c0f)",
+          "#6f35fc",
+          "color-mix(in oklab, #6f35fc 70%, #ecebf2)",
+          "color-mix(in oklab, #6f35fc 45%, #ecebf2)"
+        ]
+      },
+      "energy-dark": {
+        "role": "primary",
+        "displayName": "Dark Energy",
+        "canonical": "#705746",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #705746 25%, #0c0c0f)",
+          "color-mix(in oklab, #705746 40%, #0c0c0f)",
+          "color-mix(in oklab, #705746 55%, #0c0c0f)",
+          "color-mix(in oklab, #705746 70%, #0c0c0f)",
+          "color-mix(in oklab, #705746 85%, #0c0c0f)",
+          "#705746",
+          "color-mix(in oklab, #705746 70%, #ecebf2)",
+          "color-mix(in oklab, #705746 45%, #ecebf2)"
+        ]
+      },
+      "energy-steel": {
+        "role": "primary",
+        "displayName": "Steel Energy",
+        "canonical": "#b7b7ce",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #b7b7ce 25%, #0c0c0f)",
+          "color-mix(in oklab, #b7b7ce 40%, #0c0c0f)",
+          "color-mix(in oklab, #b7b7ce 55%, #0c0c0f)",
+          "color-mix(in oklab, #b7b7ce 70%, #0c0c0f)",
+          "color-mix(in oklab, #b7b7ce 85%, #0c0c0f)",
+          "#b7b7ce",
+          "color-mix(in oklab, #b7b7ce 70%, #ecebf2)",
+          "color-mix(in oklab, #b7b7ce 45%, #ecebf2)"
+        ]
+      },
+      "energy-fairy": {
+        "role": "primary",
+        "displayName": "Fairy Energy",
+        "canonical": "#d685ad",
+        "source": "ENERGY in src/modules/redesign/Shell.ts; applied through --foe / --foe-2",
+        "tonalRamp": [
+          "color-mix(in oklab, #d685ad 25%, #0c0c0f)",
+          "color-mix(in oklab, #d685ad 40%, #0c0c0f)",
+          "color-mix(in oklab, #d685ad 55%, #0c0c0f)",
+          "color-mix(in oklab, #d685ad 70%, #0c0c0f)",
+          "color-mix(in oklab, #d685ad 85%, #0c0c0f)",
+          "#d685ad",
+          "color-mix(in oklab, #d685ad 70%, #ecebf2)",
+          "color-mix(in oklab, #d685ad 45%, #ecebf2)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "figure-display": {
+        "displayName": "Figure Display",
+        "purpose": "Foe HP in the card line."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Foe name."
+      },
+      "title-page": {
+        "displayName": "Page Title",
+        "purpose": "Page headings (22px on Combat)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Top bar route name, modal titles."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Attack, DPS, currencies, counts, levels (14-18px, tabular)."
+      },
+      "section-label": {
+        "displayName": "Section Label",
+        "purpose": "Uppercase n7 module and section headers (12-13px); the heading itself."
+      },
+      "row": {
+        "displayName": "Row",
+        "purpose": "Menu and list rows."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Default UI text; descriptions 48-60ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Tab labels, ball names."
+      }
+    },
+    "shadows": [
+      {
+        "name": "float",
+        "value": "0 12px 32px rgba(0, 0, 0, .5)",
+        "purpose": "Dropdowns, popovers, notifications."
+      },
+      {
+        "name": "toast",
+        "value": "0 10px 28px rgba(0, 0, 0, .5)",
+        "purpose": "Toast stack."
+      },
+      {
+        "name": "sheet",
+        "value": "0 24px 64px rgba(0, 0, 0, .6)",
+        "purpose": "Modal panels over a 60% black backdrop."
+      },
+      {
+        "name": "energy-dot-ring",
+        "value": "inset 0 0 0 2px rgba(255, 255, 255, .28)",
+        "purpose": "Faint inner ring on 14px energy dots."
+      },
+      {
+        "name": "energy-halo",
+        "value": "radial-gradient(55% 50% at 50% 50%, color-mix(in oklab, var(--foe) 34%, transparent), transparent 72%), radial-gradient(40% 40% at 62% 60%, color-mix(in oklab, var(--foe-2) 18%, transparent), transparent 70%)",
+        "purpose": "Luminous field behind the foe sprite (not a shadow)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(.16, 1, .3, 1)",
+        "purpose": "House easing for every transition."
+      },
+      {
+        "name": "control",
+        "value": ".15s",
+        "purpose": "Button background and colour."
+      },
+      {
+        "name": "switch",
+        "value": ".2s",
+        "purpose": "Switch track and knob."
+      },
+      {
+        "name": "sheet",
+        "value": ".32s",
+        "purpose": "Bottom sheet rising 24px; disabled under prefers-reduced-motion."
+      },
+      {
+        "name": "halo",
+        "value": ".4s",
+        "purpose": "Energy halo change between foes; disabled under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "<700px",
+        "purpose": "Bottom tabs, mini combat bar, sheets."
+      },
+      {
+        "name": "tablet",
+        "value": "700px",
+        "purpose": "Centred 760px column, centred panels."
+      },
+      {
+        "name": "desktop",
+        "value": "1100px",
+        "purpose": "88px rail, 380-440px docked combat column, page column."
+      }
+    ],
+    "layoutTokens": {
+      "top-h": "60px",
+      "nav-h": "64px",
+      "mini-h": "56px",
+      "tap": "44px",
+      "safe-area": "env(safe-area-inset-top/bottom)"
+    }
+  },
+  "components": [
+    {
+      "name": "Tonal Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "The single button style; every upstream Bootstrap variant maps to it.",
+      "html": "<div class=\"ds-btn-wrap\"><button class=\"ds-btn\">Hatch</button><button class=\"ds-btn ds-btn-bad\">Release</button><button class=\"ds-btn\" disabled>Locked</button></div>",
+      "css": ".ds-btn-wrap{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-btn-wrap{display:flex;gap:8px;padding:16px;background:var(--n1)}.ds-btn{border:0;border-radius:8px;background:var(--n2);color:var(--n9);font:500 15px/1.4 var(--font-ui);padding:8px 14px;min-height:44px;cursor:pointer;transition:background-color .15s var(--ease),color .15s var(--ease)}.ds-btn:hover{background:var(--n3)}.ds-btn:active{background:var(--n4)}.ds-btn:focus-visible{outline:2px solid var(--n9);outline-offset:2px}.ds-btn-bad{color:#f07167}.ds-btn:disabled{background:var(--n2);color:var(--n6);cursor:default}"
+    },
+    {
+      "name": "Icon Button",
+      "kind": "button",
+      "refersTo": "icon-button",
+      "description": "44px transparent icon control in the top bar and section headers.",
+      "html": "<div class=\"ds-ib-wrap\"><button class=\"ds-ib\" aria-label=\"Combat\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><polyline points=\"14.5 17.5 3 6 3 3 6 3 17.5 14.5\"/><line x1=\"13\" x2=\"19\" y1=\"19\" y2=\"13\"/><line x1=\"16\" x2=\"20\" y1=\"16\" y2=\"20\"/><line x1=\"19\" x2=\"21\" y1=\"21\" y2=\"19\"/><polyline points=\"14.5 6.5 18 3 21 3 21 6 17.5 9.5\"/><line x1=\"5\" x2=\"9\" y1=\"14\" y2=\"18\"/><line x1=\"7\" x2=\"4\" y1=\"17\" y2=\"20\"/><line x1=\"3\" x2=\"5\" y1=\"19\" y2=\"21\"/></svg></button></div>",
+      "css": ".ds-ib-wrap{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-ib-wrap{padding:16px;background:var(--n1)}.ds-ib{width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--n7);cursor:pointer}.ds-ib:hover{color:var(--n9);background:var(--n2)}.ds-ib:focus-visible{outline:2px solid var(--n9);outline-offset:2px}"
+    },
+    {
+      "name": "Action Chip",
+      "kind": "chip",
+      "refersTo": "action-chip",
+      "description": "Quick link above a page's modules.",
+      "html": "<div class=\"ds-chip-wrap\"><button class=\"ds-chip\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M6 9H4.5a2.5 2.5 0 0 1 0-5H6\"/><path d=\"M18 9h1.5a2.5 2.5 0 0 0 0-5H18\"/><path d=\"M4 22h16\"/><path d=\"M18 2H6v7a6 6 0 0 0 12 0V2Z\"/></svg>All quests</button></div>",
+      "css": ".ds-chip-wrap{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-chip-wrap{padding:16px;background:var(--n1)}.ds-chip{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px 0 14px;border:0;border-radius:20px;background:var(--n2);color:var(--n9);font:500 14px var(--font-ui);cursor:pointer}.ds-chip svg{width:16px;height:16px;color:var(--n7)}.ds-chip:hover{background:var(--n3)}.ds-chip:focus-visible{outline:2px solid var(--n9);outline-offset:2px}"
+    },
+    {
+      "name": "Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text input and select on the tonal control step.",
+      "html": "<div class=\"ds-in-wrap\"><input class=\"ds-in\" placeholder=\"Search Pokémon\"></div>",
+      "css": ".ds-in-wrap{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-in-wrap{padding:16px;background:var(--n1)}.ds-in{width:100%;min-height:40px;padding:0 12px;background:var(--n2);border:1px solid var(--n3);border-radius:8px;color:var(--n9);font:400 15px var(--font-ui)}.ds-in::placeholder{color:var(--n7)}.ds-in:focus{outline:none;border-color:var(--n6)}"
+    },
+    {
+      "name": "Section with Rows",
+      "kind": "card",
+      "refersTo": "section-header",
+      "description": "An upstream card restyled as an open section: uppercase header, hairline rows.",
+      "html": "<section class=\"ds-sec\"><div class=\"ds-sec-h\">Currencies</div><button class=\"ds-row\">Pokédollars<span class=\"ds-row-v\">1,284,500</span></button><button class=\"ds-row\">Dungeon tokens<span class=\"ds-row-v\">18,240</span></button></section>",
+      "css": ".ds-sec{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-sec{background:var(--n1);color:var(--n9)}.ds-sec-h{display:flex;align-items:center;min-height:48px;padding:0 16px;border-bottom:1px solid var(--line);color:var(--n7);font:600 13px/1.2 var(--font-fig);letter-spacing:.08em;text-transform:uppercase}.ds-row{display:flex;align-items:center;gap:14px;width:100%;min-height:52px;padding:8px 16px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--n9);font:500 16px/1.3 var(--font-ui);text-align:left;cursor:pointer}.ds-row:hover{background:var(--n2)}.ds-row:focus-visible{outline:2px solid var(--n9);outline-offset:-2px}.ds-row-v{margin-left:auto;font:600 18px var(--font-fig);font-variant-numeric:tabular-nums}"
+    },
+    {
+      "name": "Bottom Tabs",
+      "kind": "nav",
+      "refersTo": "nav-tab",
+      "description": "Phone navigation; becomes the 88px rail on desktop.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-tab is-active\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><polyline points=\"14.5 17.5 3 6 3 3 6 3 17.5 14.5\"/><line x1=\"13\" x2=\"19\" y1=\"19\" y2=\"13\"/><line x1=\"16\" x2=\"20\" y1=\"16\" y2=\"20\"/><line x1=\"19\" x2=\"21\" y1=\"21\" y2=\"19\"/><polyline points=\"14.5 6.5 18 3 21 3 21 6 17.5 9.5\"/><line x1=\"5\" x2=\"9\" y1=\"14\" y2=\"18\"/><line x1=\"7\" x2=\"4\" y1=\"17\" y2=\"20\"/><line x1=\"3\" x2=\"5\" y1=\"19\" y2=\"21\"/></svg>Combat</button><button class=\"ds-tab\"><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M6 9H4.5a2.5 2.5 0 0 1 0-5H6\"/><path d=\"M18 9h1.5a2.5 2.5 0 0 0 0-5H18\"/><path d=\"M4 22h16\"/><path d=\"M18 2H6v7a6 6 0 0 0 12 0V2Z\"/></svg>Progrès</button></nav>",
+      "css": ".ds-nav{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-nav{display:flex;height:64px;padding:6px 4px;background:var(--n0);border-top:1px solid var(--line)}.ds-tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:0;border-radius:12px;background:transparent;color:var(--n7);font:500 11px/1 var(--font-ui);cursor:pointer}.ds-tab:hover,.ds-tab.is-active{color:var(--n9)}.ds-tab.is-active svg{stroke-width:2.4}.ds-tab:focus-visible{outline:2px solid var(--n9);outline-offset:2px}"
+    },
+    {
+      "name": "Automation Row with Switch",
+      "kind": "custom",
+      "refersTo": "switch",
+      "description": "One automation: name, clamped description, neutral switch.",
+      "html": "<div class=\"ds-auto\"><div class=\"ds-auto-main\"><span class=\"ds-auto-name\">Auto hatchery</span><span class=\"ds-auto-sub\">Fills empty slots from the egg list.</span></div><button class=\"ds-sw\" role=\"switch\" aria-checked=\"true\" aria-label=\"Auto hatchery\"><i></i></button></div>",
+      "css": ".ds-auto{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-auto{display:flex;align-items:center;gap:8px;padding:12px 12px 12px 16px;background:var(--n1);border-bottom:1px solid var(--line)}.ds-auto-main{flex:1;display:flex;flex-direction:column;gap:2px}.ds-auto-name{color:var(--n9);font:600 16px/1.25 var(--font-ui)}.ds-auto-sub{color:var(--n9);font:400 13px/1.35 var(--font-ui)}.ds-sw{position:relative;width:52px;height:32px;border:0;border-radius:16px;background:var(--n4);cursor:pointer;transition:background-color .2s var(--ease)}.ds-sw i{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--n7);transition:transform .2s var(--ease),background-color .2s var(--ease)}.ds-sw[aria-checked=true]{background:var(--n9)}.ds-sw[aria-checked=true] i{transform:translateX(20px);background:var(--n1)}.ds-sw:focus-visible{outline:2px solid var(--n9);outline-offset:2px}"
+    },
+    {
+      "name": "Combat Card Line",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature: foe name and energy left, HP figures right, energy halo, HP bar in the foe colour.",
+      "html": "<div class=\"ds-foe\"><div class=\"ds-foe-head\"><div class=\"ds-foe-id\"><span class=\"ds-foe-name\">Charmander</span><span class=\"ds-type\"><i class=\"ds-dot\"></i>Fire</span></div><div class=\"ds-hp\"><b>214</b><small>/ 320</small></div></div><div class=\"ds-halo\"></div><div class=\"ds-bar\"><i style=\"width:67%\"></i></div></div>",
+      "css": ".ds-foe{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-foe{position:relative;background:var(--n1);color:var(--n9);padding:16px;min-height:300px;display:flex;flex-direction:column;isolation:isolate}.ds-foe-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.ds-foe-id{display:flex;flex-direction:column;gap:8px}.ds-foe-name{font:700 30px/1 var(--font-fig);letter-spacing:.005em}.ds-type{display:inline-flex;align-items:center;gap:6px;color:var(--n7);font:400 13px var(--font-ui)}.ds-dot{width:14px;height:14px;border-radius:50%;background:var(--foe);box-shadow:inset 0 0 0 2px rgba(255,255,255,.28)}.ds-hp{display:flex;align-items:baseline;gap:4px;color:var(--n7);font-variant-numeric:tabular-nums}.ds-hp b{font:600 34px/1 var(--font-fig);color:var(--n9)}.ds-hp small{font:600 15px var(--font-fig)}.ds-halo{flex:1;position:relative;z-index:-1;margin:0 -16px;background:radial-gradient(55% 50% at 50% 50%,color-mix(in oklab,var(--foe) 34%,transparent),transparent 72%)}.ds-bar{height:6px;border-radius:3px;background:var(--n3);overflow:hidden}.ds-bar i{display:block;height:100%;background:var(--foe);border-radius:3px}"
+    },
+    {
+      "name": "Automation Pill",
+      "kind": "custom",
+      "refersTo": "automation-pill",
+      "description": "What is running, one tap to its settings; floats above the tabs on phones.",
+      "html": "<button class=\"ds-pill\"><span class=\"ds-pill-dot\"></span><span><b>3</b> automations on</span><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m9 18 6-6-6-6\"/></svg></button>",
+      "css": ".ds-pill{--n0:#0c0c0f;--n1:#131317;--n2:#1c1c22;--n3:#26262e;--n4:#33333d;--n5:#4a4a56;--n6:#74737f;--n7:#a5a4b1;--n9:#ecebf2;--line:#24242b;--ok:#8fd468;--foe:#ee8130;--font-ui:'Figtree',system-ui,sans-serif;--font-fig:'Barlow Semi Condensed','Figtree',system-ui,sans-serif;--ease:cubic-bezier(.16,1,.3,1);}.ds-pill{display:flex;align-items:center;gap:10px;width:320px;min-height:44px;padding:0 10px 0 14px;border:0;border-radius:22px;background:var(--n2);color:var(--n7);font:500 14px/1.2 var(--font-ui);cursor:pointer}.ds-pill b{color:var(--n9);font-weight:600}.ds-pill svg{margin-left:auto}.ds-pill-dot{width:8px;height:8px;border-radius:50%;background:var(--ok)}.ds-pill:hover{background:var(--n3)}.ds-pill:focus-visible{outline:2px solid var(--n9);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Trading card anatomy without the card rectangle",
+    "overview": "The interface is a quiet, dark, neutral instrument. Everything the player operates (rows, buttons, tabs, sheets) is drawn from one fixed neutral ramp, and the only saturated colour on screen is the energy colour of whichever Pokémon or type is being shown: a radial halo behind the foe's sprite, its HP bar, the energy dots beside its types. Information is laid out the way a trading card reads (name left, HP figures right, type below, figures in pairs), but there is no card rectangle: modules are open sections separated by hairline seams on a single dark ground.\n\nDensity is high and phone-first: one player, short one-handed check-ins, 44px tap targets, edge-to-edge sections with a 16px gutter. Importance is carried by a fixed size ramp in a condensed figure face, not by colour. Meaning colours (ok, warn, bad) appear only as text and small marks, never as button fills.\n\n**Scope and mergeability.** This system is a layer over the upstream PokeClicker client. Every rule is scoped under `html.rd`, so switching the redesign off restores the classic interface untouched. Upstream Bootstrap 4 markup and module roots are restyled and relocated into the six pages at runtime, never rewritten; new surfaces should follow the same approach (restyle upstream classes and attribute hooks under `html.rd`, add `rd-` markup only in the shell).",
+    "keyCharacteristics": [
+      "One dark ground (n1) with tonal steps for controls; no white surfaces.",
+      "Saturated colour belongs to content (type energy), never to chrome.",
+      "Hairline 1px seams between rows instead of boxes.",
+      "Barlow Semi Condensed for names and every figure (tabular), Figtree for UI text.",
+      "State marks are typographic: ● caught, ✶ shiny.",
+      "The fight is always on screen: docked column on desktop, mini combat bar above the tabs on phones."
+    ],
+    "rules": [
+      {
+        "name": "The Energy Belongs to Content Rule",
+        "body": "Saturated hue appears only on what the player is looking at (the Pokémon, its type, its HP). Chrome, controls and navigation stay on the neutral ramp.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Ramp Rule",
+        "body": "The nine neutral steps and the seam colour are the only tonal tokens. New surfaces pick a step; they do not mix new greys.",
+        "section": "colors"
+      },
+      {
+        "name": "The Meaning-as-Text Rule",
+        "body": "ok, warn and bad colour text and small marks. A button never gets a coloured fill; an upstream `btn-danger` becomes an n2 button with coral text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Figures Are Condensed Rule",
+        "body": "Every number on screen is Barlow Semi Condensed with tabular figures, so columns align and values don't jitter as the game ticks.",
+        "section": "typography"
+      },
+      {
+        "name": "The Size Carries Importance Rule",
+        "body": "Hierarchy comes from the fixed size ramp and weight, not from colour.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Ground Rule",
+        "body": "Anything that sits on the page is flat. A shadow only appears on something floating above it, and it is always ambient and blurred, never a hard offset.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do scope every new rule under `html.rd` and restyle upstream Bootstrap 4 classes and attribute hooks rather than editing upstream templates.",
+      "Do take every tonal value from the n0–n9 ramp and every divider from the seam colour (#24242b, 1px).",
+      "Do route saturated colour through `--foe` / `--foe-2` or the type energy table, and only onto content.",
+      "Do set every number in Barlow Semi Condensed with tabular figures.",
+      "Do keep tap targets at 44px minimum and the 16px page gutter.",
+      "Do honour `prefers-reduced-motion`: sheets and halo transitions switch off."
+    ],
+    "donts": [
+      "Don't put a white or light surface anywhere, or bring back the decorative background.",
+      "Don't fill a button, tab or chip with a meaning or energy colour; meaning lives in text and small marks.",
+      "Don't wrap modules in bordered card rectangles; use open sections and hairline seams.",
+      "Don't cast a shadow from anything resting on the page; shadows belong to floating layers only.",
+      "Don't add a second emphasis level of buttons; there is one tonal button.",
+      "Don't replace drawn icons with text glyphs (such as \"?\"); interface icons come from the Lucide sprite."
+    ]
+  }
+}
