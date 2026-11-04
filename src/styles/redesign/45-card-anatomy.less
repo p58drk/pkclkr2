@@ -1,0 +1,99 @@
+// Fork: trading-card anatomy for the fight, Poké Balls as a strip.
+
+html.rd {
+    #rd-foehead {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 16px 0;
+    }
+    .rd-foe-id { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+    .rd-foe-name {
+        font: 700 30px/1 var(--font-fig);
+        letter-spacing: .005em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .rd-foe-types { display: flex; gap: 12px; flex-wrap: wrap; }
+    .rd-energy-type { display: inline-flex; align-items: center; gap: 6px; color: var(--n7); font-size: 13px; }
+    .rd-energy {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .28);
+    }
+    .rd-foe-hp {
+        flex: none;
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+        color: var(--n7);
+        small { font: 600 15px var(--font-fig); }
+        b { font: 600 34px/1 var(--font-fig); color: var(--n9); }
+    }
+
+    // The upstream title keeps its status icons and info button; the name moved to the card line.
+    #battleContainer .pageItemTitle {
+        knockout[data-bind*='pokemonNameTemplate'] { display: none; }
+        min-height: 0;
+    }
+    #battleContainer .battle-view > .row > .col.clickable { padding-top: 4px; }
+    // HP lives in the card line; the bar keeps only the colour.
+    #battleContainer .progress.hitpoints { margin-bottom: 16px; }
+    #battleContainer .progress.hitpoints .progress-bar span { display: none; }
+
+    // Footer: the route row repeats the top bar; attack figures read as a pair.
+    #battleContainer .pageItemFooter tr:first-child { display: none; }
+    #battleContainer .pageItemFooter span[data-bind*='pokemonAttackObservable'] { color: var(--n9); font: 600 17px var(--font-fig); }
+
+    // Gender marks are not energy: keep them neutral.
+    #battleContainer knockout[data-bind*='pokemonGenderTemplate'],
+    #battleContainer .gender, #battleContainer [class*='gender'] { filter: grayscale(1) brightness(1.4); }
+
+    // Currency pop-ups stay inside their figure instead of flying over the dock.
+    #currencyContainer .currency-wrapper > div { position: relative; overflow: hidden; }
+    .animated-currency { pointer-events: none; }
+
+    // ----- Poké Balls: one column per filter, ball over count -----
+    #pokeballSelector {
+        .card-header { display: none; }
+        thead { display: none; }
+        .table-responsive { height: auto !important; }
+        .table, .table tbody { display: block; }
+        #pokeballFilters {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(78px, 1fr);
+            overflow-x: auto;
+            padding: 4px 12px 8px;
+            gap: 4px;
+        }
+        #pokeballFilters > tr {
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+            gap: 2px;
+            padding: 8px 4px;
+            border-radius: var(--radius);
+        }
+        #pokeballFilters > tr:hover { background: var(--n2); }
+        #pokeballFilters > tr > td {
+            border: 0 !important;
+            padding: 0 !important;
+            text-align: center !important;
+            width: auto !important;
+        }
+        #pokeballFilters > tr > td:first-child {
+            color: var(--n7);
+            font: 500 11px/1.2 var(--font-ui) !important;
+            max-width: 84px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #pokeballFilters > tr > td:last-child { font: 600 17px/1.1 var(--font-fig) !important; color: var(--n9); }
+        #pokeballFilters img { width: 26px; height: 26px; }
+    }
+}

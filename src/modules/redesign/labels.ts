@@ -27,6 +27,7 @@ const fr = {
     open: 'Ouvrir',
     goToCombat: 'Aller au combat',
     attack: 'Attaquer',
+    hp: 'PV',
     activitiesEmpty: 'La pension, la ferme et le souterrain apparaîtront ici dès qu’ils seront débloqués au fil de l’aventure.',
 } as const;
 
@@ -57,6 +58,7 @@ const en: Record<LabelKey, string> = {
     open: 'Open',
     goToCombat: 'Go to battle',
     attack: 'Attack',
+    hp: 'HP',
     activitiesEmpty: 'The Day Care, the Farm and the Underground will appear here as soon as you unlock them.',
 };
 
@@ -70,3 +72,13 @@ export function label(key: LabelKey): string {
     return lang === 'fr' ? fr[key] : en[key];
 }
 
+
+const TYPES_FR = ['Normal', 'Feu', 'Eau', 'Électrik', 'Plante', 'Glace', 'Combat', 'Poison', 'Sol', 'Vol',
+    'Psy', 'Insecte', 'Roche', 'Spectre', 'Dragon', 'Ténèbres', 'Acier', 'Fée'];
+const TYPES_EN = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying',
+    'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'];
+
+export function typeLabel(type: number): string {
+    if (type < 0) return '';
+    return (label('hp') === 'PV' ? TYPES_FR : TYPES_EN)[type] ?? '';
+}

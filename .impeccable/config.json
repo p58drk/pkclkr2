@@ -11,6 +11,51 @@
         ],
         "createdAt": "2026-11-04T23:02:35.033Z",
         "reason": "assistant: img src is set by a Knockout attr binding at runtime (foe sprite)"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:28:21.206Z",
+        "reason": "assistant: archived decision-round sketch, not shipped; the halo is the direction the user chose on the decision page"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-11-04T23:28:21.225Z",
+        "reason": "assistant: archived decision-round sketch, not shipped"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:28:21.243Z",
+        "reason": "assistant: archived decision-round sketch of an unchosen challenger, not shipped"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-console.html"
+        ],
+        "createdAt": "2026-11-04T23:28:21.260Z",
+        "reason": "assistant: archived decision-round sketch of an unchosen challenger, not shipped"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-11-04T23:28:28.591Z",
+        "reason": "assistant: archived decision sketch; the gradient is a sprite placeholder, not a background glow"
       }
     ]
   }

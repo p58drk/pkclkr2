@@ -231,7 +231,7 @@ html.rd {
         height: var(--mini-h);
         border-radius: 16px;
         background: var(--n2);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+        border: 1px solid var(--n3);
         overflow: hidden;
         &::before {
             content: '';
@@ -361,3 +361,6 @@ html.rd {
         }
     }
 }
+
+// Route status mark next to the route name: ● all caught, ✶ all caught shiny.
+html.rd .rd-where .rd-mark { margin-left: 6px; color: var(--n7); font: 600 13px/1 var(--font-ui); vertical-align: 4px; }

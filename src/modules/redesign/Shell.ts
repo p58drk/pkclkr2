@@ -5,7 +5,7 @@
 // below does not know about falls back to the Activities page, so upstream
 // additions stay reachable after a merge.
 import GameLoadState from '../utilities/GameLoadState';
-import { label, LabelKey } from './labels';
+import { label, LabelKey, typeLabel } from './labels';
 import Automation from './automation/Automation';
 
 const w = window as any;
@@ -26,6 +26,7 @@ const resolveScriptGlobals = (): any => {
         BreedingController: get('BreedingController'),
         FarmController: get('FarmController'),
         PartyController: get('PartyController'),
+        RouteHelper: get('RouteHelper'),
     };
 };
 
@@ -134,9 +135,28 @@ export default class RedesignShell {
         }
     });
 
-    static typeName(type: number): string {
-        return type >= 0 ? (w.PokemonType?.[type] ?? '') : '';
-    }
+    static foeTypes = ko.pureComputed(() => {
+        const foe = RedesignShell.foe();
+        if (!foe) return [];
+        return [foe.type1, foe.type2]
+            .filter((t: number) => t != null && t >= 0)
+            .filter((t: number, i: number, a: number[]) => a.indexOf(t) === i)
+            .map((t: number) => ({ name: typeLabel(t), color: ENERGY[t] }));
+    });
+
+    // Route completion as a mark: ● all caught, ✶ all caught shiny.
+    static routeMark = ko.pureComputed(() => {
+        try {
+            const { RouteHelper, player } = RedesignShell.refs();
+            const GS = w.GameConstants.GameState;
+            if (RedesignShell.state() !== GS.fighting) return '';
+            if (RouteHelper.routeCompleted(player.route, player.region, true)) return '✶';
+            if (RouteHelper.routeCompleted(player.route, player.region, false)) return '●';
+            return '';
+        } catch {
+            return '';
+        }
+    });
 
     static attack() {
         const GS = w.GameConstants?.GameState;
@@ -153,7 +173,9 @@ export default class RedesignShell {
 
     static formatNumber(n: number): string {
         if (n == null || Number.isNaN(n)) return '';
-        return Math.round(n).toLocaleString('fr-FR').replace(/ | /g, ' ');
+        const locale = label('hp') === 'PV' ? 'fr-FR' : 'en-US';
+        // Narrow no-break and no-break spaces become a thin space.
+        return Math.round(n).toLocaleString(locale).replace(/[\u202f\u00a0]/g, '\u2009');
     }
 
     // ----- Boot -----

@@ -46,9 +46,68 @@ html.rd {
     #battleItemContainer .table td:first-child,
     #battleItemContainer .table td:last-child { padding-left: 2px !important; padding-right: 2px !important; }
 
-    // Module bodies that upstream makes resizable get a quiet handle.
-    .rd-slot [data-bind*='resizable'] { resize: vertical; }
+    // Upstream resizable module heights: the page scrolls instead, no browser grip.
+    .rd-slot [data-bind*='resizable'] { resize: none !important; }
+
+    // ----- Pokémon: dense grid of fixed-scale sprites with marks -----
+    #pokemonListContainer {
+        [data-bind*='resizable'] { height: auto !important; max-height: none !important; }
+        .input-group { padding: 0 16px 8px; }
+        .input-group-append { background: transparent !important; }
+        div:has(> .pokemon-row) {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+            gap: 2px;
+            padding: 0 12px;
+        }
+        .pokemon-row {
+            position: relative;
+            flex-direction: column;
+            align-items: stretch !important;
+            padding: 6px 4px 8px !important;
+            border: 0 !important;
+            border-radius: var(--radius);
+            font-size: 12px;
+            text-align: center;
+            &:hover { background: var(--n2); }
+            > img { width: 64px; height: 64px; max-height: none !important; margin: 0 auto; object-fit: contain; image-rendering: pixelated; }
+            > .flex-grow-1 > .d-flex { flex-direction: column; justify-content: center; gap: 0; }
+            .ml-auto { margin: 0 !important; justify-content: center; text-align: center !important; }
+            knockout[data-bind*='displayName'] { font: 500 13px/1.2 var(--font-ui); color: var(--n9); }
+            knockout[data-bind='text: level'], knockout[data-bind*='attack.toLocaleString'] { font: 600 14px var(--font-fig); font-variant-numeric: tabular-nums; }
+            sup { font-size: 0; position: absolute; top: 6px; right: 8px; }
+            sup::after { content: '✶'; font-size: 14px; color: var(--warn); }
+        }
+    }
+
+    // ----- Progress: quest lines read as items under the section header -----
+    #questDisplayContainer .questLine > .card-header {
+        min-height: 44px;
+        color: var(--n9);
+        font: 600 16px/1.3 var(--font-ui);
+        letter-spacing: 0;
+        text-transform: none;
+    }
+    #questDisplayContainer .questDisplayBlock { padding-left: 16px; padding-right: 16px; }
+    #questDisplayContainer .questDisplayBlock .card-header { margin: 0 -16px; }
+
+    // Help buttons: a drawn icon instead of a "?" glyph.
+    .card .btn[style*='position: absolute'] {
+        &[data-bind^='tooltip'] { font-size: 0 !important; }
+        &[data-bind^='tooltip']::before {
+            content: '';
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background: currentColor;
+            -webkit-mask: url('../assets/images/redesign/help.svg') center / contain no-repeat;
+            mask: url('../assets/images/redesign/help.svg') center / contain no-repeat;
+        }
+    }
 }
 
 html.rd #battleItemContainer .table,
-html.rd #battleItemContainer .table-bordered { border: 0 !important; }
+html.rd #battleItemContainer .table-bordered,
+html.rd #battleItemContainer .table td,
+html.rd #battleItemContainer .table tr { border: 0 !important; box-shadow: none !important; }
+html.rd #battleItemContainer .card-header { border-bottom: 1px solid var(--line) !important; }

@@ -292,3 +292,6 @@ html.rd {
         border-bottom: 1px solid var(--line);
     }
 }
+
+// Bootstrap draws a 2px light rule between consecutive tbody elements.
+html.rd .table tbody + tbody { border-top: 0; }

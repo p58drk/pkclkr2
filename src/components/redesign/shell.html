@@ -10,7 +10,12 @@
                 <span data-bind="text: RedesignShell.label('defeated')"></span>
                 <!-- /ko -->
             </small>
-            <b data-bind="text: RedesignShell.locationName()"></b>
+            <b>
+                <span data-bind="text: RedesignShell.locationName()"></span>
+                <!-- ko if: RedesignShell.routeMark() -->
+                <span class="rd-mark" data-bind="text: RedesignShell.routeMark(), attr: { title: RedesignShell.routeMark() === '✶' ? 'Shiny ✓' : '✓' }"></span>
+                <!-- /ko -->
+            </b>
         </div>
         <button type="button" class="rd-icon-btn rd-top-menu" data-bind="click: () => RedesignShell.go('menu'), attr: { 'aria-label': RedesignShell.label('menu') }, css: { 'is-active': RedesignShell.page() === 'menu' }">
             <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-menu"></use></svg>
@@ -47,6 +52,21 @@
     <main id="rd-main" data-bind="attr: { 'data-page': RedesignShell.page() }">
         <!-- Combat dock: the fight, Poké Balls and currencies. Docked on desktop, top of the Combat page on mobile. -->
         <section id="rd-dock" aria-label="Combat">
+            <!-- Trading-card top line: name left, HP right, energy marks below. -->
+            <!-- ko if: RedesignShell.foe() -->
+            <div id="rd-foehead">
+                <div class="rd-foe-id">
+                    <span class="rd-foe-name" data-bind="text: RedesignShell.foe().displayName"></span>
+                    <span class="rd-foe-types" data-bind="foreach: RedesignShell.foeTypes()">
+                        <span class="rd-energy-type"><i class="rd-energy" data-bind="style: { backgroundColor: $data.color }"></i><span data-bind="text: $data.name"></span></span>
+                    </span>
+                </div>
+                <div class="rd-foe-hp">
+                    <small data-bind="text: RedesignShell.label('hp')"></small>
+                    <b class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.foe().health())"></b>
+                </div>
+            </div>
+            <!-- /ko -->
             <div id="rd-dock-fight" class="rd-slot"></div>
             <button type="button" class="rd-autopill" data-bind="click: () => RedesignShell.go('menu'), css: { 'is-on': RedesignAutomation.Automation.active().length > 0 }">
                 <span class="rd-autopill-dot" aria-hidden="true"></span>
