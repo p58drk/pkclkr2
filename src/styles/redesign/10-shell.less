@@ -263,6 +263,7 @@ html.rd {
         cursor: pointer;
         img { width: 56px; height: 56px; object-fit: contain; image-rendering: pixelated; }
         &:active img { transform: scale(.92); }
+        &:disabled { cursor: default; &:active img { transform: none; } }
     }
     .rd-mini-info {
         position: relative;
@@ -295,7 +296,7 @@ html.rd {
     // ----- Tablet: centred column -----
     @media (min-width: 700px) {
         #rd-main { max-width: 760px; margin: 0 auto; }
-        #rd-mini { left: 50%; right: auto; width: 744px; transform: translateX(-50%); }
+        #rd-mini { left: 50%; right: auto; width: ~"min(744px, calc(100% - 16px))"; transform: translateX(-50%); }
     }
 
     // ----- Desktop: navigation rail + docked combat column -----
@@ -376,3 +377,16 @@ html.rd {
 
 // Route status mark next to the route name: ● all caught, ✶ all caught shiny.
 html.rd .rd-where .rd-mark { margin-left: 6px; color: var(--n7); font: 600 13px/1 var(--font-ui); vertical-align: 4px; }
+
+html.rd {
+    // Pinch zoom is allowed again; double-tap zoom stays off for fast tapping.
+    body { touch-action: manipulation; }
+    // Focus rings inside clipped containers are drawn inside.
+    #rd-mini :focus-visible, #battleContainer :focus-visible { outline-offset: -3px; }
+}
+
+// Bootstrap rows inside flush modules overhang by their negative gutters (7px on the
+// farm): clip horizontally so phones never zoom the whole page out.
+html.rd #rd-shell { overflow-x: clip; }
+html.rd .rd-slot .card-body > .row,
+html.rd .rd-slot .card-body > div > .row { margin-left: 0; margin-right: 0; }

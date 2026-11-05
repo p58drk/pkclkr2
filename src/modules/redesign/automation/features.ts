@@ -78,10 +78,11 @@ Automation.register({
         eggs.forEach((egg, i) => {
             if (egg().canHatch()) breeding.hatchPokemonEgg(i);
         });
-        let guard = eggs.length;
-        while (guard-- > 0 && breeding.hasFreeEggSlot()) {
-            const next = BreedingController.hatcherySortedFilteredList()[0];
-            if (!next || !breeding.addPokemonToHatchery(next)) break;
+        if (!breeding.hasFreeEggSlot()) return;
+        // Sorted once per tick (the list is idle while the hatchery window is closed).
+        const candidates = BreedingController.hatcherySortedFilteredList();
+        for (let i = 0; i < candidates.length && breeding.hasFreeEggSlot(); i++) {
+            if (!candidates[i].breeding) breeding.addPokemonToHatchery(candidates[i]);
         }
     },
     status: (ctx) => {
@@ -287,8 +288,8 @@ Automation.register({
         en: 'Unlocks every Oak Item slot without the caught-Pokémon requirement.',
     },
     warning: {
-        fr: 'Change les règles du jeu tant que c’est actif. Rien n’est écrit dans la sauvegarde.',
-        en: 'Changes the game rules while enabled. Nothing is written to the save.',
+        fr: 'Change les règles du jeu tant que c’est actif. Les objets activés en plus sont enregistrés dans la sauvegarde ; à la désactivation, ceux qui dépassent la limite normale sont retirés.',
+        en: 'Changes the game rules while enabled. Extra active items are saved; disabling removes the ones above the normal limit.',
     },
     enable: (ctx) => {
         const oak = ctx.g.App.game.oakItems;
@@ -296,6 +297,10 @@ Automation.register({
         oak.unlockRequirements = oak.unlockRequirements.map(() => 0);
     },
     disable: (ctx) => {
-        if (originalOakRequirements) ctx.g.App.game.oakItems.unlockRequirements = [...originalOakRequirements];
+        const oak = ctx.g.App.game.oakItems;
+        if (originalOakRequirements) oak.unlockRequirements = [...originalOakRequirements];
+        // Drop active items above the normal limit, last ones first.
+        const active = oak.itemList.filter((item: any) => item.isActive);
+        active.slice(oak.maxActiveCount()).reverse().forEach((item: any) => { item.isActive = false; });
     },
 });

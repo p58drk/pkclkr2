@@ -11,6 +11,9 @@ html.rd {
         max-width: 48ch;
     }
     #rd-slot-activities:not(:has(> .card:not([style*='display: none']))) + .rd-empty { display: block; }
+    @media (min-width: 1100px) {
+        #pokemonListContainer .flex-grow-1[style*='overflow'] { max-height: ~"calc(100vh - var(--top-h) - 120px)"; }
+    }
 
     // ----- Battle items: a row of item columns, active effect marked by a tonal cell -----
     #battleItemContainer {
@@ -52,9 +55,17 @@ html.rd {
     // ----- Pokémon: dense grid of fixed-scale sprites with marks -----
     #pokemonListContainer {
         [data-bind*='resizable'] { height: auto !important; max-height: none !important; }
+        // The lazy loader observes this scroller: it must stay bounded or the whole party renders.
+        .flex-grow-1[style*='overflow'] {
+            max-height: ~"calc(100vh - var(--top-h) - var(--nav-h) - var(--mini-h) - var(--safe-b) - 120px)";
+            max-height: ~"calc(100dvh - var(--top-h) - var(--nav-h) - var(--mini-h) - var(--safe-b) - 120px)";
+            overflow: auto;
+        }
+        // Upstream light-theme fixes (yeti) still match the body class: keep the ramp.
+        .pokemon-row .text-muted { color: var(--n7) !important; }
         .input-group { padding: 0 16px 8px; }
         .input-group-append { background: transparent !important; }
-        div:has(> .pokemon-row) {
+        .rd-pokegrid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
             gap: 0;

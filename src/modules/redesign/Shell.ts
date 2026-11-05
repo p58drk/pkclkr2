@@ -76,7 +76,7 @@ export default class RedesignShell {
     static go(page: PageId) {
         RedesignShell.page(page);
         localStorage.setItem(STORAGE_PAGE, page);
-        document.getElementById('rd-main')?.scrollTo({ top: 0 });
+        window.scrollTo({ top: 0 });
     }
 
     // Shows the page that holds an element, synchronously (Knockout defers its own
@@ -135,7 +135,16 @@ export default class RedesignShell {
 
     static foe = ko.pureComputed(() => {
         if (!RedesignShell.isFighting()) return null;
+        // In a dungeon the last foe stays in Battle.enemyPokemon while the player explores.
+        const r = RedesignShell.refs();
+        if (RedesignShell.state() === w.GameConstants?.GameState?.dungeon && !r?.DungeonRunner?.fighting?.()) return null;
         return w.Battle?.enemyPokemon?.() ?? null;
+    });
+
+    // Battle Frontier fights on its own; the mini bar shows the foe but has nothing to hit.
+    static canAttack = ko.pureComputed(() => {
+        const GS = w.GameConstants?.GameState;
+        return !!RedesignShell.foe() && RedesignShell.state() !== GS?.battleFrontier;
     });
 
     static regionName = ko.pureComputed(() => {
@@ -201,7 +210,7 @@ export default class RedesignShell {
         switch (RedesignShell.state()) {
             case GS.fighting: w.Battle?.clickAttack?.(); break;
             case GS.gym: r.GymBattle?.clickAttack?.(); break;
-            case GS.dungeon: r.DungeonRunner?.handleInteraction?.(); break;
+            case GS.dungeon: if (r.DungeonRunner?.fighting?.()) r.DungeonBattle?.clickAttack?.(); break;
             case GS.temporaryBattle: r.TemporaryBattleBattle?.clickAttack?.(); break;
             default: break;
         }
@@ -256,6 +265,8 @@ export default class RedesignShell {
                 if (el) RedesignShell.moveInto(el, slot);
             });
         });
+        // Pokémon list: a class instead of a :has() rule (re-evaluated on every row insert).
+        document.querySelector('#pokemonListBody div[data-bind^="let:"]')?.classList.add('rd-pokegrid');
         // Fallback: anything upstream adds to a column lands on Activities.
         const fallback = document.getElementById('rd-slot-activities');
         UPSTREAM_COLUMNS.forEach((col) => {
@@ -272,17 +283,57 @@ export default class RedesignShell {
         }
     }
 
+    private static lastFoeColours = '';
+
     static applyFoeColours(foe: any) {
-        const root = document.documentElement.style;
         const t1 = foe?.type1 ?? -1;
         const t2 = foe?.type2 ?? -1;
-        root.setProperty('--foe', t1 >= 0 ? ENERGY[t1] : 'var(--n5)');
-        root.setProperty('--foe-2', t2 >= 0 ? ENERGY[t2] : (t1 >= 0 ? ENERGY[t1] : 'var(--n5)'));
+        const c1 = t1 >= 0 ? ENERGY[t1] : 'var(--n5)';
+        const c2 = t2 >= 0 ? ENERGY[t2] : c1;
+        // Only write when the colours change, and below the root, to keep restyles local.
+        if (`${c1}|${c2}` === RedesignShell.lastFoeColours) return;
+        RedesignShell.lastFoeColours = `${c1}|${c2}`;
+        const host = (document.getElementById('rd-shell') ?? document.documentElement).style;
+        host.setProperty('--foe', c1);
+        host.setProperty('--foe-2', c2);
+    }
+
+    // Phones: allow pinch zoom (upstream blocks it) and draw under the notch.
+    private static fixViewport() {
+        const meta = document.querySelector('meta[name="viewport"]');
+        meta?.setAttribute('content', 'width=device-width, initial-scale=1, viewport-fit=cover');
+    }
+
+    // Upstream swallows Space on keyup and maps it to game actions: keep Space/Enter for
+    // the shell's own buttons and switches.
+    private static guardKeys(shell: HTMLElement) {
+        const stop = (e: KeyboardEvent) => {
+            const t = e.target as HTMLElement;
+            if ((e.key === ' ' || e.key === 'Enter') && t.closest('button, a, [role="switch"], input, select')) e.stopPropagation();
+        };
+        shell.addEventListener('keydown', stop);
+        shell.addEventListener('keyup', stop);
     }
 
     static boot() {
         if (RedesignShell.enabled) RedesignShell.patchTutorials();
         if (!RedesignShell.enabled) {
+            // Classic interface: drop the shell (no hidden bindings) and offer a way back.
+            const onClassicReady = () => {
+                document.getElementById('rd-shell')?.remove();
+                const menu = document.querySelector('#startMenu .dropdown-menu');
+                if (menu && !menu.querySelector('.rd-back')) {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.className = 'dropdown-item rd-back';
+                    a.href = '#';
+                    a.textContent = label('redesignUI');
+                    a.addEventListener('click', (e) => { e.preventDefault(); RedesignShell.setClassic(false); });
+                    li.appendChild(a);
+                    menu.prepend(li);
+                }
+            };
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onClassicReady); else onClassicReady();
             // Automation still runs under the classic interface.
             GameLoadState.onLoadState(GameLoadState.states.running, () => {
                 RedesignShell.refs(resolveScriptGlobals());
@@ -298,6 +349,8 @@ export default class RedesignShell {
             const shell = document.getElementById('rd-shell');
             const game = document.getElementById('game');
             if (shell && game && shell.parentElement !== game) game.prepend(shell);
+            if (shell) RedesignShell.guardKeys(shell);
+            RedesignShell.fixViewport();
             RedesignShell.relocate();
         };
         if (document.readyState === 'loading') {
@@ -313,6 +366,7 @@ export default class RedesignShell {
         });
         GameLoadState.onLoadState(GameLoadState.states.running, () => Automation.start(RedesignShell.refs()));
         GameLoadState.onLoadState(GameLoadState.states.appliedBindings, () => {
+            document.documentElement.lang = label('hp') === 'PV' ? 'fr' : 'en';
             RedesignShell.applyFoeColours(w.Battle?.enemyPokemon?.());
             w.Battle?.enemyPokemon?.subscribe((foe) => RedesignShell.applyFoeColours(foe));
         });

@@ -13,7 +13,8 @@
             <b>
                 <span data-bind="text: RedesignShell.locationName()"></span>
                 <!-- ko if: RedesignShell.routeMark() -->
-                <span class="rd-mark" data-bind="text: RedesignShell.routeMark(), attr: { title: RedesignShell.routeMark() === '✶' ? 'Shiny ✓' : '✓' }"></span>
+                <span class="rd-mark" aria-hidden="true" data-bind="text: RedesignShell.routeMark()"></span>
+                <span class="sr-only" data-bind="text: RedesignShell.routeMark() === '✶' ? RedesignShell.label('routeShiny') : RedesignShell.label('routeCaught')"></span>
                 <!-- /ko -->
             </b>
         </div>
@@ -208,10 +209,10 @@
     <!-- Mini combat bar: the fight stays one tap away on every other page (mobile). -->
     <div id="rd-mini" data-bind="css: { 'has-foe': !!RedesignShell.foe() }">
         <!-- ko if: RedesignShell.foe() -->
-        <button type="button" class="rd-mini-hit" data-bind="click: () => RedesignShell.attack(), attr: { 'aria-label': RedesignShell.label('attack') }">
+        <button type="button" class="rd-mini-hit" data-bind="click: () => RedesignShell.attack(), enable: RedesignShell.canAttack(), attr: { 'aria-label': RedesignShell.label('attack') }">
             <img alt="" data-bind="attr: { src: RedesignShell.foe().getImage() }">
         </button>
-        <button type="button" class="rd-mini-info" data-bind="click: () => RedesignShell.go('combat'), attr: { 'aria-label': RedesignShell.label('goToCombat') }">
+        <button type="button" class="rd-mini-info" data-bind="click: () => RedesignShell.go('combat'), attr: { title: RedesignShell.label('goToCombat') }">
             <span class="rd-mini-line">
                 <span class="rd-mini-name" data-bind="text: RedesignShell.foe().displayName"></span>
                 <span class="rd-num rd-mini-hp" data-bind="text: RedesignShell.formatNumber(RedesignShell.foe().health())"></span>

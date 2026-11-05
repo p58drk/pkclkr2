@@ -43,6 +43,8 @@ html.rd {
     .rd-switch {
         flex: none;
         position: relative;
+        // 44px hit area around the 32px track.
+        &::after { content: ''; position: absolute; inset: -6px -4px; }
         width: 52px;
         height: 32px;
         border: 0;
@@ -120,5 +122,9 @@ html.rd {
     }
 }
 @media (min-width: 700px) and (max-width: 1099.98px) {
-    html.rd #rd-main[data-page='combat'] .rd-autopill { left: 50%; right: auto; width: 744px; transform: translateX(-50%); }
+    html.rd #rd-main[data-page='combat'] .rd-autopill { left: 50%; right: auto; width: ~"min(744px, calc(100% - 16px))"; transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html.rd .rd-switch, html.rd .rd-switch i, html.rd .btn, html.rd .rd-mini-hit img { transition: none !important; }
 }

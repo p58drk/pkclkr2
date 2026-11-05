@@ -104,6 +104,7 @@ export class AutomationFeature {
 
     statusText = ko.pureComputed(() => {
         Automation.ready();
+        Object.values(this.options).forEach((o) => o()); // status reads options with peek()
         if (!this.enabled() || !this.def.status) return '';
         const ctx = Automation.context(this);
         try { return ctx ? this.def.status(ctx) : ''; } catch { return ''; }
@@ -134,6 +135,19 @@ export default class Automation {
 
     static active = ko.pureComputed(() => Automation.features.filter((f) => f.enabled() && f.available()));
 
+    private static warned = new Set<string>();
+
+    static report(feature: AutomationFeature, e: unknown) {
+        const msg = String((e as Error)?.message || e);
+        feature.lastError(msg);
+        const key = `${feature.id}:${msg}`;
+        if (!Automation.warned.has(key)) {
+            Automation.warned.add(key);
+            // eslint-disable-next-line no-console
+            console.warn(`[automation] ${feature.id}: ${msg}`);
+        }
+    }
+
     static persist() {
         const data: Stored = {};
         Automation.features.forEach((f) => {
@@ -141,7 +155,12 @@ export default class Automation {
             Object.entries(f.options).forEach(([k, o]) => { options[k] = o(); });
             data[f.id] = { enabled: f.enabled.peek(), options };
         });
-        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+        try {
+            localStorage.setItem(STORE_KEY, JSON.stringify(data));
+        } catch (e) {
+            // eslint-disable-next-line no-console
+            console.warn('[automation] settings not saved', e);
+        }
     }
 
     static context(feature: AutomationFeature): AutomationContext | null {
@@ -162,11 +181,20 @@ export default class Automation {
             const ctx = Automation.context(f);
             try { f.def.enable?.(ctx); } catch (e) { f.lastError(String((e as Error)?.message || e)); }
         });
+        // The game keeps ticking in a Web Worker when the tab is hidden, while timers get
+        // throttled: run automation from the game tick, plus a light timer while visible
+        // for a smoother auto clicker.
+        const game = globals?.App?.game;
+        if (game && !game.__rdAutomationHooked) {
+            const original = game.gameTick.bind(game);
+            game.gameTick = () => { original(); Automation.tick(); };
+            game.__rdAutomationHooked = true;
+        }
         window.clearInterval(Automation.timer);
-        Automation.timer = window.setInterval(() => Automation.tick(), 20);
+        Automation.timer = window.setInterval(() => { if (!document.hidden) Automation.tick(); }, 50);
     }
 
-    private static tick() {
+    static tick() {
         const now = Date.now();
         Automation.features.forEach((f) => {
             if (!f.def.tick || !f.enabled.peek()) return;
@@ -180,7 +208,7 @@ export default class Automation {
                 f.def.tick(ctx);
                 if (f.lastError.peek()) f.lastError('');
             } catch (e) {
-                f.lastError(String((e as Error)?.message || e));
+                Automation.report(f, e);
             }
         });
     }
