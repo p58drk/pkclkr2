@@ -145,12 +145,22 @@
         <section class="rd-page" id="rd-page-menu">
             <h2 class="rd-page-title" data-bind="text: RedesignShell.label('menu')"></h2>
 
-            <h3 class="rd-section-title" data-bind="text: RedesignShell.label('automation')"></h3>
-            <div id="rd-menu-automation" data-bind="foreach: RedesignAutomation.groups">
+            <h3 class="rd-section-title">
+                <button type="button" class="rd-collapse" data-bind="click: () => RedesignShell.toggleSection('automation'), attr: { 'aria-expanded': RedesignShell.sectionOpen('automation') ? 'true' : 'false' }">
+                    <span data-bind="text: RedesignShell.label('automation')"></span>
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-down"></use></svg>
+                </button>
+            </h3>
+            <div id="rd-menu-automation" data-bind="foreach: RedesignAutomation.groups, visible: RedesignShell.sectionOpen('automation')">
                 <!-- ko if: $data.id !== 'vanilla' -->
-                <h4 class="rd-group-title" data-bind="text: $data.title"></h4>
+                <h4 class="rd-group-title">
+                    <button type="button" class="rd-collapse" data-bind="click: () => RedesignShell.toggleSection('group-' + $data.id), attr: { 'aria-expanded': RedesignShell.sectionOpen('group-' + $data.id) ? 'true' : 'false' }">
+                        <span data-bind="text: $data.title"></span>
+                        <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-down"></use></svg>
+                    </button>
+                </h4>
                 <!-- /ko -->
-                <div class="rd-list" data-bind="foreach: $data.features">
+                <div class="rd-list" data-bind="foreach: $data.features, visible: $data.id === 'vanilla' || RedesignShell.sectionOpen('group-' + $data.id)">
                     <div class="rd-auto" data-bind="css: { 'is-on': enabled(), 'is-unavailable': !available(), 'is-open': expanded() }">
                         <div class="rd-auto-row">
                             <button type="button" class="rd-auto-main" data-bind="click: () => expanded(!expanded()), attr: { 'aria-expanded': expanded() ? 'true' : 'false' }">

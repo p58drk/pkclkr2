@@ -97,6 +97,7 @@ export default class RedesignShell {
     }
 
     static goToAutomation() {
+        if (!RedesignShell.sectionOpen('automation')) RedesignShell.toggleSection('automation');
         RedesignShell.go('menu');
         window.setTimeout(() => document.getElementById('rd-menu-automation')?.scrollIntoView({ block: 'start' }), 0);
     }
@@ -369,6 +370,21 @@ export default class RedesignShell {
                 : label('soldTreasures').replace('{n}', RedesignShell.formatNumber(count)).replace('{v}', RedesignShell.formatNumber(value)),
             type: w.NotificationConstants.NotificationOption.success,
         });
+    }
+
+    // Collapsible Menu sections (open by default), remembered across launches.
+    private static sections = ko.observable<Record<string, boolean>>((() => {
+        try { return JSON.parse(localStorage.getItem('rd.sections') || '{}'); } catch { return {}; }
+    })());
+
+    static sectionOpen(key: string): boolean {
+        return RedesignShell.sections()[key] !== false;
+    }
+
+    static toggleSection(key: string) {
+        const next = { ...RedesignShell.sections(), [key]: !RedesignShell.sectionOpen(key) };
+        RedesignShell.sections(next);
+        try { localStorage.setItem('rd.sections', JSON.stringify(next)); } catch { /* not saved */ }
     }
 
     // The mini bar floats above the tabs on pages other than Combat (phones).

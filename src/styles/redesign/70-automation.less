@@ -87,3 +87,23 @@ html.rd {
 @media (prefers-reduced-motion: reduce) {
     html.rd .rd-switch, html.rd .rd-switch i, html.rd .btn, html.rd .rd-mini-hit img { transition: none !important; }
 }
+
+// Collapsible section and group titles in the Menu.
+html.rd .rd-collapse {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    margin: -6px 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    cursor: pointer;
+    svg { width: 16px; height: 16px; transition: transform .2s var(--ease); }
+    &[aria-expanded='false'] svg { transform: rotate(-90deg); }
+}
+@media (prefers-reduced-motion: reduce) { html.rd .rd-collapse svg { transition: none; } }
