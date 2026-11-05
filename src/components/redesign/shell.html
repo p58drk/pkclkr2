@@ -248,6 +248,26 @@
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('twelveEggs')"></span>
             </button>
         </div>
+        <div id="rd-farm-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('farmSpeed')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('farmBoost') + ' ×' + options.speed()"></span>
+            </button>
+        </div>
+        <div id="rd-farmmodal-tools" class="rd-inline-tools" data-bind="with: RedesignAutomation.Automation.find('farmSpeed')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('farmBoost') + ' ×' + options.speed()"></span>
+            </button>
+        </div>
+        <div id="rd-mine-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('mineSpeed')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('mineBoost') + ' ×' + options.speed()"></span>
+            </button>
+        </div>
+        <div id="rd-minemodal-tools" class="rd-inline-tools" data-bind="with: RedesignAutomation.Automation.find('mineSpeed')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('mineBoost') + ' ×' + options.speed()"></span>
+            </button>
+        </div>
         <div id="rd-tracker-go" class="rd-tracker-go">
             <!-- ko if: RedesignShell.trackedDestination() -->
             <button type="button" class="rd-action" data-bind="click: () => RedesignShell.travelTo(App.game.achievementTracker.trackedAchievement())">

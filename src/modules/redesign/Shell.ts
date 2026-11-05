@@ -458,6 +458,13 @@ export default class RedesignShell {
         };
         moveTo('rd-balls-tools', '#pokeballSelector');
         moveTo('rd-hatch-tools', '#breedingDisplay');
+        moveTo('rd-farm-tools', '#farmDisplay');
+        moveTo('rd-mine-tools', '#undergroundDisplay');
+        moveTo('rd-minemodal-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
+        // The farm window footer: first, before the info button.
+        const farmFooter = document.querySelector('#farmModal .modal-footer');
+        const farmModalTools = document.getElementById('rd-farmmodal-tools');
+        if (farmFooter && farmModalTools && farmModalTools.parentElement !== farmFooter) farmFooter.prepend(farmModalTools);
         moveTo('rd-tracker-go', '#achievementTrackerBody');
         // The start menu's item list becomes the Menu page's game section.
         const list = document.querySelector('#startMenu .dropdown-menu');

@@ -173,3 +173,17 @@ html.rd .breedingListItem {
     content-visibility: auto;
     contain-intrinsic-block-size: auto 140px;
 }
+
+// ----- Farm and mine: accelerator switches, centred pager -----
+html.rd {
+    #farmDisplay > .card-header,
+    #undergroundDisplay > .card-header { padding-right: 196px !important; }
+    #farmDisplay > .rd-module-tools,
+    #undergroundDisplay > .rd-module-tools { right: 64px; }
+    .rd-inline-tools { display: flex; align-items: center; margin: 0 8px 0 0; }
+    #farmModal .modal-footer > .rd-inline-tools { margin-right: auto; }
+    #farmModal .modal-footer > .rd-inline-tools ~ .btn.mr-auto { margin-right: 0 !important; }
+    #mineModal #dig .col-6.d-flex { align-items: center; gap: 6px; flex-wrap: wrap; }
+    // "x / y" between the two arrows sits in the middle.
+    [data-bind*='navigateIndex()+1'], [data-bind*='navigateIndex() + 1'] { text-align: center; font: 600 15px/1 var(--font-fig); }
+}
