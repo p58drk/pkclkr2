@@ -486,3 +486,27 @@ Automation.register({
         if (mine && !mine.completed && mine.timeUntilDiscovery > 0.001) mine._timeUntilDiscovery(0.001);
     },
 });
+
+// Hatchery: eggs are ready as soon as they are placed (rule change). Hatching itself
+// stays with the player or with Auto hatchery.
+Automation.register({
+    id: 'hatchInstant',
+    group: 'custom',
+    name: { fr: 'Éclosion instantanée', en: 'Instant hatch' },
+    description: {
+        fr: 'Les œufs sont prêts à éclore dès qu’ils sont posés. Avec l’auto-éclosion, ils éclosent aussitôt.',
+        en: 'Eggs are ready to hatch as soon as they are placed. With Auto hatchery, they hatch at once.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. Rien d’autre n’est modifié dans la sauvegarde.',
+        en: 'Changes the game rules while enabled. Nothing else in the save is changed.',
+    },
+    available: (ctx) => ctx.g.App.game.breeding.canAccess(),
+    intervalMs: 250,
+    tick: (ctx) => {
+        (ctx.g.App.game.breeding.eggList as Array<KnockoutObservable<any>>).forEach((slot) => {
+            const egg = slot();
+            if (!egg.isNone() && !egg.canHatch()) egg.steps(egg.totalSteps);
+        });
+    },
+});

@@ -457,7 +457,10 @@ export default class RedesignShell {
             if (el && host && el.parentElement !== host) host.appendChild(el);
         };
         moveTo('rd-balls-tools', '#pokeballSelector');
-        moveTo('rd-hatch-tools', '#breedingDisplay');
+        // Hatchery module: the switch row opens the module body, above the eggs.
+        const eggList = document.querySelector('#breedingDisplay #eggList');
+        const hatchTools = document.getElementById('rd-hatch-tools');
+        if (eggList && hatchTools && hatchTools.parentElement !== eggList) eggList.prepend(hatchTools);
         // Farm module: the switch row opens the module body, above the tools.
         const farmBody = document.querySelector('#farmDisplay #plotListCard');
         const farmTools = document.getElementById('rd-farm-tools');

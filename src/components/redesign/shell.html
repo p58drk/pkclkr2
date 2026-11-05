@@ -243,10 +243,22 @@
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('zeroDelay')"></span>
             </button>
         </div>
-        <div id="rd-hatch-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('hatchery12')">
+        <div id="rd-hatch-tools" class="rd-switch-row">
+            <!-- ko with: RedesignAutomation.Automation.find('autoHatch') -->
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('autoHatchShort')"></span>
+            </button>
+            <!-- /ko -->
+            <!-- ko with: RedesignAutomation.Automation.find('hatchInstant') -->
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('hatchInstant')"></span>
+            </button>
+            <!-- /ko -->
+            <!-- ko with: RedesignAutomation.Automation.find('hatchery12') -->
             <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('twelveEggs')"></span>
             </button>
+            <!-- /ko -->
         </div>
         <div id="rd-farm-tools" class="rd-switch-row">
             <!-- ko with: RedesignAutomation.Automation.find('autoFarm') -->
