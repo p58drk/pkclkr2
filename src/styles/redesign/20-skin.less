@@ -50,8 +50,8 @@ html.rd {
     }
     .card-header[aria-expanded='false'] { color: var(--n7); }
     // Header tools (help, settings, view toggles) sit at the right of the header.
-    .card > .btn[style*='position: absolute'],
-    .card > .btn[style*='position:absolute'],
+    .card:not(#townMap) > .btn[style*='position: absolute'],
+    .card:not(#townMap) > .btn[style*='position:absolute'],
     .card > img.clickable[style*='position: absolute'],
     .card-header .btn[style*='position: absolute'] {
         top: 4px !important;

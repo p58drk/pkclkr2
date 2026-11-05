@@ -66,6 +66,9 @@ Seules les deux lignes ci-dessus peuvent entrer en conflit. Après une mise à j
 
 ## Pages
 
+L'écran d'accueil (choix de la sauvegarde) garde le logo sur un fond neutre : les sauvegardes forment une liste (toucher = charger, bouton ⋯ = télécharger, importer par-dessus, supprimer) et « Nouvelle sauvegarde » / « Importer » restent en bas de l'écran.
+
+
 | Page | Contenu |
 |---|---|
 | Combat | Interrupteurs auto-clic, auto-arène et auto-donjon, combat, carte, monnaies, Poké Balls (avec « Zéro délai ») |

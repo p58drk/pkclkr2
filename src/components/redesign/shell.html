@@ -1,6 +1,6 @@
 <!-- Fork: redesign shell. Upstream modules are moved into the rd-* slots at boot (see modules/redesign/Shell.ts).
      Never use `if`/`ifnot`/`with` bindings around slots: they would destroy the relocated modules. -->
-<div id="rd-shell" data-bind="attr: { 'data-state': RedesignShell.stateName() }">
+<div id="rd-shell" data-bind="attr: { 'data-state': RedesignShell.stateName() }, css: { 'has-mini': RedesignShell.miniVisible() }">
     <header id="rd-top">
         <div class="rd-where">
             <small>

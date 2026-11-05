@@ -199,6 +199,9 @@ export default class RedesignShell {
         return s === GS.town && r.player.town instanceof r.DungeonTown && !!r.player.town.dungeon?.isUnlocked();
     });
 
+    // The mini bar floats above the tabs on pages other than Combat (phones).
+    static miniVisible = ko.pureComputed(() => !!RedesignShell.foe() && RedesignShell.page() !== 'combat');
+
     static progressTab = ko.observable<'quests' | 'lines' | 'achievements'>('quests');
 
     // Achievement locations: route, gym or dungeon, when the player can already go there.
@@ -400,6 +403,39 @@ export default class RedesignShell {
         host.setProperty('--foe-2', c2);
     }
 
+    // Home screen (save selector): plain text links, a section title, translated actions,
+    // and a visible actions button on every save card.
+    private static homeScreen() {
+        const home = document.getElementById('saveSelector');
+        if (!home) return;
+        const names: Record<string, string> = { discord: 'Discord', github: 'GitHub', wiki: 'Wiki' };
+        home.querySelectorAll('a[target="_blank"] > img[alt]').forEach((img) => {
+            const a = img.parentElement as HTMLAnchorElement;
+            const key = Object.keys(names).find((k) => (img.getAttribute('alt') || '').toLowerCase().includes(k));
+            a.textContent = key ? names[key] : img.getAttribute('alt');
+            a.classList.add('rd-home-link');
+        });
+        const list = home.querySelector('.save-container');
+        if (list && !home.querySelector('.rd-home-title')) {
+            const title = document.createElement('h2');
+            title.className = 'rd-home-title';
+            title.textContent = label('saves');
+            list.parentElement?.insertBefore(title, list);
+        }
+        const [newBtn, importBtn] = Array.from(home.querySelectorAll('.new-import-buttons > label'));
+        if (newBtn) newBtn.textContent = label('newSave');
+        if (importBtn) importBtn.textContent = label('importSave');
+        const decorate = () => home.querySelectorAll('.context-menu-button').forEach((b) => {
+            if (b.classList.contains('rd-save-more')) return;
+            b.classList.add('rd-save-more');
+            b.setAttribute('role', 'button');
+            b.setAttribute('aria-label', label('saveActions'));
+            b.textContent = '⋯';
+        });
+        decorate();
+        if (list) new MutationObserver(decorate).observe(list, { childList: true });
+    }
+
     // Bottom sheets: the grab handle (and the header) drag the sheet down; past a
     // threshold, or a quick flick, it closes. A tap on the handle closes it too.
     private static sheetGestures() {
@@ -502,6 +538,7 @@ export default class RedesignShell {
             RedesignShell.fixViewport();
             RedesignShell.relocate();
             RedesignShell.sheetGestures();
+            RedesignShell.homeScreen();
             // Choosing an achievement to track also travels to its place, when unlocked.
             document.addEventListener('click', (e) => {
                 const row = (e.target as Element)?.closest?.('#achievementsModal .achievement-row');

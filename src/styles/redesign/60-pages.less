@@ -103,8 +103,8 @@ html.rd {
     #questDisplayContainer .questDisplayBlock { padding-left: 16px; padding-right: 16px; }
     #questDisplayContainer .questDisplayBlock .card-header { margin: 0 -16px; }
 
-    // Help buttons: a drawn icon instead of a "?" glyph.
-    .card .btn[style*='position: absolute'] {
+    // Help buttons: a drawn icon instead of a "?" glyph (same weight as the header-tool rule).
+    .card:not(#townMap) .btn[style*='position: absolute'] {
         &[data-bind^='tooltip'] { font-size: 0 !important; }
         &[data-bind^='tooltip']::before {
             content: '';

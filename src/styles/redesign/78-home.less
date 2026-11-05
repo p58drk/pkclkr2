@@ -1,0 +1,254 @@
+// Fork: home screen (save selector and loader), region map header, bottom spacing.
+
+// ----- Home: logo, saves as a list, actions pinned to the bottom -----
+html.rd #saveSelector,
+html.rd #loader {
+    background: var(--n1) !important;
+    background-image: none !important;
+}
+
+html.rd #saveSelector {
+    display: block !important;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 0 !important;
+    color: var(--n9);
+    text-align: left;
+    overflow: visible;
+
+    > .container.row {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        width: 100%;
+        max-width: 560px;
+        min-height: 100vh;
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: ~"calc(24px + var(--safe-t)) 0 0";
+    }
+
+    // Logo, kept, at a calm size.
+    > .container > .col-6 {
+        flex: none;
+        width: 100%;
+        max-width: 232px;
+        margin: 8px auto 24px;
+        padding: 0;
+        img { display: block; width: 100%; height: auto; }
+    }
+
+    // Community links move to a quiet footer.
+    > .container > .col-12.d-flex {
+        order: 10;
+        flex: none;
+        flex-direction: row !important;
+        justify-content: center;
+        gap: 24px;
+        margin: 0 !important;
+        padding: 16px 16px ~"calc(16px + var(--safe-b))";
+    }
+    .rd-home-link {
+        margin: 0 !important;
+        color: var(--n7);
+        font: 500 14px/44px var(--font-ui);
+        text-decoration: none;
+        &:hover { color: var(--n9); text-decoration: underline; }
+    }
+    #use-our-client-message { display: none !important; }
+
+    .rd-home-title {
+        margin: 0;
+        padding: 0 16px 8px;
+        color: var(--n7);
+        font: 600 13px/1.2 var(--font-fig);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    // Saves: one row each. Tap loads; the ⋯ button opens the actions.
+    .save-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        padding: 0 16px;
+    }
+    .trainer-card-container {
+        flex: none;
+        width: 100%;
+        max-width: none;
+        margin: 0 !important;
+        padding: 0;
+    }
+    .trainer-card {
+        margin: 0 !important;
+        border: 0 !important;
+        border-radius: var(--radius) !important;
+        background: var(--n2) !important;
+        background-image: none !important;
+        color: var(--n9) !important;
+        transition: background-color .15s var(--ease);
+        &:hover { transform: none; box-shadow: none; background: var(--n3) !important; }
+        .card-body {
+            position: relative;
+            display: grid;
+            grid-template-columns: 48px minmax(0, 1fr) auto 44px;
+            grid-template-areas: 'avatar name mon more' 'avatar meta mon more';
+            align-items: center;
+            column-gap: 12px;
+            row-gap: 2px;
+            min-height: 72px;
+            padding: 10px 4px 10px 12px !important;
+        }
+        h5 { display: contents; }
+        .trainer-image { grid-area: avatar; width: 48px; height: 48px; object-fit: contain; image-rendering: pixelated; }
+        .trainer-name { grid-area: name; align-self: end; overflow: hidden; color: var(--n9); font: 600 17px/1.2 var(--font-ui); text-overflow: ellipsis; white-space: nowrap; }
+        table {
+            grid-area: meta;
+            align-self: start;
+            display: block;
+            width: auto !important;
+            max-width: none;
+            flex: none;
+            margin: 0;
+            padding: 0;
+            color: var(--n7) !important;
+            tbody { display: flex; flex-wrap: wrap; gap: 0 10px; }
+            tr { display: inline-flex; gap: 4px; }
+            td { padding: 0 !important; border: 0 !important; color: var(--n7); font: 400 13px/1.3 var(--font-ui); }
+            td + td { color: var(--n9); font: 600 13px/1.3 var(--font-fig); text-align: left !important; }
+        }
+        .trainer-pokemon-image {
+            grid-area: mon;
+            position: static !important;
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            image-rendering: pixelated;
+        }
+        .trainer-id, .trainer-version { display: none; }
+        .challenge-badges {
+            position: absolute !important;
+            right: 52px;
+            bottom: 4px;
+            width: auto;
+            img { width: 16px; height: 16px; margin: 0 0 0 2px !important; }
+        }
+        .rd-save-more {
+            grid-area: more;
+            position: static !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            padding: 0 !important;
+            border-radius: 22px;
+            color: var(--n7);
+            font: 600 22px/1 var(--font-ui);
+            cursor: pointer !important;
+            &:hover { background: var(--n4); color: var(--n9); }
+        }
+    }
+
+    // New and Import: full-width, pinned to the bottom of the screen.
+    .new-import-buttons {
+        position: sticky;
+        bottom: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        max-width: none;
+        margin: auto 0 0;
+        padding: 16px 16px 12px;
+        background: linear-gradient(to bottom, transparent, var(--n1) 16px);
+        .btn {
+            flex: none;
+            width: 100%;
+            max-width: none;
+            min-height: 52px;
+            margin: 0 !important;
+            border-radius: var(--radius);
+            font: 600 16px/52px var(--font-ui);
+            padding: 0;
+        }
+        .btn-success { background: var(--n9); color: var(--n1); &:hover { background: var(--n7); color: var(--n1); } }
+        .btn-warning { background: var(--n2); color: var(--n9); &:hover { background: var(--n3); color: var(--n9); } }
+    }
+}
+// Room under the list for the pinned actions.
+html.rd #saveSelector .save-container { padding-bottom: 8px; }
+
+// Save actions: a sheet on phones, a small menu elsewhere.
+html.rd #saveSelectorContextMenu {
+    min-width: 220px;
+    padding: 6px 0 !important;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--n2);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .6);
+    .dropdown-item,
+    .dropdown-item label {
+        min-height: 48px;
+        background: transparent !important;
+        color: var(--n9) !important;
+        font: 500 15px/48px var(--font-ui);
+    }
+    .dropdown-item { padding: 0 16px; &:hover { background: var(--n3) !important; } }
+    .dropdown-item.p-0 label { display: block; padding: 0 16px !important; margin: 0; }
+    .dropdown-item.bg-danger { color: var(--bad) !important; }
+}
+@media (max-width: 699.98px) {
+    html.rd #saveSelectorContextMenu.show {
+        position: fixed !important;
+        top: auto !important;
+        left: 8px !important;
+        right: 8px;
+        bottom: ~"calc(8px + var(--safe-b))";
+        z-index: 1060;
+        border-radius: 16px;
+    }
+}
+
+// ----- Region map: a header row with readable tool chips -----
+html.rd #townMap {
+    > .card-header { display: flex !important; padding-right: 196px !important; }
+    > .btn[style*='position: absolute'] {
+        top: 4px !important;
+        height: 40px !important;
+        min-width: 40px;
+        padding: 0 6px !important;
+        border: 0;
+        border-radius: 20px;
+        color: var(--n9);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .12);
+        img { width: 26px; height: 26px; }
+    }
+    > .btn[data-toggle='popover'] {
+        left: auto !important;
+        right: 144px !important;
+        background: var(--n2);
+        font: 600 17px/1 var(--font-fig);
+        &:hover { background: var(--n3); }
+    }
+}
+// The map's own header names it on phones; the page title would repeat it.
+@media (max-width: 1099.98px) {
+    html.rd #rd-page-combat .rd-page-title { display: none; }
+    html.rd #rd-slot-combat { padding-top: 8px; }
+}
+html.rd #rd-slot-combat { padding: 0; }
+html.rd #rd-slot-combat #mapBody { margin: 0 16px; border-radius: var(--radius); overflow: hidden; }
+
+// ----- Bottom spacing: reserve room for the mini bar only when it shows -----
+@media (max-width: 1099.98px) {
+    html.rd #rd-shell:not(.has-mini) #rd-nav::before { display: none; }
+    html.rd #rd-shell:not(.has-mini) #rd-main { padding-bottom: ~"calc(var(--nav-h) + var(--safe-b) + 16px)"; }
+    html.rd #rd-shell:not(.has-mini) #rd-main[data-page='pokemon'] { padding-bottom: 0; }
+    html.rd #rd-shell:not(.has-mini) #pokemonListContainer .flex-grow-1[style*='overflow'] { padding-bottom: 16px !important; }
+}
