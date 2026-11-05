@@ -77,7 +77,19 @@ export default class RedesignShell {
         return PAGES.includes(saved) ? saved : 'combat';
     }
 
+    private static pageBeforeMenu: PageId = 'combat';
+
+    // The menu button opens the Menu page, and a second tap goes back where you were.
+    static toggleMenu() {
+        if (RedesignShell.page() === 'menu') {
+            RedesignShell.go(RedesignShell.pageBeforeMenu);
+        } else {
+            RedesignShell.go('menu');
+        }
+    }
+
     static go(page: PageId) {
+        if (page === 'menu' && RedesignShell.page() !== 'menu') RedesignShell.pageBeforeMenu = RedesignShell.page();
         RedesignShell.page(page);
         localStorage.setItem(STORAGE_PAGE, page);
         window.scrollTo({ top: 0 });

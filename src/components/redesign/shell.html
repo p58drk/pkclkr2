@@ -18,8 +18,8 @@
                 <!-- /ko -->
             </b>
         </div>
-        <button type="button" class="rd-icon-btn rd-top-menu" data-bind="click: () => RedesignShell.go('menu'), attr: { 'aria-label': RedesignShell.label('menu') }, css: { 'is-active': RedesignShell.page() === 'menu' }">
-            <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-menu"></use></svg>
+        <button type="button" class="rd-icon-btn rd-top-menu" data-bind="click: () => RedesignShell.toggleMenu(), attr: { 'aria-label': RedesignShell.page() === 'menu' ? RedesignShell.label('close') : RedesignShell.label('menu'), 'aria-expanded': RedesignShell.page() === 'menu' ? 'true' : 'false' }, css: { 'is-active': RedesignShell.page() === 'menu' }">
+            <svg aria-hidden="true"><use data-bind="attr: { href: RedesignShell.page() === 'menu' ? 'assets/images/redesign/icons.svg#i-x' : 'assets/images/redesign/icons.svg#i-menu' }"></use></svg>
         </button>
     </header>
 
@@ -44,7 +44,7 @@
             <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-sprout"></use></svg>
             <span data-bind="text: RedesignShell.label('activities')"></span>
         </button>
-        <button type="button" class="rd-nav-menu" data-bind="click: () => RedesignShell.go('menu'), css: { 'is-active': RedesignShell.page() === 'menu' }, attr: { 'aria-current': RedesignShell.page() === 'menu' ? 'page' : null }">
+        <button type="button" class="rd-nav-menu" data-bind="click: () => RedesignShell.toggleMenu(), css: { 'is-active': RedesignShell.page() === 'menu' }, attr: { 'aria-current': RedesignShell.page() === 'menu' ? 'page' : null }">
             <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-menu"></use></svg>
             <span data-bind="text: RedesignShell.label('menu')"></span>
         </button>
