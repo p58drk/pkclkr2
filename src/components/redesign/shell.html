@@ -196,6 +196,13 @@
                     <span data-bind="text: RedesignShell.label('sound')"></span>
                     <span class="rd-row-value" data-bind="text: Settings.getSetting('sound.muted').observableValue() ? 'Off' : 'On'"></span>
                 </button>
+                <!-- ko if: RedesignShell.keepAwakeSupported -->
+                <button type="button" class="rd-row" role="switch" data-bind="click: () => RedesignShell.toggleKeepAwake(), attr: { 'aria-checked': RedesignShell.keepAwake() ? 'true' : 'false' }">
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-sun"></use></svg>
+                    <span data-bind="text: RedesignShell.label('keepAwake')"></span>
+                    <span class="rd-row-value" data-bind="text: RedesignShell.keepAwake() ? 'On' : 'Off'"></span>
+                </button>
+                <!-- /ko -->
                 <button type="button" class="rd-row" data-bind="click: () => Save.store(player, true)">
                     <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-save"></use></svg>
                     <span data-bind="text: RedesignShell.label('save')"></span>
@@ -229,6 +236,11 @@
         <div id="rd-balls-tools" class="rd-balls-tools" data-bind="with: RedesignAutomation.Automation.find('catchSpeed')">
             <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('zeroDelay')"></span>
+            </button>
+        </div>
+        <div id="rd-hatch-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('hatchery12')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('twelveEggs')"></span>
             </button>
         </div>
         <div id="rd-tracker-go" class="rd-tracker-go">

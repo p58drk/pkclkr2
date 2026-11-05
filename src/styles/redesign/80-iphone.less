@@ -1,0 +1,77 @@
+// Fork: iPhone pass. Safari specifics (focus zoom, long-press menus, rubber band,
+// sticky hover, notch in landscape), the home screen web app, and module tools.
+
+html.rd {
+    // Text keeps its size when the phone turns.
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+
+    body {
+        // No rubber band or pull-to-refresh while tapping fast.
+        overscroll-behavior-y: none;
+        // Landscape: content clears the notch and the rounded corners.
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+    }
+
+    // Long-press on a sprite or an icon opens Safari's image menu: not in a game.
+    img, svg, .tile, .plot, .eggSlot, .pokemon-row, #battleContainer {
+        -webkit-touch-callout: none;
+        -webkit-user-drag: none;
+    }
+
+    // The town illustration slides forever upstream: still on phones (battery).
+    #townView { animation: none !important; }
+
+    // Hatchery header: the 12-eggs switch sits left of "List".
+    #breedingDisplay > .card-header { padding-right: 176px !important; }
+    .rd-module-tools {
+        position: absolute;
+        top: 4px;
+        right: 60px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+// Safari zooms into any field under 16px when it gets focus.
+@media (max-width: 1099.98px) {
+    html.rd {
+        input[type='text'], input[type='number'], input[type='search'], input[type='email'],
+        input[type='password'], input:not([type]), select, textarea, .form-control, .custom-select {
+            font-size: 16px !important;
+        }
+    }
+}
+
+// Touch screens: hover colours would stick after a tap.
+@media (hover: none) {
+    html.rd {
+        .btn:hover { background: var(--n2); }
+        .btn.is-on:hover, .btn.active:hover { background: var(--n4); }
+        .rd-row:hover, .rd-list .dropdown-item:hover, .rd-auto-main:hover { background: transparent; }
+        .rd-grid > .rd-row:hover, #rd-menu-game > .rd-list .dropdown-item:hover { background: var(--n2); }
+        .rd-chip:hover:not(.is-on) { background: transparent; color: var(--n7); }
+        .rd-action:hover, .rd-mini-switch:hover { background: var(--n2); }
+        .rd-mini-switch:hover { background: transparent; }
+        #pokeballFilters > tr:hover { background: transparent; }
+        #saveSelector .trainer-card:hover { background: var(--n2) !important; }
+        .rd-auto-main:active, .rd-row:active, .rd-chip:active:not(:disabled), .btn:active { background: var(--n3); }
+    }
+}
+
+// Phone in landscape: thinner bars so the game keeps most of the height.
+@media (max-width: 1099.98px) and (max-height: 500px) and (orientation: landscape) {
+    html.rd {
+        --top-h: 44px;
+        --nav-h: 48px;
+        --mini-h: 48px;
+        #rd-top b { font-size: 18px; }
+        #rd-top small { display: none; }
+        #rd-nav button span { display: none; }
+        #rd-nav { padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }
+        #rd-mini { left: ~"calc(8px + env(safe-area-inset-left, 0px))"; right: ~"calc(8px + env(safe-area-inset-right, 0px))"; }
+        #rd-foehead { min-height: 0; padding-top: 8px; }
+    }
+}

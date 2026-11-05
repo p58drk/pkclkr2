@@ -199,6 +199,35 @@ export default class RedesignShell {
         return s === GS.town && r.player.town instanceof r.DungeonTown && !!r.player.town.dungeon?.isUnlocked();
     });
 
+    // Screen Wake Lock (iOS 16.4+, Chrome): keeps the phone awake while the game is open.
+    static keepAwake = ko.observable(localStorage.getItem('rd.keepAwake') === '1');
+    static keepAwakeSupported = 'wakeLock' in navigator;
+    private static wakeLock: any = null;
+
+    static toggleKeepAwake() {
+        RedesignShell.keepAwake(!RedesignShell.keepAwake());
+        localStorage.setItem('rd.keepAwake', RedesignShell.keepAwake() ? '1' : '0');
+        RedesignShell.applyWakeLock();
+    }
+
+    static async applyWakeLock() {
+        const nav: any = navigator;
+        if (!nav.wakeLock) return;
+        try {
+            if (RedesignShell.keepAwake() && document.visibilityState === 'visible') {
+                if (!RedesignShell.wakeLock) {
+                    RedesignShell.wakeLock = await nav.wakeLock.request('screen');
+                    RedesignShell.wakeLock.addEventListener?.('release', () => { RedesignShell.wakeLock = null; });
+                }
+            } else if (RedesignShell.wakeLock) {
+                await RedesignShell.wakeLock.release();
+                RedesignShell.wakeLock = null;
+            }
+        } catch {
+            RedesignShell.wakeLock = null;
+        }
+    }
+
     // The mini bar floats above the tabs on pages other than Combat (phones).
     static miniVisible = ko.pureComputed(() => !!RedesignShell.foe() && RedesignShell.page() !== 'combat');
 
@@ -377,6 +406,7 @@ export default class RedesignShell {
             if (el && host && el.parentElement !== host) host.appendChild(el);
         };
         moveTo('rd-balls-tools', '#pokeballSelector');
+        moveTo('rd-hatch-tools', '#breedingDisplay');
         moveTo('rd-tracker-go', '#achievementTrackerBody');
         // The start menu's item list becomes the Menu page's game section.
         const list = document.querySelector('#startMenu .dropdown-menu');
@@ -536,7 +566,33 @@ export default class RedesignShell {
         shell.addEventListener('keyup', stop);
     }
 
+    // Home screen icon (black, iPhone and Android), web app manifest and status bar.
+    // Added from here so the upstream page head stays untouched.
+    private static installAppMeta() {
+        const head = document.head;
+        if (!head || head.querySelector('link[rel="apple-touch-icon"]')) return;
+        const base = 'assets/images/redesign/';
+        const add = (tag: string, attrs: Record<string, string>) => {
+            const el = document.createElement(tag);
+            Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+            head.appendChild(el);
+        };
+        const favicon = head.querySelector('link[rel="icon"]');
+        if (favicon) {
+            favicon.setAttribute('href', `${base}favicon-48.png`);
+            favicon.setAttribute('type', 'image/png');
+        }
+        add('link', { rel: 'apple-touch-icon', href: `${base}apple-touch-icon.png` });
+        add('link', { rel: 'manifest', href: `${base}manifest.webmanifest` });
+        add('meta', { name: 'theme-color', content: '#131317' });
+        add('meta', { name: 'apple-mobile-web-app-capable', content: 'yes' });
+        add('meta', { name: 'mobile-web-app-capable', content: 'yes' });
+        add('meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' });
+        add('meta', { name: 'apple-mobile-web-app-title', content: 'PokéClicker' });
+    }
+
     static boot() {
+        RedesignShell.installAppMeta();
         if (RedesignShell.enabled) RedesignShell.patchTutorials();
         if (!RedesignShell.enabled) {
             // Classic interface: drop the shell (no hidden bindings) and offer a way back.
@@ -576,6 +632,8 @@ export default class RedesignShell {
             RedesignShell.sheetGestures();
             RedesignShell.homeScreen();
             RedesignShell.toastGestures();
+            // The lock is dropped when the page is hidden: take it again on return.
+            document.addEventListener('visibilitychange', () => RedesignShell.applyWakeLock());
             // Choosing an achievement to track also travels to its place, when unlocked.
             document.addEventListener('click', (e) => {
                 const row = (e.target as Element)?.closest?.('#achievementsModal .achievement-row');
@@ -593,7 +651,10 @@ export default class RedesignShell {
             RedesignShell.refs(resolveScriptGlobals());
             RedesignShell.relocate();
         });
-        GameLoadState.onLoadState(GameLoadState.states.running, () => Automation.start(RedesignShell.refs()));
+        GameLoadState.onLoadState(GameLoadState.states.running, () => {
+            Automation.start(RedesignShell.refs());
+            RedesignShell.applyWakeLock();
+        });
         GameLoadState.onLoadState(GameLoadState.states.appliedBindings, () => {
             document.documentElement.lang = label('hp') === 'PV' ? 'fr' : 'en';
             RedesignShell.applyFoeColours(w.Battle?.enemyPokemon?.());

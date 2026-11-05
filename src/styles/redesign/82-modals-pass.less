@@ -1,0 +1,72 @@
+// Fork: verification pass over every window (05/11/2026). Upstream relied on centred
+// text everywhere; the redesign aligns text left, so lone images, flush tables and
+// the various close buttons are set straight here.
+
+html.rd {
+    // Headers: title on the left, close on the right (some upstream headers centre).
+    .modal-header[style*='space-around'] { justify-content: flex-start !important; }
+
+    // Every way upstream closes a window looks like the same quiet 44px button.
+    .modal-header > .btn[data-dismiss='modal'],
+    .modal-header .btn-danger.position-absolute,
+    .modal-header li > .btn-danger[data-dismiss='modal'] {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        margin-left: auto;
+        padding: 0 !important;
+        border: 0 !important;
+        border-radius: var(--radius) !important;
+        background: transparent !important;
+        color: var(--n7) !important;
+        font: 400 26px/44px var(--font-ui) !important;
+        &:hover { background: var(--n2) !important; color: var(--n9) !important; }
+    }
+    .modal-header .btn-danger.position-absolute { top: 8px !important; right: 8px !important; }
+
+    // A lone illustration in a window is centred (ship, berry, candy, dream orb...).
+    .modal-body > img,
+    .modal-body > p > img:only-child,
+    .modal-body > div > img:only-child:not([style*='position']) {
+        display: block;
+        max-width: 100%;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    .modal-body > img.my-5 { margin-top: 16px !important; margin-bottom: 16px !important; }
+    .lazy-loader-container,
+    .loader-pokeball { margin-left: auto !important; margin-right: auto !important; }
+    .lazy-loader-container { display: flex; justify-content: center; }
+
+    // Tables that run edge to edge keep a 16px gutter on their outer cells.
+    .modal-body.p-0 > .table,
+    .modal-body.p-0 > div > .table,
+    .modal-body.p-0 > .table-responsive > .table,
+    .modal-body.p-0.table-responsive > .table {
+        > thead > tr > :first-child,
+        > tbody > tr > :first-child { padding-left: 16px !important; }
+        > thead > tr > :last-child,
+        > tbody > tr > :last-child { padding-right: 16px !important; }
+    }
+
+    // Help glyphs sitting in a header corner stay inside the sheet.
+    .modal-header > .btn[style*='position: absolute'][style*='right: 0'] { right: 8px !important; }
+}
+
+// Achievements list: four columns that fit a phone (no sideways scroll, nothing cut).
+html.rd #achievementsModal .modal-body .table {
+    width: 100%;
+    table-layout: fixed;
+    td, th { white-space: normal !important; overflow-wrap: anywhere; }
+    td:nth-child(1) { width: 44%; padding-left: 16px !important; }
+    td:nth-child(2) { width: 26%; }
+    td:nth-child(n+2) { font: 500 13px/1.3 var(--font-fig); }
+    td:nth-child(3), td:nth-child(4) { width: 15%; text-align: right; }
+    td:nth-child(4) { padding-right: 16px !important; color: var(--n7); }
+}
+
+// Hatchery: a slot holding an egg never shows the lock or the unlock price over it
+// (happens while extra eggs finish after « 12 eggs » is switched off).
+html.rd #breedingDisplay .eggSlot .content:has(> .clickable) {
+    > div[data-bind^='visible'], > div:first-child:not(.clickable) { display: none !important; }
+}

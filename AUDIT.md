@@ -79,3 +79,17 @@ Cet audit couvre la version v0.10.26 du fork. Il s'appuie sur trois sources :
 | 21 | **Scripts restants à porter** : Battle Frontier, événements saisonniers, taux de shiny, outils debug, vitamines illimitées, Pokérus, météo, modes de défi, pousse des baies hors ligne. | Triche pour la plupart | Faible à moyen |
 
 Le détail et les sources de chaque proposition (liens des tickets, votes, fichiers du jeu concernés) ont été recueillis pendant la recherche. Les votes restent faibles partout (3 à 10 réactions) : ce sont des signaux relatifs, pas des mesures de demande.
+
+## 5. Passe iPhone et vérification des fenêtres (05/11/2026)
+
+| Sujet | Mesure |
+|---|---|
+| Écran d'accueil | Icône noire (Poké Ball en pixel art, contour éclairci), manifeste, `apple-mobile-web-app-*`, barre d'état translucide, couleur de thème. Ajoutés au démarrage depuis la couche du fork, sans toucher à l'en-tête du jeu. |
+| Zoom à la saisie | Safari zoome sur tout champ sous 16 px : champs et listes à 16 px sur téléphone. |
+| Appui long | Plus de menu « Enregistrer l'image » sur les sprites, cases et parcelles (`-webkit-touch-callout`). |
+| Défilement | Pas de rebond ni de tirer-pour-recharger pendant les clics rapides. |
+| Survol collant | Sur écran tactile, les fonds de survol ne restent plus après un toucher. |
+| Paysage | Barres réduites (44 et 48 px, onglets sans libellé), encoche et coins arrondis respectés. |
+| Batterie | Animation de fond des villes coupée. Option « Garder l'écran allumé » (Wake Lock, iOS 16.4+). |
+| Fenêtres | 58 fenêtres capturées : images seules centrées, tableaux avec marge de 16 px, croix de fermeture identiques, titres alignés à gauche, liste des succès sans débordement. |
+| Pension | Interrupteur « 12 œufs » dans l'en-tête ; un emplacement occupé n'affiche plus de cadenas. |

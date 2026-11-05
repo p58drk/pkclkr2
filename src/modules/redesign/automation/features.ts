@@ -310,10 +310,18 @@ Automation.register({
         const breeding = ctx.g.App.game.breeding;
         if (breeding.eggList.length < HATCHERY_SLOTS) {
             // The hatchery view is built once: reload so the 12 slots exist before bindings.
+            // A guard stops a reload loop if the hatchery could not be extended.
+            const tries = Number(sessionStorage.getItem('rd.hatchery12.reload') || 0);
+            if (tries >= 1) {
+                sessionStorage.removeItem('rd.hatchery12.reload');
+                throw new Error('hatchery not extended');
+            }
+            sessionStorage.setItem('rd.hatchery12.reload', String(tries + 1));
             ctx.g.Save.store(ctx.g.player);
             window.location.reload();
             return;
         }
+        sessionStorage.removeItem('rd.hatchery12.reload');
         if (breeding.__rdPurchased == null) {
             breeding.__rdPurchased = breeding.eggSlots;
             breeding.eggSlots = HATCHERY_SLOTS;
