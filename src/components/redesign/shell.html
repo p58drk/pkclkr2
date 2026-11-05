@@ -248,15 +248,29 @@
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('twelveEggs')"></span>
             </button>
         </div>
-        <div id="rd-farm-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('farmSpeed')">
+        <div id="rd-farm-tools" class="rd-switch-row">
+            <!-- ko with: RedesignAutomation.Automation.find('autoFarm') -->
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('autoHarvest')"></span>
+            </button>
+            <!-- /ko -->
+            <!-- ko with: RedesignAutomation.Automation.find('farmSpeed') -->
             <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
                 <i aria-hidden="true"></i><span data-bind="text: options.mode() === 'instant' ? RedesignShell.label('farmInstant') : RedesignShell.label('farmBoost') + ' ×' + options.mode()"></span>
             </button>
+            <!-- /ko -->
         </div>
-        <div id="rd-farmmodal-tools" class="rd-inline-tools" data-bind="with: RedesignAutomation.Automation.find('farmSpeed')">
+        <div id="rd-farmmodal-tools" class="rd-switch-row">
+            <!-- ko with: RedesignAutomation.Automation.find('autoFarm') -->
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('autoHarvest')"></span>
+            </button>
+            <!-- /ko -->
+            <!-- ko with: RedesignAutomation.Automation.find('farmSpeed') -->
             <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
                 <i aria-hidden="true"></i><span data-bind="text: options.mode() === 'instant' ? RedesignShell.label('farmInstant') : RedesignShell.label('farmBoost') + ' ×' + options.mode()"></span>
             </button>
+            <!-- /ko -->
         </div>
         <div id="rd-mine-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('mineSpeed')">
             <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">

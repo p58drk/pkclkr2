@@ -458,7 +458,10 @@ export default class RedesignShell {
         };
         moveTo('rd-balls-tools', '#pokeballSelector');
         moveTo('rd-hatch-tools', '#breedingDisplay');
-        moveTo('rd-farm-tools', '#farmDisplay');
+        // Farm module: the switch row opens the module body, above the tools.
+        const farmBody = document.querySelector('#farmDisplay #plotListCard');
+        const farmTools = document.getElementById('rd-farm-tools');
+        if (farmBody && farmTools && farmTools.parentElement !== farmBody) farmBody.prepend(farmTools);
         moveTo('rd-mine-tools', '#undergroundDisplay');
         moveTo('rd-minemodal-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
         moveTo('rd-minefind-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');

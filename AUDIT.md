@@ -12,7 +12,7 @@ Cet audit couvre la version v0.10.26 du fork. Il s'appuie sur trois sources :
 |---|---|---|
 | Auto-clic | 1000 clics/s demandés → 1000 obtenus ; 500 → 503 ; 200 → 200 ; 20 → 20 (mesures du 05/11/2026, ennemi rendu invincible pour ne compter que les clics). 50/s tenus sans minuteur, avec le seul battement du jeu (donc onglet en arrière-plan). | OK |
 | Auto-éclosion | Remplit l'emplacement libre selon les filtres de la pension. Fait éclore un œuf prêt puis le remplace. | OK |
-| Auto-ferme | Plante la baie choisie, récolte la baie mûre (+2) et replante. | OK |
+| Auto-récolte (ex-« Auto-ferme ») | Plante la baie choisie, récolte la baie mûre (+2) et replante. | OK |
 | Auto-mine | Creuse les objets ; 1 objet sur 3 en 12 s, limité par la durabilité des outils. | OK, lente par nature |
 | Auto-quêtes | Démarre une quête dans la limite des emplacements, réclame les quêtes terminées. | OK |
 | Auto-objets de combat | X Attaque et X Clic relancés (27 s d'effet), stock décrémenté. | OK |

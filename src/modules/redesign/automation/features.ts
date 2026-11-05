@@ -44,12 +44,12 @@ Automation.register({
 Automation.register({
     id: 'autoFarm',
     group: 'vanilla',
-    name: { fr: 'Auto-ferme', en: 'Auto farm' },
+    name: { fr: 'Auto-récolte', en: 'Auto harvest' },
     description: {
         fr: 'Récolte les baies mûres et replante la baie sélectionnée dans la ferme.',
         en: 'Harvests ripe berries and replants the berry selected in the farm.',
     },
-    intervalMs: 2000,
+    intervalMs: 1000,
     options: [
         {
             key: 'mode',
