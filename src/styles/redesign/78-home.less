@@ -376,23 +376,25 @@ html.rd #routeInfoModal {
     .pokemon-not-seen { filter: brightness(0) invert(.25); }
 }
 
-// Map hover label: a small tag in the map's lower-left corner, in the interface font
-// (upstream drops it in pixel font over the subregional travel bar; on touch screens
-// it stays after a tap).
+// Map hover label: a centred tag in its own row, between the subregional travel bar and
+// the map (upstream drops it in pixel font over the travel bar). The row keeps its
+// height while empty, so the map never jumps.
 html.rd #mapBody { position: relative; }
 html.rd #mapTooltip {
-    position: absolute !important;
-    top: auto !important;
-    bottom: 8px;
-    left: 8px !important;
-    z-index: 2;
-    margin: 0;
-    padding: 4px 10px !important;
+    position: static !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    max-width: 100%;
+    min-height: 28px;
+    margin: 0 auto 8px !important;
+    padding: 4px 12px !important;
     border: 0 !important;
-    border-radius: 12px;
-    background: rgba(12, 12, 15, .88) !important;
+    border-radius: 14px;
+    background: var(--n2) !important;
     color: var(--n9) !important;
-    font: 600 13px/16px var(--font-ui) !important;
-    min-height: 0;
+    font: 600 13px/20px var(--font-ui) !important;
     pointer-events: none;
+    &:empty::before { content: '\00a0'; }
 }
