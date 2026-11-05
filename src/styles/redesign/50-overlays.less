@@ -90,7 +90,22 @@ html.rd {
             .toast { touch-action: pan-x; }
             .toast:nth-child(n+3) { display: none; }
             .toast-header { padding: 6px 4px 0 12px; strong { font-size: 15px; } small { font-size: 12px; } }
-            .toast-body { max-height: 4.4em; overflow: hidden; padding: 4px 12px 10px; font-size: 14px; line-height: 1.35; }
+            // The body is a centred flex row (Bootstrap .d-flex .align-items-center): a capped
+            // height clipped both its first and last lines. The message is clamped instead.
+            .toast-header + .toast-body { align-items: flex-start !important; }
+
+            .toast-body {
+                padding: 4px 12px 10px;
+                font-size: 14px;
+                line-height: 1.35;
+
+                > .flex-grow-1 {
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;
+                    overflow: hidden;
+                }
+            }
             .close { width: 40px; height: 32px; }
         }
     }

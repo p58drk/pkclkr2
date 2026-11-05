@@ -37,6 +37,8 @@ export interface AutomationFeatureDef {
     intervalMs?: number;
     options?: AutomationOption[];
     available?: (ctx: AutomationContext) => boolean;
+    // Why `available` is false, shown in the Menu (e.g. what unlocks it).
+    unavailable?: Text;
     tick?: (ctx: AutomationContext) => void;
     enable?: (ctx: AutomationContext) => void;
     disable?: (ctx: AutomationContext) => void;
@@ -94,6 +96,7 @@ export class AutomationFeature {
     name() { return this.def.name[lang()]; }
     description() { return this.def.description[lang()]; }
     warning() { return this.def.warning?.[lang()] ?? ''; }
+    unavailableText() { return this.def.unavailable?.[lang()] ?? ''; }
     optionLabel(o: AutomationOption) { return o.label[lang()]; }
     choiceLabel(c: { label: Text }) { return c.label[lang()]; }
 

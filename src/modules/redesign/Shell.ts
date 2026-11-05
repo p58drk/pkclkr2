@@ -655,6 +655,28 @@ export default class RedesignShell {
         document.addEventListener('touchcancel', end);
     }
 
+    // A notification identical to one still on screen (same title and text) replaces it,
+    // e.g. an event's "on now!" followed by "ends in 60 mins!". The game's Notifier is
+    // untouched: toasts are compared as they land in #toaster.
+    private static toastDedupe() {
+        const toaster = document.getElementById('toaster');
+        if (!toaster) return;
+        const keyOf = (t: Element) => {
+            const title = t.querySelector('.toast-header strong')?.textContent ?? '';
+            const body = t.querySelector('.toast-body .flex-grow-1')?.textContent ?? '';
+            return `${title}|${body}`.replace(/\s+/g, ' ').trim();
+        };
+        new MutationObserver((mutations) => {
+            mutations.forEach((m) => m.addedNodes.forEach((node) => {
+                if (!(node instanceof HTMLElement) || !node.classList.contains('toast')) return;
+                const key = keyOf(node);
+                toaster.querySelectorAll(':scope > .toast').forEach((other) => {
+                    if (other !== node && keyOf(other) === key) other.remove();
+                });
+            }));
+        }).observe(toaster, { childList: true });
+    }
+
     // Home screen (save selector): plain text links, a section title, translated actions,
     // and a visible actions button on every save card.
     private static homeScreen() {
@@ -867,6 +889,7 @@ export default class RedesignShell {
             RedesignShell.sheetGestures();
             RedesignShell.homeScreen();
             RedesignShell.toastGestures();
+            RedesignShell.toastDedupe();
             RedesignShell.tooltipHygiene();
             // The lock is dropped when the page is hidden: take it again on return.
             document.addEventListener('visibilitychange', () => RedesignShell.applyWakeLock());

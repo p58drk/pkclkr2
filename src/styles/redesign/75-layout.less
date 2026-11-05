@@ -373,6 +373,8 @@ html.rd {
             .card-header[href='#questLineDisplayBody'] { display: none !important; }
         }
         &[data-tab='achievements'] #questDisplayContainer { display: none !important; }
+        // Daily quests not unlocked yet: say what unlocks them (the binding hides it after).
+        &[data-tab='quests'] .rd-quests-locked { display: block; }
 
         // Quest lines: name, current step, bar; the description stays behind ⓘ.
         #questLineDisplayBody .questLine > .card-header {
@@ -397,6 +399,9 @@ html.rd {
     .rd-auto-caret { width: 16px; height: 16px; color: var(--n6); transition: transform .2s var(--ease); }
     .rd-auto.is-open .rd-auto-caret { transform: rotate(180deg); }
     .rd-auto-sub { -webkit-line-clamp: 1; }
+    // What unlocks a feature stays readable in full, and quiet even when it is switched on.
+    .rd-auto.is-unavailable .rd-auto-sub { -webkit-line-clamp: 2; }
+    .rd-auto-locked { color: var(--n7); }
 
     .rd-grid,
     #rd-menu-game > .rd-list {

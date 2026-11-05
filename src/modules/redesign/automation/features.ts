@@ -3,6 +3,15 @@
 import Automation from './Automation';
 import Amount from '../../wallet/Amount';
 
+// Why a feature cannot run yet, shown under its name in the Menu.
+const LOCKED = {
+    breeding: { fr: 'Se débloque avec la pension, plus loin dans l’aventure.', en: 'Unlocks with the Day Care, later in the adventure.' },
+    farming: { fr: 'Se débloque avec la ferme, plus loin dans l’aventure.', en: 'Unlocks with the Farm, later in the adventure.' },
+    underground: { fr: 'Se débloque avec le souterrain, plus loin dans l’aventure.', en: 'Unlocks with the Underground, later in the adventure.' },
+    quests: { fr: 'Se débloque à la fin des quêtes du tutoriel (Progrès > Histoires).', en: 'Unlocks once the Tutorial Quests are done (Progress > Quest lines).' },
+    battleItems: { fr: 'Désactivé par un mode de défi actif.', en: 'Disabled by an active challenge mode.' },
+};
+
 // ---------------------------------------------------------------- vanilla
 
 // enhancedautohatchery.user.js: hatch ready eggs, refill free slots with the first
@@ -18,6 +27,7 @@ Automation.register({
     },
     intervalMs: 1000,
     available: (ctx) => ctx.g.App.game.breeding.canAccess(),
+    unavailable: LOCKED.breeding,
     tick: (ctx) => {
         const { App, BreedingController } = ctx.g;
         const breeding = App.game.breeding;
@@ -64,6 +74,7 @@ Automation.register({
         },
     ],
     available: (ctx) => ctx.g.App.game.farming.canAccess(),
+    unavailable: LOCKED.farming,
     tick: (ctx) => {
         const { App, FarmController } = ctx.g;
         const farming = App.game.farming;
@@ -96,6 +107,7 @@ Automation.register({
     },
     intervalMs: 400,
     available: (ctx) => ctx.g.App.game.underground.canAccess(),
+    unavailable: LOCKED.underground,
     tick: (ctx) => {
         const { App, Settings } = { App: ctx.g.App, Settings: ctx.w.Settings };
         const ug = App.game.underground;
@@ -143,6 +155,7 @@ Automation.register({
         { key: 'paidRefresh', label: { fr: 'Rafraîchir en payant', en: 'Paid refresh' }, type: 'boolean', default: false },
     ],
     available: (ctx) => ctx.g.App.game.quests.isDailyQuestsUnlocked?.() ?? true,
+    unavailable: LOCKED.quests,
     tick: (ctx) => {
         const quests = ctx.g.App.game.quests;
         quests.questList().forEach((q: any, i: number) => {
@@ -179,6 +192,7 @@ Automation.register({
         })),
     ],
     available: (ctx) => !ctx.g.App.game.challenges.list.disableBattleItems.active(),
+    unavailable: LOCKED.battleItems,
     tick: (ctx) => {
         const { player } = ctx.g;
         const { ItemList, ItemHandler, EffectEngineRunner } = ctx.w;
@@ -311,6 +325,7 @@ Automation.register({
         en: 'Changes the game rules; the page reloads when switched on. The save keeps your bought slots. Eggs 5-12 do not exist in the official game: importing the save there drops them and returns their Pokémon to the party. When switched off, eggs in progress finish normally.',
     },
     available: (ctx) => ctx.g.App.game.breeding.canAccess(),
+    unavailable: LOCKED.breeding,
     enable: (ctx) => {
         const breeding = ctx.g.App.game.breeding;
         if (breeding.eggList.length < HATCHERY_SLOTS) {
@@ -388,6 +403,7 @@ Automation.register({
         },
     ],
     available: (ctx) => ctx.g.App.game.farming.canAccess(),
+    unavailable: LOCKED.farming,
     intervalMs: 250,
     enable: (ctx) => { patchPlot(); farmSpeed = ctx.opt('mode') === 'instant' ? 1 : Math.max(1, Number(ctx.opt('mode')) || 1); },
     tick: (ctx) => {
@@ -460,6 +476,7 @@ Automation.register({
         },
     ],
     available: (ctx) => ctx.g.App.game.underground.canAccess(),
+    unavailable: LOCKED.underground,
     intervalMs: 500,
     enable: (ctx) => { patchTools(ctx); mineSpeed(mineFactor(ctx.opt('mode'))); },
     tick: (ctx) => {
@@ -485,6 +502,7 @@ Automation.register({
         en: 'Changes the game rules while enabled. Nothing else in the save is changed.',
     },
     available: (ctx) => ctx.g.App.game.underground.canAccess(),
+    unavailable: LOCKED.underground,
     intervalMs: 250,
     tick: (ctx) => {
         const mine = ctx.g.App.game.underground.mine;
@@ -507,6 +525,7 @@ Automation.register({
         en: 'Changes the game rules while enabled. Nothing else in the save is changed.',
     },
     available: (ctx) => ctx.g.App.game.breeding.canAccess(),
+    unavailable: LOCKED.breeding,
     intervalMs: 250,
     tick: (ctx) => {
         (ctx.g.App.game.breeding.eggList as Array<KnockoutObservable<any>>).forEach((slot) => {

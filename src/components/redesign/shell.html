@@ -129,6 +129,7 @@
                     <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
                 </button>
             </div>
+            <p class="rd-empty rd-quests-locked" data-bind="visible: !App.game.quests.isDailyQuestsUnlocked(), text: RedesignShell.label('questsLocked')"></p>
             <div id="rd-slot-progress" class="rd-slot"></div>
         </section>
 
@@ -171,10 +172,11 @@
                         <div class="rd-auto-row">
                             <button type="button" class="rd-auto-main" data-bind="click: () => expanded(!expanded()), attr: { 'aria-expanded': expanded() ? 'true' : 'false' }">
                                 <span class="rd-auto-name"><span data-bind="text: name()"></span><svg class="rd-auto-caret" aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-down"></use></svg></span>
-                                <!-- ko if: lastError() || statusText() -->
+                                <!-- ko if: lastError() || statusText() || (!available() && unavailableText()) -->
                                 <span class="rd-auto-sub">
                                     <!-- ko if: lastError() --><span class="rd-auto-error" data-bind="text: lastError()"></span><!-- /ko -->
-                                    <!-- ko ifnot: lastError() --><span data-bind="text: statusText()"></span><!-- /ko -->
+                                    <!-- ko if: !lastError() && !available() && unavailableText() --><span class="rd-auto-locked" data-bind="text: unavailableText()"></span><!-- /ko -->
+                                    <!-- ko if: !lastError() && (available() || !unavailableText()) --><span data-bind="text: statusText()"></span><!-- /ko -->
                                 </span>
                                 <!-- /ko -->
                             </button>
