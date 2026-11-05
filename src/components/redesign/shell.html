@@ -1,6 +1,6 @@
 <!-- Fork: redesign shell. Upstream modules are moved into the rd-* slots at boot (see modules/redesign/Shell.ts).
      Never use `if`/`ifnot`/`with` bindings around slots: they would destroy the relocated modules. -->
-<div id="rd-shell" data-bind="attr: { 'data-state': RedesignShell.stateName() }, css: { 'has-mini': RedesignShell.miniVisible() }">
+<div id="rd-shell" data-bind="attr: { 'data-state': RedesignShell.stateName() }, css: { 'has-mini': RedesignShell.miniVisible(), 'bf-idle': RedesignShell.stateName() === 'battleFrontier' && !RedesignShell.isFighting() }">
     <header id="rd-top">
         <div class="rd-where">
             <small>
@@ -359,6 +359,41 @@
                     </button>
                     <!-- /ko -->
                 </div>
+            </div>
+        </div>
+        <!-- Battle Frontier: welcome sheet and switches (moved into #battleFrontierInformation). -->
+        <div id="rd-frontier" class="rd-frontier">
+            <!-- ko ifnot: BattleFrontierRunner.started -->
+            <div class="rd-frontier-stats">
+                <div><small data-bind="text: RedesignShell.label('bfRecord')"></small><b class="rd-num" data-bind="text: RedesignShell.formatNumber(App.game.statistics.battleFrontierHighestStageCompleted())"></b></div>
+                <div><small data-bind="text: RedesignShell.label('bfCheckpoint')"></small><b class="rd-num" data-bind="text: BattleFrontierRunner.hasCheckpoint() ? RedesignShell.formatNumber(BattleFrontierRunner.checkpoint()) : '–'"></b></div>
+                <div><small data-bind="text: RedesignShell.label('bfPoints')"></small><b class="rd-num"><img src="assets/images/currency/battlePoint.svg" alt=""><span data-bind="text: RedesignShell.formatNumber(App.game.wallet.currencies[GameConstants.Currency.battlePoint]())"></span></b></div>
+            </div>
+            <p class="rd-frontier-intro" data-bind="text: RedesignShell.label('bfIntro')"></p>
+            <div class="rd-frontier-actions">
+                <!-- ko if: BattleFrontierRunner.hasCheckpoint() -->
+                <button type="button" class="rd-frontier-primary" data-bind="click: () => BattleFrontierRunner.start(true), text: RedesignShell.label('bfResume').replace('{n}', RedesignShell.formatNumber(BattleFrontierRunner.checkpoint()))"></button>
+                <!-- /ko -->
+                <button type="button" data-bind="click: () => BattleFrontierRunner.start(false), css: { 'rd-frontier-primary': !BattleFrontierRunner.hasCheckpoint() }, text: RedesignShell.label('bfStart')"></button>
+                <button type="button" class="rd-frontier-ghost" data-bind="click: () => App.game.battleFrontier.leave(), text: RedesignShell.label('bfLeave')"></button>
+            </div>
+            <!-- /ko -->
+            <div class="rd-switch-row rd-frontier-switches">
+                <!-- ko with: RedesignAutomation.Automation.find('autoFrontier') -->
+                <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false', title: description() }">
+                    <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('bfAuto')"></span>
+                </button>
+                <!-- /ko -->
+                <!-- ko with: RedesignAutomation.Automation.find('frontierTimeFreeze') -->
+                <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                    <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('bfFreeze')"></span>
+                </button>
+                <!-- /ko -->
+                <!-- ko with: RedesignAutomation.Automation.find('frontierDamage') -->
+                <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                    <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('bfDamage') + ' ' + (options.mode() === 'ko' ? 'K.O.' : '×' + options.mode())"></span>
+                </button>
+                <!-- /ko -->
             </div>
         </div>
         <div id="rd-tracker-go" class="rd-tracker-go">

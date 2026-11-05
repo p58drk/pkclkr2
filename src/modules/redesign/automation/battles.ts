@@ -335,3 +335,95 @@ Automation.register({
     },
     status: () => dungeonTarget?.name ?? '',
 });
+
+// ---------------------------------------------------------------- Battle Frontier
+
+// autobattlefrontier.user.js: starts a new run when the previous one ended in a loss.
+// A run left with « Quit Battle » keeps its checkpoint and waits for the player.
+Automation.register({
+    id: 'autoFrontier',
+    group: 'vanilla',
+    name: { fr: 'Auto Frontier', en: 'Auto Frontier' },
+    description: {
+        fr: 'Dans la Battle Frontier, relance une partie depuis l’étape 1 après chaque défaite. Une partie quittée garde son point de reprise et attend.',
+        en: 'In the Battle Frontier, starts a new run from stage 1 after each loss. A run you quit keeps its checkpoint and waits.',
+    },
+    intervalMs: 1000,
+    tick: (ctx) => {
+        const { App } = ctx.g;
+        const Runner = ctx.g.BattleFrontierRunner;
+        if (!Runner || App.game.gameState !== GS(ctx).battleFrontier || Runner.started()) return;
+        if (Runner.hasCheckpoint()) return;
+        Runner.start(false);
+    },
+    status: (ctx) => {
+        const Runner = ctx.g.BattleFrontierRunner;
+        return Runner?.started() ? `${ctx.g.App.game.statistics.battleFrontierHighestStageCompleted()}` : '';
+    },
+});
+
+// Frontier cheats: the timer stays full; damage multiplied (or one hit).
+Automation.register({
+    id: 'frontierTimeFreeze',
+    group: 'custom',
+    name: { fr: 'Frontier : temps figé', en: 'Frontier: frozen timer' },
+    description: {
+        fr: 'Le chronomètre de la Battle Frontier ne descend plus.',
+        en: 'The Battle Frontier timer no longer runs down.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. Rien n’est écrit dans la sauvegarde.',
+        en: 'Changes the game rules while enabled. Nothing is written to the save.',
+    },
+    intervalMs: 250,
+    tick: (ctx) => {
+        const Runner = ctx.g.BattleFrontierRunner;
+        if (!Runner?.started()) return;
+        Runner.timeLeft(ctx.w.GameConstants.GYM_TIME);
+        Runner.timeLeftPercentage(100);
+    },
+});
+
+let frontierDamage = 1;
+let frontierPatched = false;
+const patchFrontierDamage = (ctx: AutomationContext) => {
+    const party = ctx.g.App?.game?.party;
+    if (frontierPatched || !party) return;
+    frontierPatched = true;
+    const original = party.calculatePokemonAttack.bind(party);
+    party.calculatePokemonAttack = (...args: any[]) => {
+        const base = original(...args);
+        return frontierDamage > 1 && ctx.g.App.game.gameState === GS(ctx).battleFrontier ? base * frontierDamage : base;
+    };
+};
+
+Automation.register({
+    id: 'frontierDamage',
+    group: 'custom',
+    name: { fr: 'Frontier : dégâts', en: 'Frontier: damage' },
+    description: {
+        fr: 'Multiplie les dégâts de votre équipe dans la Battle Frontier (ou met K.O. en un coup).',
+        en: 'Multiplies your team’s damage in the Battle Frontier (or knocks out in one hit).',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. Rien n’est écrit dans la sauvegarde.',
+        en: 'Changes the game rules while enabled. Nothing is written to the save.',
+    },
+    options: [
+        {
+            key: 'mode',
+            label: { fr: 'Dégâts', en: 'Damage' },
+            type: 'select',
+            default: 'ko',
+            choices: [
+                { value: 'ko', label: { fr: 'K.O. en un coup', en: 'One-hit K.O.' } },
+                ...[2, 10, 100].map((n) => ({ value: String(n), label: { fr: `×${n}`, en: `×${n}` } })),
+            ],
+        },
+    ],
+    intervalMs: 1000,
+    enable: (ctx) => { patchFrontierDamage(ctx); frontierDamage = ctx.opt('mode') === 'ko' ? 1e15 : Math.max(1, Number(ctx.opt('mode')) || 1); },
+    tick: (ctx) => { frontierDamage = ctx.opt('mode') === 'ko' ? 1e15 : Math.max(1, Number(ctx.opt('mode')) || 1); },
+    disable: () => { frontierDamage = 1; },
+    status: (ctx) => (ctx.opt('mode') === 'ko' ? 'K.O.' : `×${ctx.opt('mode')}`),
+});

@@ -33,6 +33,7 @@ const resolveScriptGlobals = (): any => {
         Gym: get('Gym'),
         DungeonTown: get('DungeonTown'),
         DungeonGuides: get('DungeonGuides'),
+        BattleFrontierRunner: get('BattleFrontierRunner'),
     };
 };
 
@@ -151,7 +152,8 @@ export default class RedesignShell {
         const GS = w.GameConstants?.GameState;
         if (!GS) return false;
         const s = RedesignShell.state();
-        return [GS.fighting, GS.gym, GS.dungeon, GS.temporaryBattle, GS.battleFrontier].includes(s);
+        if (s === GS.battleFrontier) return !!RedesignShell.refs()?.BattleFrontierRunner?.started?.();
+        return [GS.fighting, GS.gym, GS.dungeon, GS.temporaryBattle].includes(s);
     });
 
     static foe = ko.pureComputed(() => {
@@ -430,6 +432,7 @@ export default class RedesignShell {
             if (RedesignShell.state() === GS.fighting) {
                 return w.Routes.getName(player.route, player.region);
             }
+            if (RedesignShell.state() === GS.battleFrontier) return 'Battle Frontier';
             return player.town?.name ?? '';
         } catch {
             return '';
@@ -557,6 +560,10 @@ export default class RedesignShell {
         if (farmBody && farmTools && farmTools.parentElement !== farmBody) farmBody.prepend(farmTools);
         moveTo('rd-mine-tools', '#undergroundDisplay');
         moveTo('rd-oak-tools', '#oakItemsContainer');
+        // Battle Frontier card: our welcome and switches open the card body.
+        const bfCard = document.getElementById('battleFrontierInformation');
+        const bfView = document.getElementById('rd-frontier');
+        if (bfCard && bfView && bfView.parentElement !== bfCard) bfCard.querySelector(':scope > .card-header')?.after(bfView);
         const treasuresPane = document.getElementById('treasures');
         const treasuresView = document.getElementById('rd-treasures');
         if (treasuresPane && treasuresView && treasuresView.parentElement !== treasuresPane) treasuresPane.prepend(treasuresView);
