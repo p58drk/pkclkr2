@@ -61,7 +61,7 @@ Cet audit couvre la version v0.10.26 du fork. Il s'appuie sur trois sources :
 | 3 | **Supprimer les confirmations** pour rafraîchir ou abandonner une quête (PC#4180). | Pur | Faible |
 | 4 | **Comportement mobile** : écran maintenu allumé pendant le jeu, résumé des gains hors ligne au retour, infobulles à l'appui long au lieu du survol, installation en PWA. | Pur | Faible |
 | 5 | **Pension** : tri sur plusieurs critères et filtres d'exclusion (PC#2087, PC#3189). Améliore directement l'auto-éclosion. | Pur | Faible à moyen |
-| 6 | **Auto-donjon** avec modes rush du boss, coffres puis boss, ou exploration complète. Pur s'il est payé comme les guides du jeu, triche s'il est gratuit. | Pur ou triche | Moyen |
+| 6 | ~~**Auto-donjon** avec modes rush du boss, coffres puis boss, ou exploration complète.~~ Fait le 05/11/2026, avec l'auto-arène : entrée payée en jetons, relance d'arène payée comme dans le jeu. | Pur | Fait |
 | 7 | **Auto-Safari** : succès de 1000 cailloux et 10 000 pas jugés « incroyablement fastidieux » (EPH#325, 10 votes). C'est un script à porter. | Pur | Moyen à élevé |
 | 8 | **Sauvegardes** : copies locales tournantes et export par la feuille de partage du téléphone. Synchronisation entre appareils plus tard, en option. | Pur | Faible, puis élevé |
 | 9 | **Liste Pokémon** : recherche, filtres repris du Pokédex (type, shiny, Pokérus, EV), plusieurs clés de tri. | Pur | Faible à moyen |

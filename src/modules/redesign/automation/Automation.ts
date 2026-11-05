@@ -23,6 +23,8 @@ export interface AutomationContext {
     g: any; // script-level globals (App, player, ...)
     w: any; // window
     opt: (key: string) => any;
+    // Turn the feature off (after the current tick), optionally telling the player why.
+    stop: (message?: Text) => void;
 }
 
 export interface AutomationFeatureDef {
@@ -129,6 +131,10 @@ export default class Automation {
         Automation.features.push(new AutomationFeature(def, stored));
     }
 
+    static find(id: string) {
+        return Automation.features.find((f) => f.id === id);
+    }
+
     static byGroup(group: Group) {
         return Automation.features.filter((f) => f.def.group === group);
     }
@@ -169,6 +175,18 @@ export default class Automation {
             g: Automation.globals,
             w: window,
             opt: (key: string) => feature.options[key]?.peek(),
+            stop: (message?: Text) => {
+                window.setTimeout(() => feature.enabled(false), 0);
+                if (!message) return;
+                const w = window as any;
+                try {
+                    w.Notifier.notify({
+                        title: feature.name(),
+                        message: message[lang()],
+                        type: w.NotificationConstants.NotificationOption.warning,
+                    });
+                } catch { /* notifications unavailable */ }
+            },
         };
     }
 

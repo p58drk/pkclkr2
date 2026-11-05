@@ -1,6 +1,7 @@
 // Entry point of the redesign layer. Loaded once from ../index.ts.
 import RedesignShell from './Shell';
 import Automation, { lang } from './automation/Automation';
+import './automation/battles';
 import './automation/features';
 
 const GROUP_TITLES = {

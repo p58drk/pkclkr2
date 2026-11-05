@@ -1,62 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Feature definitions. Each one names the userscript it replaces and what was repaired.
-import Automation, { AutomationContext } from './Automation';
+import Automation from './Automation';
 import Amount from '../../wallet/Amount';
 
-const GS = (ctx: AutomationContext) => ctx.w.GameConstants.GameState;
-
 // ---------------------------------------------------------------- vanilla
-
-// enhancedautoclicker.user.js: click attack on every battle type.
-// Rate 1-200/s (the original script went to 100/s with a ×5 multiplier). Up to 20/s
-// the average stays within the game's own limit; above, it exceeds it. Every click goes
-// through the game's real click code path (statistics, challenges, catching, defeat).
-const GAME_CLICK_CAP = 20;
-let clickDebt = 0;
-let lastClickTick = 0;
-Automation.register({
-    id: 'autoClick',
-    group: 'vanilla',
-    name: { fr: 'Auto-clic', en: 'Auto clicker' },
-    description: {
-        fr: 'Attaque à votre place sur les routes, dans les arènes, les donjons et les combats spéciaux. Au-delà de 20 clics par seconde, la limite du jeu est dépassée.',
-        en: 'Click attacks for you on routes, gyms, dungeons and special battles. Above 20 clicks per second, the game\'s own limit is exceeded.',
-    },
-    intervalMs: 0,
-    options: [
-        { key: 'rate', label: { fr: 'Clics par seconde', en: 'Clicks per second' }, type: 'number', default: 20, min: 1, max: 200, step: 1 },
-    ],
-    tick: (ctx) => {
-        const rate = Math.max(1, Math.min(200, Number(ctx.opt('rate')) || GAME_CLICK_CAP));
-        const now = Date.now();
-        const elapsed = lastClickTick ? Math.min(now - lastClickTick, 1000) : 0;
-        lastClickTick = now;
-        clickDebt = Math.min(clickDebt + (rate * elapsed) / 1000, 20);
-        const clicks = Math.floor(clickDebt);
-        if (clicks < 1) return;
-        clickDebt -= clicks;
-
-        const { App, GymBattle, DungeonRunner, DungeonBattle, TemporaryBattleBattle } = ctx.g;
-        const G = GS(ctx);
-        let target: any = null;
-        switch (App.game.gameState) {
-            case G.fighting: target = ctx.w.Battle; break;
-            case G.gym: target = GymBattle; break;
-            case G.dungeon: target = DungeonRunner.fighting() && !DungeonBattle.catching() ? DungeonBattle : null; break;
-            case G.temporaryBattle: target = TemporaryBattleBattle; break;
-            default: break;
-        }
-        if (!target) return;
-        // The click debt already paces the rate; the game's 50 ms guard is reset so the
-        // scheduler's 20 ms granularity does not drop clicks (at <= 20/s the average stays
-        // within the game's own limit).
-        for (let i = 0; i < clicks; i++) {
-            target.lastClickAttack = 0;
-            target.clickAttack();
-        }
-    },
-    status: (ctx) => `${ctx.opt('rate')}/s`,
-});
 
 // enhancedautohatchery.user.js: hatch ready eggs, refill free slots with the first
 // Pokémon of the hatchery's own filtered and sorted list. Fossil mode removed: fossil

@@ -29,6 +29,10 @@ const resolveScriptGlobals = (): any => {
         FarmController: get('FarmController'),
         PartyController: get('PartyController'),
         RouteHelper: get('RouteHelper'),
+        GymRunner: get('GymRunner'),
+        Gym: get('Gym'),
+        DungeonTown: get('DungeonTown'),
+        DungeonGuides: get('DungeonGuides'),
     };
 };
 
