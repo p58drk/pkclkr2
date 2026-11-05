@@ -227,7 +227,7 @@ html.rd #rd-top {
 }
 
 // Safari (iOS 26) blurs the page under its own top edge: on phones every top
-// element (top bar, banners, home and loading logos) clears it by 10px more.
+// element (top bar, banners, home and loading logos) clears it by 20px more.
 @media (max-width: 1099.98px) {
-    html.rd { --safe-t: ~"calc(env(safe-area-inset-top, 0px) + 10px)"; }
+    html.rd { --safe-t: ~"calc(env(safe-area-inset-top, 0px) + 20px)"; }
 }
