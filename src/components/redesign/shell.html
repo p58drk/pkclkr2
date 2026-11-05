@@ -192,6 +192,16 @@
 
             <h3 class="rd-section-title" data-bind="text: RedesignShell.label('gameMenu')"></h3>
             <div id="rd-menu-game"></div>
+
+            <div class="rd-list">
+                <button type="button" class="rd-row" data-toggle="modal" href="#rdSourceModal">
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-code"></use></svg>
+                    <span>
+                        <span data-bind="text: RedesignShell.label('sourceLicense')"></span>
+                        <small class="rd-row-hint" data-bind="text: RedesignShell.label('sourceLicenseHint')"></small>
+                    </span>
+                </button>
+            </div>
         </section>
     </main>
 
@@ -209,5 +219,39 @@
             <span class="rd-hpbar"><i data-bind="style: { width: RedesignShell.foe().healthPercentage() + '%' }"></i></span>
         </button>
         <!-- /ko -->
+    </div>
+</div>
+
+<!-- Fork: source code and licence notice (GPL v3 obligations for the public site). -->
+<div class="modal" id="rdSourceModal" tabindex="-1" role="dialog" aria-labelledby="rdSourceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rdSourceModalLabel" data-bind="text: RedesignShell.label('sourceLicense')"></h5>
+                <button type="button" class="close" data-dismiss="modal" data-bind="attr: { 'aria-label': RedesignShell.label('close') }">
+                    <svg aria-hidden="true" width="20" height="20"><use href="assets/images/redesign/icons.svg#i-x"></use></svg>
+                </button>
+            </div>
+            <div class="modal-body rd-source">
+                <p data-bind="text: RedesignShell.label('sourceIntro')"></p>
+                <div class="rd-list">
+                    <a class="rd-row" href="https://github.com/p58drk/pkclkr2" target="_blank" rel="noopener">
+                        <span data-bind="text: RedesignShell.label('sourceRepo')"></span>
+                        <span class="rd-row-value">github.com/p58drk/pkclkr2</span>
+                    </a>
+                    <a class="rd-row" href="https://github.com/pokeclicker/pokeclicker/tree/b6b4200d6a7f8d0528727b64155028bf18bba5bf" target="_blank" rel="noopener">
+                        <span data-bind="text: RedesignShell.label('sourceGame')"></span>
+                        <span class="rd-row-value">b6b4200</span>
+                    </a>
+                    <a class="rd-row" href="https://github.com/Ephenia/Pokeclicker-Scripts" target="_blank" rel="noopener">
+                        <span data-bind="text: RedesignShell.label('sourceScripts')"></span>
+                    </a>
+                    <a class="rd-row" href="assets/licenses/GPL-3.0.txt" target="_blank" rel="noopener">
+                        <span data-bind="text: RedesignShell.label('sourceGpl')"></span>
+                    </a>
+                </div>
+                <p class="rd-source-credits" data-bind="text: RedesignShell.label('sourceCredits')"></p>
+            </div>
+        </div>
     </div>
 </div>

@@ -28,6 +28,15 @@ const fr = {
     goToCombat: 'Aller au combat',
     attack: 'Attaquer',
     hp: 'PV',
+    sourceLicense: 'Code source et licence',
+    sourceLicenseHint: 'GPL v3 · code sur GitHub',
+    sourceIntro: 'Ce site est une version modifiée de PokéClicker. Sa nouvelle interface et son automatisation intégrée sont distribuées sous licence GNU GPL v3 : l’automatisation est une réécriture des scripts Pokeclicker-Scripts d’Ephenia, eux-mêmes sous GPL v3.',
+    sourceRepo: 'Code source de ce site',
+    sourceGame: 'Jeu d’origine (commit utilisé)',
+    sourceGpl: 'Texte de la licence GPL v3',
+    sourceScripts: 'Scripts d’origine (Ephenia)',
+    sourceCredits: 'Jeu PokéClicker et icônes Lucide sous licence ISC ; polices Figtree et Barlow Semi Condensed sous SIL Open Font License 1.1.',
+    close: 'Fermer',
     activitiesEmpty: 'La pension, la ferme et le souterrain apparaîtront ici dès qu’ils seront débloqués au fil de l’aventure.',
 } as const;
 
@@ -59,6 +68,15 @@ const en: Record<LabelKey, string> = {
     goToCombat: 'Go to battle',
     attack: 'Attack',
     hp: 'HP',
+    sourceLicense: 'Source code and licence',
+    sourceLicenseHint: 'GPL v3 · code on GitHub',
+    sourceIntro: 'This site is a modified version of PokéClicker. Its new interface and integrated automation are distributed under the GNU GPL v3: the automation is a rewrite of Ephenia’s Pokeclicker-Scripts, themselves GPL v3.',
+    sourceRepo: 'Source code of this site',
+    sourceGame: 'Original game (commit used)',
+    sourceGpl: 'GPL v3 licence text',
+    sourceScripts: 'Original scripts (Ephenia)',
+    sourceCredits: 'PokéClicker game and Lucide icons under the ISC licence; Figtree and Barlow Semi Condensed fonts under the SIL Open Font License 1.1.',
+    close: 'Close',
     activitiesEmpty: 'The Day Care, the Farm and the Underground will appear here as soon as you unlock them.',
 };
 
