@@ -339,3 +339,103 @@ Automation.register({
         return `${eggs.filter((e) => !e().isNone()).length}/${HATCHERY_SLOTS}`;
     },
 });
+
+// Farm: faster growth until ripe (rule change). Only the time to ripen is shortened:
+// once ripe, a berry lasts as long as usual before withering. The countdown shown on
+// each plot follows, since it reads the same multiplier.
+let farmSpeed = 1;
+let plotPatched = false;
+const patchPlot = () => {
+    const Plot = lexical('Plot');
+    const PlotStage = lexical('PlotStage');
+    if (plotPatched || !Plot || PlotStage === undefined) return;
+    plotPatched = true;
+    const original = Plot.prototype.getGrowthMultiplier;
+    Plot.prototype.getGrowthMultiplier = function patchedGrowth() {
+        const base = original.call(this);
+        return farmSpeed > 1 && this.stage() < PlotStage.Berry ? base * farmSpeed : base;
+    };
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', patchPlot); else patchPlot();
+
+Automation.register({
+    id: 'farmSpeed',
+    group: 'custom',
+    name: { fr: 'Ferme accélérée', en: 'Faster farm' },
+    description: {
+        fr: 'Les baies mûrissent plus vite. Une fois mûres, elles restent le temps habituel avant de flétrir.',
+        en: 'Berries ripen faster. Once ripe, they last the usual time before withering.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. Rien n’est écrit dans la sauvegarde.',
+        en: 'Changes the game rules while enabled. Nothing is written to the save.',
+    },
+    options: [
+        {
+            key: 'speed',
+            label: { fr: 'Vitesse', en: 'Speed' },
+            type: 'select',
+            default: 10,
+            choices: [2, 5, 10, 50, 100].map((n) => ({ value: n, label: { fr: `×${n}`, en: `×${n}` } })),
+        },
+    ],
+    available: (ctx) => ctx.g.App.game.farming.canAccess(),
+    intervalMs: 1000,
+    enable: (ctx) => { patchPlot(); farmSpeed = Math.max(1, Number(ctx.opt('speed')) || 1); },
+    // The speed option can change while on: pick it up every second.
+    tick: (ctx) => { farmSpeed = Math.max(1, Number(ctx.opt('speed')) || 1); },
+    disable: () => { farmSpeed = 1; },
+    status: (ctx) => `×${ctx.opt('speed')}`,
+});
+
+// Underground: tools recharge faster (rule change). The game's own restore rate is
+// multiplied, so the "time until 100%" shown in the mine follows; past the game's own
+// threshold a tool stops using durability, as it does at high underground levels.
+const mineSpeed = ko.observable(1);
+let toolPatched = false;
+const patchTools = (ctx: any) => {
+    if (toolPatched) return;
+    const tool = ctx.g.App?.game?.underground?.tools?.tools?.[0];
+    if (!tool) return;
+    toolPatched = true;
+    const proto = Object.getPrototypeOf(tool);
+    const original = proto.calculateDurabilityRestoreRatePerSecond;
+    proto.calculateDurabilityRestoreRatePerSecond = function patchedRestore(...args: any[]) {
+        return original.apply(this, args) * mineSpeed();
+    };
+    // The game caches each tool's rate in a computed that does not know about the speed:
+    // rebuild it so it follows both the underground level and the speed.
+    const underground = ctx.g.App.game.underground;
+    underground.tools.tools.forEach((t: any) => {
+        t.restoreRatePerSecond = ko.pureComputed(() => t.calculateDurabilityRestoreRatePerSecond(underground.undergroundLevel));
+    });
+};
+
+Automation.register({
+    id: 'mineSpeed',
+    group: 'custom',
+    name: { fr: 'Mine : recharge rapide', en: 'Mine: fast recharge' },
+    description: {
+        fr: 'Les outils de la mine retrouvent leur durabilité plus vite.',
+        en: 'Underground tools regain durability faster.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. Rien n’est écrit dans la sauvegarde.',
+        en: 'Changes the game rules while enabled. Nothing is written to the save.',
+    },
+    options: [
+        {
+            key: 'speed',
+            label: { fr: 'Vitesse', en: 'Speed' },
+            type: 'select',
+            default: 10,
+            choices: [2, 5, 10, 50].map((n) => ({ value: n, label: { fr: `×${n}`, en: `×${n}` } })),
+        },
+    ],
+    available: (ctx) => ctx.g.App.game.underground.canAccess(),
+    intervalMs: 1000,
+    enable: (ctx) => { patchTools(ctx); mineSpeed(Math.max(1, Number(ctx.opt('speed')) || 1)); },
+    tick: (ctx) => { const v = Math.max(1, Number(ctx.opt('speed')) || 1); if (mineSpeed.peek() !== v) mineSpeed(v); },
+    disable: () => { mineSpeed(1); },
+    status: (ctx) => `×${ctx.opt('speed')}`,
+});

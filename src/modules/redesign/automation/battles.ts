@@ -91,9 +91,18 @@ Automation.register({
         // The click debt already paces the rate; the game's 50 ms guard is reset so the
         // scheduler's 20 ms granularity does not drop clicks (at <= 20/s the average stays
         // within the game's own limit).
+        // At most one Pokémon defeated per pass: once the foe falls (or a catch starts), the
+        // rest of this pass is dropped. Clicking through every new foe at 1000/s meant up to
+        // 1000 defeats a second, each with its rewards, quests and achievements: the page froze.
+        const foe = target.enemyPokemon?.();
         for (let i = 0; i < clicks; i++) {
             target.lastClickAttack = 0;
             target.clickAttack();
+            const current = target.enemyPokemon?.();
+            if (current !== foe || !current?.isAlive?.()) {
+                clickDebt = 0;
+                break;
+            }
         }
     },
     status: (ctx) => `${ctx.opt('rate')}/s`,

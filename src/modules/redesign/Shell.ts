@@ -240,6 +240,45 @@ export default class RedesignShell {
         }
     }
 
+    // ----- New version available -----
+    // No service worker: the deployed bundle's ETag (or Last-Modified) is read at start
+    // and checked again when the app comes back to the foreground and every 10 minutes.
+    static updateReady = ko.observable(false);
+    private static bundleStamp: string | null = null;
+
+    private static async readBundleStamp(): Promise<string | null> {
+        try {
+            const res = await fetch('scripts/modules.min.js', { method: 'HEAD', cache: 'no-store' });
+            if (!res.ok) return null;
+            return res.headers.get('etag') || res.headers.get('last-modified') || res.headers.get('content-length');
+        } catch {
+            return null;
+        }
+    }
+
+    static async checkForUpdate() {
+        if (RedesignShell.updateReady()) return;
+        const stamp = await RedesignShell.readBundleStamp();
+        if (!stamp) return;
+        if (RedesignShell.bundleStamp === null) {
+            RedesignShell.bundleStamp = stamp;
+        } else if (stamp !== RedesignShell.bundleStamp) {
+            RedesignShell.updateReady(true);
+        }
+    }
+
+    static applyUpdate() {
+        const r = RedesignShell.refs();
+        try { r?.Save?.store?.(r.player); } catch { /* reload anyway */ }
+        window.location.reload();
+    }
+
+    private static watchForUpdates() {
+        RedesignShell.checkForUpdate();
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') RedesignShell.checkForUpdate(); });
+        window.setInterval(() => RedesignShell.checkForUpdate(), 10 * 60 * 1000);
+    }
+
     // The mini bar floats above the tabs on pages other than Combat (phones).
     static miniVisible = ko.pureComputed(() => !!RedesignShell.foe() && RedesignShell.page() !== 'combat');
 
@@ -561,6 +600,20 @@ export default class RedesignShell {
         document.addEventListener('touchcancel', end);
     }
 
+    // Lazy lists (Pokémon, hatchery): load more rows per step and start well before the
+    // end of the list, so fast scrolling rarely reaches the loader.
+    private static tuneLazyLists() {
+        const original = w.lazyLoad;
+        if (typeof original !== 'function' || original.__rdTuned) return;
+        const tuned = (key: string, node: Node, list: any, options: any = {}) => original(key, node, list, {
+            ...options,
+            pageSize: Math.max(60, (options.pageSize ?? 40) * 3),
+            triggerMargin: '200%',
+        });
+        tuned.__rdTuned = true;
+        w.lazyLoad = tuned;
+    }
+
     // Phones: allow pinch zoom (upstream blocks it) and draw under the notch.
     private static fixViewport() {
         const meta = document.querySelector('meta[name="viewport"]');
@@ -640,6 +693,7 @@ export default class RedesignShell {
             if (shell && game && shell.parentElement !== game) game.prepend(shell);
             if (shell) RedesignShell.guardKeys(shell);
             RedesignShell.fixViewport();
+            RedesignShell.tuneLazyLists();
             RedesignShell.relocate();
             RedesignShell.sheetGestures();
             RedesignShell.homeScreen();
@@ -666,6 +720,7 @@ export default class RedesignShell {
         GameLoadState.onLoadState(GameLoadState.states.running, () => {
             Automation.start(RedesignShell.refs());
             RedesignShell.applyWakeLock();
+            RedesignShell.watchForUpdates();
         });
         GameLoadState.onLoadState(GameLoadState.states.appliedBindings, () => {
             document.documentElement.lang = label('hp') === 'PV' ? 'fr' : 'en';

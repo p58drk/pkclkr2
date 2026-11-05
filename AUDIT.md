@@ -93,3 +93,26 @@ Le détail et les sources de chaque proposition (liens des tickets, votes, fichi
 | Batterie | Animation de fond des villes coupée. Option « Garder l'écran allumé » (Wake Lock, iOS 16.4+). |
 | Fenêtres | 58 fenêtres capturées : images seules centrées, tableaux avec marge de 16 px, croix de fermeture identiques, titres alignés à gauche, liste des succès sans débordement. |
 | Pension | Interrupteur « 12 œufs » dans l'en-tête ; un emplacement occupé n'affiche plus de cadenas. |
+
+## 6. Fluidité, mises à jour et pixel perfect (05/11/2026)
+
+Mesures dans Chrome sans écran, sur un ordinateur : elles indiquent les tendances, pas les chiffres exacts d’un iPhone.
+
+| Situation | Avant | Après |
+|---|---|---|
+| Combat, auto-clic à 1000/s | 2 images/s, blocage de 4,5 s (jusqu’à 1000 Pokémon vaincus par seconde) | 60 images/s ; au plus un Pokémon vaincu par passage (environ 30/s), 1000 clics/s tenus sur un ennemi qui résiste |
+| Combat au repos | 59 images/s | inchangé |
+| Défilement de la liste Pokémon | 61 images/s | 61 images/s ; 120 Pokémon chargés à l’ouverture au lieu de 20, rendu des lignes hors écran différé |
+| Changement de page | 61 images/s | fondu d’ouverture de 160 ms (opacité seule) |
+
+- **Mise à jour** : sans service worker, la version déployée est comparée (ETag du script principal) au démarrage, au retour au premier plan et toutes les 10 minutes. Une bannière propose « Mettre à jour » ; la partie est sauvegardée avant le rechargement.
+- **Pixel perfect** : sprites Pokémon (96 px) affichés en multiples de 32 px CSS (160, 128, 64) : chaque pixel source couvre un nombre entier de pixels sur un iPhone (×3). Coffres à 1:1, plantes de la ferme à 2:1. Aucun débordement horizontal sur 375, 393 et 430 px, sur les six pages.
+
+### Pistes d’amélioration de l’expérience
+
+1. Retour haptique au toucher du sprite (pas d’API sur iOS Safari : seulement sur Android).
+2. Transition de la barre de PV seulement quand l’auto-clic est coupé (les coups isolés deviennent lisibles).
+3. Glisser horizontalement entre les pages sur téléphone.
+4. Indicateur « Sauvegardé » discret après chaque sauvegarde automatique.
+5. Mode hors ligne (service worker) pour jouer sans réseau ; la bannière de mise à jour s’y brancherait.
+6. Résumé des gains au retour après une longue absence (la notification « Offline Bonus » existe mais disparaît vite).

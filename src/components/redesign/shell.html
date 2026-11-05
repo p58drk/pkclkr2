@@ -231,6 +231,12 @@
         </section>
     </main>
 
+    <!-- New version banner (the game is saved before reloading). -->
+    <div id="rd-update" role="status" data-bind="visible: RedesignShell.updateReady()" style="display: none;">
+        <span data-bind="text: RedesignShell.label('updateAvailable')"></span>
+        <button type="button" class="rd-update-btn" data-bind="click: () => RedesignShell.applyUpdate(), text: RedesignShell.label('updateNow')"></button>
+    </div>
+
     <!-- Shell-owned controls relocated into upstream modules at boot (see relocate()). -->
     <div class="rd-parking" hidden>
         <div id="rd-balls-tools" class="rd-balls-tools" data-bind="with: RedesignAutomation.Automation.find('catchSpeed')">

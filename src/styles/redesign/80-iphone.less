@@ -75,3 +75,101 @@ html.rd {
         #rd-foehead { min-height: 0; padding-top: 8px; }
     }
 }
+
+// ----- Pixel-perfect sprites on iPhone (3 device pixels per CSS pixel) -----
+// Pokémon sprites are 96px: shown at multiples of 32 CSS px, each source pixel
+// covers a whole number of screen pixels (no uneven pixel columns).
+html.rd {
+    #rd-shell:is([data-state='gym'], [data-state='dungeon'], [data-state='temporaryBattle'], [data-state='battleFrontier']) #battleContainer img.enemy {
+        width: 128px !important;
+        height: 128px !important;
+        margin-top: 8px !important;
+    }
+    #routeInfoModal .pokedex-pokemon-sprite { width: 64px; height: 64px; margin: 0; }
+    #pokemonListContainer .pokemon-row > img { width: 64px !important; height: 64px !important; }
+    .rd-mini-hit img { width: 64px; height: 64px; margin: -4px 0; }
+    #saveSelector .trainer-card .trainer-pokemon-image { width: 64px; height: 64px; margin: -8px 0; }
+    // Chests are 95px tall: shown at 1:1.
+    #battleContainer .dungeon-chest img { height: 95px; max-height: none; }
+    // Farm plants are 32px tall: shown at 2:1 when the plot allows.
+    .plotButton:not(.plotLockHover) img { width: auto !important; height: 64px !important; max-height: 100%; }
+}
+
+// ----- Motion -----
+html.rd {
+    // A short fade when a page appears (opacity only: cheap on the GPU).
+    .rd-page { animation: rd-page-in .16s ease-out both; }
+    // Gradients cannot interpolate: the halo changes at once, without a costly transition.
+    #battleContainer .battle-view::before { transition: none !important; }
+}
+@keyframes rd-page-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { html.rd .rd-page { animation: none; } }
+
+// ----- New version banner -----
+html.rd #rd-update {
+    position: fixed;
+    top: ~"calc(var(--top-h) + var(--safe-t) + 8px)";
+    left: 8px;
+    right: 8px;
+    z-index: 75;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 52px;
+    padding: 6px 6px 6px 16px;
+    border-radius: 16px;
+    background: var(--n9);
+    color: var(--n1);
+    font: 600 14px/1.2 var(--font-ui);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .5);
+    .rd-update-btn {
+        flex: none;
+        margin-left: auto;
+        min-height: 40px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--n1);
+        color: var(--n9);
+        font: 600 14px/1 var(--font-ui);
+        cursor: pointer;
+    }
+}
+@media (min-width: 700px) {
+    html.rd #rd-update { left: 50%; right: auto; width: ~"min(560px, calc(100% - 16px))"; transform: translateX(-50%); }
+}
+
+// ----- Flutes header: the ⓘ (shown while a flute plays) joins the tools on the right -----
+html.rd #battleItemContainer {
+    .card-header[href='#fluteItemContainerBody'] {
+        padding-right: 112px !important;
+        > .btn[style*='position: absolute'] { left: auto !important; right: 56px !important; }
+    }
+    .card-header[href='#fluteItemContainerBody'] + .btn[style*='position: absolute'] {
+        top: 4px !important;
+        right: 4px !important;
+        height: 40px !important;
+        min-width: 44px;
+        padding: 0 8px !important;
+        background: transparent !important;
+        border-radius: var(--radius-s) !important;
+        img { width: 24px; height: 24px; image-rendering: pixelated; }
+        &:hover { background: var(--n2) !important; }
+    }
+    #fluteItemContainerBody code { color: var(--n9); font: 600 12px/1.6 var(--font-fig); background: transparent; }
+}
+
+// ----- Hatchery eggs: the egg sits centred in its cell -----
+html.rd #breedingDisplay .eggSlot .content > .clickable > div:first-child {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    svg.egg { width: 58%; height: auto; }
+}
+
+// ----- Long lists: rows off screen are not laid out or painted until needed -----
+html.rd #pokemonListContainer .pokemon-row,
+html.rd .breedingListItem {
+    content-visibility: auto;
+    contain-intrinsic-block-size: auto 140px;
+}
