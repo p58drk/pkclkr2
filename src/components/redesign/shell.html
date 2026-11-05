@@ -96,6 +96,12 @@
                 <!-- /ko -->
             </div>
             <!-- /ko -->
+            <!-- Gym: number of clears (the Poké Balls above already show the team progress). -->
+            <!-- ko if: RedesignShell.stateName() === 'gym' -->
+            <div id="rd-gymbar" class="rd-gymbar">
+                <span class="rd-gymbar-item"><b class="rd-num" data-bind="text: RedesignShell.formatNumber(GymRunner.gymObservable()?.clears() ?? 0)"></b><small data-bind="text: RedesignShell.label('gymClears')"></small></span>
+            </div>
+            <!-- /ko -->
             <div id="rd-dock-fight" class="rd-slot"></div>
             <div id="rd-dock-currency" class="rd-slot"></div>
             <div id="rd-dock-balls" class="rd-slot"></div>
