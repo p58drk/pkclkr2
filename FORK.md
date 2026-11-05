@@ -17,6 +17,18 @@ npx gulp build          # sortie dans build/
 npm start               # serveur de dev avec rechargement
 ```
 
+## Déploiement (Vercel, projet `pkclkr2`)
+
+Le site est déployé comme site statique déjà compilé, depuis `dist/`. Ce dossier est ignoré par Git ; il contient le lien `.vercel/`, un `vercel.json` (sans installation ni build) et un `.vercelignore` qui exclut `.env*`.
+
+```sh
+export PATH=~/.local/node/bin:$PATH
+NODE_ENV=production npx gulp build
+rsync -a --delete --exclude .vercel --exclude vercel.json --exclude .vercelignore --exclude .env.local --exclude .gitignore build/ dist/
+cd dist && vercel deploy          # preview, protégée par l'authentification Vercel
+# vercel deploy --prod            # production : seulement après validation
+```
+
 ## Architecture : une couche posée sur le jeu
 
 Le code du jeu n'est presque pas touché, pour pouvoir récupérer les mises à jour. Seules deux lignes changent dans les fichiers d'origine :
