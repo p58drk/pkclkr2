@@ -298,6 +298,77 @@ export default class RedesignShell {
         return { caught: caught.size, total, shiny: shiny.size };
     }).extend({ rateLimit: 1000 });
 
+    // ----- Mine treasures: sell from the list -----
+    static treasureFilter = ko.observable<'sell' | 'all'>('sell');
+
+    static treasures = ko.pureComputed(() => {
+        const r = RedesignShell.refs();
+        const UI = w.UndergroundItems;
+        const VT = w.UndergroundItemValueType;
+        if (!r?.player || !UI || !VT) return [];
+        const all = RedesignShell.treasureFilter() === 'all';
+        const rows = UI.list
+            .filter((it: any) => it.valueType !== VT.MegaStone)
+            .map((it: any) => {
+                const owned = r.player.itemList[it.itemName]?.() ?? 0;
+                const sellable = it.hasSellValue();
+                return { item: it, owned, sellable, total: sellable ? it.value * owned : 0, gem: it.valueType === VT.Gem };
+            })
+            .filter((row: any) => row.owned > 0 && (all || row.sellable));
+        rows.sort((a: any, b: any) => Number(b.sellable) - Number(a.sellable)
+            || a.item.valueType - b.item.valueType
+            || b.total - a.total);
+        return rows;
+    });
+
+    static treasureSummary = ko.pureComputed(() => {
+        let diamonds = 0;
+        let plates = 0;
+        RedesignShell.treasures().forEach((row: any) => {
+            if (!row.sellable || row.item.sellLocked()) return;
+            if (row.gem) plates += row.owned; else diamonds += row.total;
+        });
+        return { diamonds, plates };
+    });
+
+    static treasureValueText(row: any): string {
+        return row.gem ? `${RedesignShell.formatNumber(row.item.value)} ${w.PokemonType[row.item.type]}` : RedesignShell.formatNumber(row.item.value);
+    }
+
+    static openTreasure(row: any) {
+        const T = w.UndergroundTrading;
+        if (!T || !row.item.isUnlocked()) return;
+        T.selectedTradeFromItem = row.item;
+        T.selectedTradeToItem = T.tradeToItemList[0];
+        w.$('#treasureDetailModal').modal('show');
+    }
+
+    static sellTreasure(row: any) {
+        if (!row.sellable || row.item.sellLocked()) return;
+        w.UndergroundController.sellMineItem(row.item, row.owned);
+    }
+
+    // Sells every unlocked stack of one kind (diamond treasures or gem plates); items
+    // locked with the padlock are kept.
+    static sellAllTreasures(kind: 'diamond' | 'gem') {
+        let count = 0;
+        let value = 0;
+        RedesignShell.treasures().slice().forEach((row: any) => {
+            if (!row.sellable || row.item.sellLocked() || row.gem !== (kind === 'gem')) return;
+            count += row.owned;
+            value += row.total;
+            w.UndergroundController.sellMineItem(row.item, row.owned);
+        });
+        if (!count) return;
+        w.Notifier.notify({
+            title: label('treasures'),
+            message: kind === 'gem'
+                ? label('soldPlates').replace('{n}', RedesignShell.formatNumber(count))
+                : label('soldTreasures').replace('{n}', RedesignShell.formatNumber(count)).replace('{v}', RedesignShell.formatNumber(value)),
+            type: w.NotificationConstants.NotificationOption.success,
+        });
+    }
+
     // The mini bar floats above the tabs on pages other than Combat (phones).
     static miniVisible = ko.pureComputed(() => !!RedesignShell.foe() && RedesignShell.page() !== 'combat');
 
@@ -486,6 +557,9 @@ export default class RedesignShell {
         if (farmBody && farmTools && farmTools.parentElement !== farmBody) farmBody.prepend(farmTools);
         moveTo('rd-mine-tools', '#undergroundDisplay');
         moveTo('rd-oak-tools', '#oakItemsContainer');
+        const treasuresPane = document.getElementById('treasures');
+        const treasuresView = document.getElementById('rd-treasures');
+        if (treasuresPane && treasuresView && treasuresView.parentElement !== treasuresPane) treasuresPane.prepend(treasuresView);
         moveTo('rd-minemodal-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
         moveTo('rd-minefind-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
         // Find mine window: next to « Search for mine ».

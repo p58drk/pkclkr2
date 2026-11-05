@@ -316,6 +316,51 @@
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('oakNoLimit')"></span>
             </button>
         </div>
+        <!-- Mine treasures, redesigned: sell from the list (moved into #treasures). -->
+        <div id="rd-treasures" class="rd-treasures">
+            <div class="rd-tabs" role="tablist">
+                <button type="button" role="tab" data-bind="click: () => RedesignShell.treasureFilter('sell'), attr: { 'aria-selected': RedesignShell.treasureFilter() === 'sell' ? 'true' : 'false' }, text: RedesignShell.label('treasuresToSell')"></button>
+                <button type="button" role="tab" data-bind="click: () => RedesignShell.treasureFilter('all'), attr: { 'aria-selected': RedesignShell.treasureFilter() === 'all' ? 'true' : 'false' }, text: RedesignShell.label('treasuresAll')"></button>
+            </div>
+            <div class="rd-treasure-summary">
+                <div class="rd-treasure-total">
+                    <span class="rd-treasure-total-label" data-bind="text: RedesignShell.label('treasuresDiamonds')"></span>
+                    <span class="rd-treasure-total-value"><img src="assets/images/currency/diamond.svg" alt=""><b class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.treasureSummary().diamonds)"></b></span>
+                    <button type="button" class="rd-treasure-sellall" data-bind="click: () => RedesignShell.sellAllTreasures('diamond'), enable: RedesignShell.treasureSummary().diamonds > 0, text: RedesignShell.label('sellAll')"></button>
+                </div>
+                <div class="rd-treasure-total">
+                    <span class="rd-treasure-total-label" data-bind="text: RedesignShell.label('treasuresPlates')"></span>
+                    <span class="rd-treasure-total-value"><b class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.treasureSummary().plates)"></b><small data-bind="text: RedesignShell.label('plates')"></small></span>
+                    <button type="button" class="rd-treasure-sellall" data-bind="click: () => RedesignShell.sellAllTreasures('gem'), enable: RedesignShell.treasureSummary().plates > 0, text: RedesignShell.label('sellAll')"></button>
+                </div>
+            </div>
+            <p class="rd-treasure-hint" data-bind="text: RedesignShell.treasures().length ? RedesignShell.label('treasuresHint') : RedesignShell.label('noTreasures')"></p>
+            <div class="rd-treasure-list" data-bind="foreach: RedesignShell.treasures()">
+                <div class="rd-treasure" data-bind="css: { 'is-locked': item.sellLocked(), 'is-unsellable': !sellable }">
+                    <button type="button" class="rd-treasure-main" data-bind="click: () => RedesignShell.openTreasure($data)">
+                        <img alt="" data-bind="attr: { src: item.image }">
+                        <span class="rd-treasure-text">
+                            <b data-bind="text: item.displayName"></b>
+                            <small>
+                                <span class="rd-num" data-bind="text: '×' + RedesignShell.formatNumber(owned)"></span>
+                                <!-- ko if: sellable -->
+                                · <img alt="" data-bind="attr: { src: gem ? Gems.image(item.type) : 'assets/images/currency/diamond.svg' }"><span class="rd-num" data-bind="text: RedesignShell.treasureValueText($data)"></span>
+                                <!-- /ko -->
+                            </small>
+                        </span>
+                    </button>
+                    <!-- ko if: sellable -->
+                    <button type="button" class="rd-treasure-lock" data-bind="click: () => item.toggleSellLock(), attr: { 'aria-pressed': item.sellLocked() ? 'true' : 'false', 'aria-label': RedesignShell.label('sellLock'), title: RedesignShell.label('sellLock') }">
+                        <svg aria-hidden="true"><use data-bind="attr: { href: item.sellLocked() ? 'assets/images/redesign/icons.svg#i-lock' : 'assets/images/redesign/icons.svg#i-lock-open' }"></use></svg>
+                    </button>
+                    <button type="button" class="rd-treasure-sell" data-bind="click: () => RedesignShell.sellTreasure($data), enable: !item.sellLocked()">
+                        <img alt="" data-bind="attr: { src: gem ? Gems.image(item.type) : 'assets/images/currency/diamond.svg' }">
+                        <span class="rd-num" data-bind="text: RedesignShell.formatNumber(total)"></span>
+                    </button>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
         <div id="rd-tracker-go" class="rd-tracker-go">
             <!-- ko if: RedesignShell.trackedDestination() -->
             <button type="button" class="rd-action" data-bind="click: () => RedesignShell.travelTo(App.game.achievementTracker.trackedAchievement())">

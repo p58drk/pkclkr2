@@ -66,6 +66,9 @@ Seules les deux lignes ci-dessus peuvent entrer en conflit. Après une mise à j
 
 ## Pages
 
+Mine › Treasures est refait : total vendable (diamants, plaques) avec « Tout vendre », filtre À vendre / Tous, et une ligne par trésor avec sa valeur, un cadenas (le verrou de vente du jeu) et un bouton qui vend la pile. Toucher la ligne ouvre la vente partielle du jeu.
+
+
 L'écran d'accueil (choix de la sauvegarde) garde le logo sur un fond neutre : les sauvegardes forment une liste (toucher = charger, bouton ⋯ = télécharger, importer par-dessus, supprimer) et « Nouvelle sauvegarde » / « Importer » restent en bas de l'écran.
 
 

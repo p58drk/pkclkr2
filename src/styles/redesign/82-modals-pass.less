@@ -158,3 +158,123 @@ html.rd #dailyQuestDisplayBody {
         font: 600 13px/28px var(--font-ui);
     }
 }
+
+// ----- Mine › Treasures: sell from the list -----
+html.rd #treasures {
+    padding: 0 !important;
+    > .row { display: none !important; } // upstream list, replaced by #rd-treasures
+}
+html.rd .rd-treasures {
+    padding: 12px 0 16px;
+    .rd-tabs { margin: 0 16px 12px; }
+    .rd-treasure-summary {
+        display: grid;
+        gap: 8px;
+        margin: 0 16px 8px;
+    }
+    .rd-treasure-total {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 56px;
+        padding: 8px 8px 8px 16px;
+        border-radius: var(--radius);
+        background: var(--n2);
+    }
+    .rd-treasure-total-label { color: var(--n7); font: 600 13px/1.2 var(--font-fig); letter-spacing: .08em; text-transform: uppercase; }
+    .rd-treasure-total-value {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+        b { color: var(--n9); font: 600 18px/1 var(--font-fig); }
+        small { color: var(--n7); font-size: 13px; }
+        img { width: 18px; height: 18px; }
+    }
+    .rd-treasure-sellall {
+        flex: none;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--n9);
+        color: var(--n1);
+        font: 600 14px/1 var(--font-ui);
+        cursor: pointer;
+        &:disabled { background: var(--n3); color: var(--n6); cursor: default; }
+    }
+    .rd-treasure-hint { margin: 8px 16px; color: var(--n7); font-size: 13px; }
+    .rd-treasure-list { display: flex; flex-direction: column; }
+    .rd-treasure {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        min-height: 60px;
+        padding: 0 12px 0 0;
+        border-bottom: 1px solid var(--line);
+        &.is-unsellable .rd-treasure-main { cursor: default; }
+    }
+    .rd-treasure-main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-height: 60px;
+        padding: 6px 0 6px 16px;
+        border: 0;
+        background: transparent;
+        color: var(--n9);
+        text-align: left;
+        cursor: pointer;
+        > img { flex: none; width: 32px; height: 32px; object-fit: contain; image-rendering: pixelated; }
+    }
+    .rd-treasure-text {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        b { overflow: hidden; font: 500 15px/1.25 var(--font-ui); text-overflow: ellipsis; white-space: nowrap; }
+        small { display: flex; align-items: center; gap: 4px; color: var(--n7); font: 500 13px/1.2 var(--font-fig); img { width: 14px; height: 14px; } }
+    }
+    .rd-treasure-lock {
+        flex: none;
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 20px;
+        background: transparent;
+        color: var(--n6);
+        cursor: pointer;
+        svg { width: 18px; height: 18px; }
+        &[aria-pressed='true'] { color: var(--warn); }
+    }
+    .rd-treasure-sell {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-width: 92px;
+        min-height: 40px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 12px;
+        background: var(--n2);
+        color: var(--n9);
+        font: 600 14px/1 var(--font-fig);
+        cursor: pointer;
+        img { width: 16px; height: 16px; }
+        &:hover { background: var(--n3); }
+        &:disabled { color: var(--n6); cursor: default; img { opacity: .4; } }
+    }
+    .is-locked .rd-treasure-main b { color: var(--n7); }
+}
+
+// Treasure detail (partial sale): one clear header, no repeated icons.
+html.rd #treasureDetailModal .modal-header {
+    justify-content: flex-start !important;
+    gap: 12px;
+    > img:last-of-type { display: none; }
+    img { width: 32px; height: 32px; image-rendering: pixelated; }
+}
