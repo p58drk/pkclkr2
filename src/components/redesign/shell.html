@@ -57,8 +57,7 @@
             <div id="rd-quick" role="group" data-bind="attr: { 'aria-label': RedesignShell.label('automation') }">
                 <!-- ko foreach: RedesignAutomation.quick -->
                 <button type="button" class="rd-chip" data-bind="click: () => feature.toggle(), enable: usable(), css: { 'is-on': feature.enabled() }, attr: { 'aria-pressed': feature.enabled() ? 'true' : 'false', title: usable() ? feature.description() : RedesignShell.label('notHere') }">
-                    <i class="rd-chip-dot" aria-hidden="true"></i>
-                    <span data-bind="text: label()"></span>
+                    <span class="rd-chip-label" data-bind="text: label()"></span>
                     <!-- ko if: status() --><small class="rd-num" data-bind="text: status()"></small><!-- /ko -->
                 </button>
                 <!-- /ko -->

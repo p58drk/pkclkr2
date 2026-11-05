@@ -532,3 +532,19 @@ html.rd #rd-main[data-page='pokemon'] {
 @media (min-width: 1100px) {
     html.rd #rd-main[data-page='pokemon'] #rd-page-pokemon { height: ~"calc(100vh - var(--top-h))"; padding-bottom: 16px; }
 }
+
+// Quick toggles always fit the screen width (no sideways scroll when a long status
+// such as « 1000/s » or a « +3 » count shows): chips share the row and shrink.
+html.rd {
+    #rd-quick { overflow: visible; gap: 6px; }
+    #rd-quick .rd-chip {
+        flex: 1 1 auto;
+        min-width: 0;
+        justify-content: center;
+        gap: 6px;
+        padding: 0 10px;
+        small { flex: none; }
+    }
+    #rd-quick .rd-chip-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #rd-quick .rd-chip-more { flex: 0 0 auto; margin-left: 0; padding: 0 10px; }
+}
