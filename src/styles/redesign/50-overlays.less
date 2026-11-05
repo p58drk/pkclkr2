@@ -80,14 +80,18 @@ html.rd {
     .introjs-arrow { display: none !important; }
     .introjs-tooltipbuttons { border-top: 1px solid var(--line); }
 
-    // While a window is open on a phone, notifications move to the top edge so they
-    // never cover the sheet's content or its buttons.
+    // Phones: notifications are banners at the top edge, two at most, compact. They
+    // never cover the thumb zone, the mini bar or a sheet's buttons. Swipe up dismisses.
     @media (max-width: 1099.98px) {
-        body.modal-open #toaster {
+        #toaster {
             top: ~"calc(var(--safe-t) + 8px)";
             bottom: auto;
             flex-direction: column;
+            .toast { touch-action: pan-x; }
             .toast:nth-child(n+3) { display: none; }
+            .toast-header { padding: 6px 4px 0 12px; strong { font-size: 15px; } small { font-size: 12px; } }
+            .toast-body { max-height: 4.4em; overflow: hidden; padding: 4px 12px 10px; font-size: 14px; line-height: 1.35; }
+            .close { width: 40px; height: 32px; }
         }
     }
 }

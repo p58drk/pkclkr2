@@ -99,6 +99,7 @@ L'audit complet a été fait le 05/11/2026 contre la v0.10.26. Les scripts vienn
 | autobattleitems | Intégré | Choix des objets, rachat optionnel. |
 | catchspeedadjuster | Intégré (règle modifiée) | Le délai d'origine est restauré quand on désactive. |
 | oakitemsunlimited | Intégré (règle modifiée) | Rien n'est écrit dans la sauvegarde. |
+| (propre au fork) Pension : 12 œufs | Règle modifiée | 12 œufs en même temps. Les emplacements sont ajoutés avant la lecture de la sauvegarde ; la sauvegarde garde le nombre d’emplacements achetés. Le jeu officiel ignore les œufs 5 à 12 et rend leurs Pokémon à l’équipe. À la désactivation, les œufs en cours finissent. |
 
 ### À faire
 

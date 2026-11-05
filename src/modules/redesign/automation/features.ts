@@ -251,3 +251,83 @@ Automation.register({
         active.slice(oak.maxActiveCount()).reverse().forEach((item: any) => { item.isActive = false; });
     },
 });
+
+// Hatchery: 12 eggs at once instead of 4 (rule change, no userscript equivalent).
+// The extra slots exist only in this fork: they are added to the hatchery before the
+// save is read, so eggs 5-12 survive a reload. The save keeps the number of slots the
+// player bought; the official game ignores eggs 5-12 and returns those Pokémon to the
+// party on load. Switching off lets eggs 5-12 finish, then the slots disappear on the
+// next load.
+const HATCHERY_SLOTS = 12;
+const BASE_SLOTS = 4;
+const lexical = (name: string): any => {
+    // eslint-disable-next-line no-eval
+    try { return (0, eval)(`typeof ${name} !== 'undefined' ? ${name} : undefined`); } catch { return undefined; }
+};
+const hatcheryOn = () => !!Automation.find('hatchery12')?.enabled.peek();
+let breedingPatched = false;
+const patchBreeding = () => {
+    const Breeding = lexical('Breeding');
+    const Egg = lexical('Egg');
+    if (breedingPatched || !Breeding || !Egg) return;
+    breedingPatched = true;
+    const fromJSON = Breeding.prototype.fromJSON;
+    Breeding.prototype.fromJSON = function patchedFromJSON(json: any) {
+        const saved: any[] = json?.eggList ?? [];
+        const pending = saved.slice(BASE_SLOTS).some((e) => e && e.type != null && e.type !== -1);
+        if (hatcheryOn() || pending) {
+            while (this.defaults.eggList.length < HATCHERY_SLOTS) this.defaults.eggList.push(ko.observable(new Egg()));
+        }
+        fromJSON.call(this, json);
+        if (hatcheryOn() && this.eggList.length >= HATCHERY_SLOTS && this.__rdPurchased == null) {
+            this.__rdPurchased = this.eggSlots;
+            this.eggSlots = HATCHERY_SLOTS;
+        }
+    };
+    const toJSON = Breeding.prototype.toJSON;
+    Breeding.prototype.toJSON = function patchedToJSON() {
+        const json = toJSON.call(this);
+        if (this.__rdPurchased != null) json.eggSlots = this.__rdPurchased;
+        return json;
+    };
+};
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', patchBreeding); else patchBreeding();
+
+Automation.register({
+    id: 'hatchery12',
+    group: 'custom',
+    name: { fr: 'Pension : 12 œufs', en: 'Hatchery: 12 eggs' },
+    description: {
+        fr: 'Fait couver 12 œufs en même temps au lieu de 4.',
+        en: 'Incubates 12 eggs at once instead of 4.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu ; la page se recharge à l’activation. La sauvegarde garde vos emplacements achetés. Les œufs 5 à 12 n’existent pas dans le jeu officiel : si vous y importez la sauvegarde, ils disparaissent et leurs Pokémon reviennent dans l’équipe. À la désactivation, les œufs en cours finissent normalement.',
+        en: 'Changes the game rules; the page reloads when switched on. The save keeps your bought slots. Eggs 5-12 do not exist in the official game: importing the save there drops them and returns their Pokémon to the party. When switched off, eggs in progress finish normally.',
+    },
+    available: (ctx) => ctx.g.App.game.breeding.canAccess(),
+    enable: (ctx) => {
+        const breeding = ctx.g.App.game.breeding;
+        if (breeding.eggList.length < HATCHERY_SLOTS) {
+            // The hatchery view is built once: reload so the 12 slots exist before bindings.
+            ctx.g.Save.store(ctx.g.player);
+            window.location.reload();
+            return;
+        }
+        if (breeding.__rdPurchased == null) {
+            breeding.__rdPurchased = breeding.eggSlots;
+            breeding.eggSlots = HATCHERY_SLOTS;
+        }
+    },
+    disable: (ctx) => {
+        const breeding = ctx.g.App.game.breeding;
+        if (breeding.__rdPurchased != null) {
+            breeding.eggSlots = breeding.__rdPurchased;
+            breeding.__rdPurchased = null;
+        }
+    },
+    status: (ctx) => {
+        const eggs = ctx.g.App.game.breeding.eggList as Array<KnockoutObservable<any>>;
+        return `${eggs.filter((e) => !e().isNone()).length}/${HATCHERY_SLOTS}`;
+    },
+});

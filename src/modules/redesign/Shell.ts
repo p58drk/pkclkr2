@@ -403,6 +403,42 @@ export default class RedesignShell {
         host.setProperty('--foe-2', c2);
     }
 
+    // Phones: a notification banner follows the finger upwards and is dismissed past 40px.
+    private static toastGestures() {
+        let toast: HTMLElement | null = null;
+        let startY = 0;
+        let dy = 0;
+        document.addEventListener('touchstart', (e) => {
+            const t = (e.target as Element)?.closest?.('#toaster .toast') as HTMLElement | null;
+            if (!t || (e.target as Element).closest('button, a')) return;
+            toast = t;
+            startY = e.touches[0].clientY;
+            dy = 0;
+            toast.style.transition = 'none';
+        }, { passive: true });
+        document.addEventListener('touchmove', (e) => {
+            if (!toast) return;
+            dy = Math.min(0, e.touches[0].clientY - startY);
+            toast.style.transform = `translateY(${dy}px)`;
+            toast.style.opacity = String(1 + dy / 120);
+        }, { passive: true });
+        const end = () => {
+            if (!toast) return;
+            const t = toast;
+            toast = null;
+            t.style.transition = '';
+            if (dy < -40) {
+                w.$(t).toast('hide');
+                t.remove();
+            } else {
+                t.style.transform = '';
+                t.style.opacity = '';
+            }
+        };
+        document.addEventListener('touchend', end);
+        document.addEventListener('touchcancel', end);
+    }
+
     // Home screen (save selector): plain text links, a section title, translated actions,
     // and a visible actions button on every save card.
     private static homeScreen() {
@@ -539,6 +575,7 @@ export default class RedesignShell {
             RedesignShell.relocate();
             RedesignShell.sheetGestures();
             RedesignShell.homeScreen();
+            RedesignShell.toastGestures();
             // Choosing an achievement to track also travels to its place, when unlocked.
             document.addEventListener('click', (e) => {
                 const row = (e.target as Element)?.closest?.('#achievementsModal .achievement-row');

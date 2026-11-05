@@ -212,10 +212,27 @@ html.rd #rd-shell:is([data-state='gym'], [data-state='dungeon'], [data-state='te
     > .pageItemFooter { position: static !important; margin-top: auto !important; }
 }
 
+// Route fights: the sprite area keeps one height whether it shows the Pokémon or the
+// ball (instant catch flips between the two several times a second).
+html.rd #routeBattleContainer > .col > div:nth-child(2) {
+    display: flow-root;
+    height: 168px;
+    overflow: hidden;
+    > div { height: 168px; }
+    img.enemy { margin-top: 4px !important; }
+}
+
+// Farm plants (and the farm window's) are centred in their plot.
+html.rd .plotButton:not(.plotLockHover) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 // Catching: the ball sits where the sprite was, centred, on every battle type.
 html.rd #battleContainer .catchChance {
-    height: 164px;
-    padding-top: 24px;
+    height: 168px;
+    padding-top: 28px;
     color: var(--n9) !important;
     font: 600 15px/20px var(--font-fig);
     text-align: center;
