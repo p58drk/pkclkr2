@@ -225,3 +225,9 @@ html.rd #rd-top {
         backdrop-filter: saturate(160%) blur(18px);
     }
 }
+
+// Safari (iOS 26) blurs the page under its own top edge: on phones every top
+// element (top bar, banners, home and loading logos) clears it by 10px more.
+@media (max-width: 1099.98px) {
+    html.rd { --safe-t: ~"calc(env(safe-area-inset-top, 0px) + 10px)"; }
+}
