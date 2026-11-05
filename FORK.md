@@ -68,16 +68,16 @@ Seules les deux lignes ci-dessus peuvent entrer en conflit. Après une mise à j
 
 | Page | Contenu |
 |---|---|
-| Combat | Combat, Poké Balls, monnaies, état de l'automatisation, carte |
-| Progrès | Quêtes, suivi des succès, accès à tous les succès et toutes les quêtes |
+| Combat | Interrupteurs auto-clic, auto-arène et auto-donjon, combat, carte, monnaies, Poké Balls (avec « Zéro délai ») |
+| Progrès | Onglets Quêtes, Histoires et Succès. Choisir un succès à suivre emmène à son lieu (route, arène, donjon) s'il est débloqué |
 | Objets | Objets Oak, objets de combat |
 | Pokémon | Liste des Pokémon |
 | Activités | Pension, ferme, souterrain, raccourcis |
-| Menu | Automatisation, son, sauvegarde, interface, menu du jeu |
+| Menu | Automatisation (une ligne par fonction, réglages en dépliant), son, sauvegarde, interface, menu du jeu en grille |
 
 Disposition selon l'écran :
 
-- **Mobile** : barre d'onglets en bas, Menu en haut à droite. Une mini-barre de combat reste visible sur les autres pages ; touchez le sprite pour attaquer, le nom pour revenir au combat.
+- **Mobile** : barre d'onglets en bas, Menu en haut à droite. Les fenêtres s'ouvrent en feuille : glisser la poignée vers le bas (ou la toucher) la ferme. Une mini-barre de combat reste visible sur les autres pages ; touchez le sprite pour attaquer, le nom pour revenir au combat.
 - **Ordinateur** (1100 px et plus) : rail de navigation à gauche, combat ancré dans une colonne, page active à droite. La page Combat affiche la carte en grand.
 
 ## Scripts : état de l'intégration

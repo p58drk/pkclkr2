@@ -83,6 +83,11 @@ export default class RedesignShell {
         window.scrollTo({ top: 0 });
     }
 
+    static goToAutomation() {
+        RedesignShell.go('menu');
+        window.setTimeout(() => document.getElementById('rd-menu-automation')?.scrollIntoView({ block: 'start' }), 0);
+    }
+
     // Shows the page that holds an element, synchronously (Knockout defers its own
     // update, and intro.js measures the target right away).
     static goToElement(el: Element | null) {
@@ -141,7 +146,7 @@ export default class RedesignShell {
         if (!RedesignShell.isFighting()) return null;
         // In a dungeon the last foe stays in Battle.enemyPokemon while the player explores.
         const r = RedesignShell.refs();
-        if (RedesignShell.state() === w.GameConstants?.GameState?.dungeon && !r?.DungeonRunner?.fighting?.()) return null;
+        if (RedesignShell.state() === w.GameConstants?.GameState?.dungeon && !r?.DungeonRunner?.fighting?.() && !r?.DungeonBattle?.catching?.()) return null;
         return w.Battle?.enemyPokemon?.() ?? null;
     });
 
@@ -150,6 +155,91 @@ export default class RedesignShell {
         const GS = w.GameConstants?.GameState;
         return !!RedesignShell.foe() && RedesignShell.state() !== GS?.battleFrontier;
     });
+
+    // Game state name on the shell (data-state), so styles can follow the battle type.
+    static stateName = ko.pureComputed(() => {
+        const GS = w.GameConstants?.GameState;
+        const s = RedesignShell.state();
+        return GS && GS[s] !== undefined ? GS[s] : 'loading';
+    });
+
+    // Card line: always present during battles (no layout jump while exploring a dungeon).
+    static headName = ko.pureComputed(() => {
+        const foe = RedesignShell.foe();
+        if (foe) return foe.displayName;
+        const r = RedesignShell.refs();
+        return r?.DungeonRunner?.dungeon?.name ?? RedesignShell.locationName();
+    });
+
+    static headSub = ko.pureComputed(() => {
+        if (RedesignShell.foe()) return '';
+        const r = RedesignShell.refs();
+        if (RedesignShell.state() !== w.GameConstants?.GameState?.dungeon || !r?.DungeonRunner) return '';
+        const name = r.DungeonRunner.dungeon?.name;
+        const clears = name ? r.App.game.statistics.dungeonsCleared[w.GameConstants.getDungeonIndex(name)]() : 0;
+        return `${label('exploring')} · ${RedesignShell.formatNumber(clears)} ${label('clears')}`;
+    });
+
+    // Where the quick gym / dungeon toggles make sense.
+    static canAutoGym = ko.pureComputed(() => {
+        const r = RedesignShell.refs();
+        const GS = w.GameConstants?.GameState;
+        if (!r || !GS) return false;
+        const s = RedesignShell.state();
+        if (s === GS.gym) return true;
+        return s === GS.town && (r.player.town?.content ?? []).some((c: any) => c instanceof r.Gym && c.isUnlocked());
+    });
+
+    static canAutoDungeon = ko.pureComputed(() => {
+        const r = RedesignShell.refs();
+        const GS = w.GameConstants?.GameState;
+        if (!r || !GS) return false;
+        const s = RedesignShell.state();
+        if (s === GS.dungeon) return true;
+        return s === GS.town && r.player.town instanceof r.DungeonTown && !!r.player.town.dungeon?.isUnlocked();
+    });
+
+    static progressTab = ko.observable<'quests' | 'lines' | 'achievements'>('quests');
+
+    // Achievement locations: route, gym or dungeon, when the player can already go there.
+    static destinationFor(achievement: any): (() => void) | null {
+        const r = RedesignShell.refs();
+        const p = achievement?.property;
+        const GC = w.GameConstants;
+        const MapHelper = w.MapHelper ?? (0, eval)('typeof MapHelper !== "undefined" ? MapHelper : undefined');
+        if (!r || !p || !GC || !MapHelper) return null;
+        if (p.route !== undefined && p.region !== undefined) {
+            if (!MapHelper.accessToRoute(p.route, p.region)) return null;
+            return () => MapHelper.moveToRoute(p.route, p.region);
+        }
+        if (p.gymIndex !== undefined) {
+            const name = GC.RegionGyms.flat()[p.gymIndex];
+            const GymList = (0, eval)('typeof GymList !== "undefined" ? GymList : undefined');
+            const town = GymList?.[name]?.parent?.name ?? GymList?.[name]?.town;
+            if (!town || !MapHelper.accessToTown(town)) return null;
+            return () => MapHelper.moveToTown(town);
+        }
+        if (p.dungeonIndex !== undefined) {
+            const name = GC.RegionDungeons.flat()[p.dungeonIndex];
+            if (!name || !MapHelper.accessToTown(name)) return null;
+            return () => MapHelper.moveToTown(name);
+        }
+        return null;
+    }
+
+    static trackedDestination = ko.pureComputed(() => {
+        const r = RedesignShell.refs();
+        const tracked = r?.App?.game?.achievementTracker?.trackedAchievement?.();
+        return tracked ? RedesignShell.destinationFor(tracked) : null;
+    });
+
+    static travelTo(achievement: any) {
+        const go = RedesignShell.destinationFor(achievement);
+        if (!go) return false;
+        go();
+        RedesignShell.go('combat');
+        return true;
+    }
 
     static regionName = ko.pureComputed(() => {
         try {
@@ -277,6 +367,14 @@ export default class RedesignShell {
             const column = document.getElementById(col);
             column?.querySelectorAll(':scope > .card').forEach((card) => fallback && RedesignShell.moveInto(card, fallback));
         });
+        // Shell-owned controls that live inside upstream modules.
+        const moveTo = (id: string, hostSel: string) => {
+            const el = document.getElementById(id);
+            const host = document.querySelector(hostSel);
+            if (el && host && el.parentElement !== host) host.appendChild(el);
+        };
+        moveTo('rd-balls-tools', '#pokeballSelector');
+        moveTo('rd-tracker-go', '#achievementTrackerBody');
         // The start menu's item list becomes the Menu page's game section.
         const list = document.querySelector('#startMenu .dropdown-menu');
         const menuSlot = document.getElementById('rd-menu-game');
@@ -300,6 +398,53 @@ export default class RedesignShell {
         const host = (document.getElementById('rd-shell') ?? document.documentElement).style;
         host.setProperty('--foe', c1);
         host.setProperty('--foe-2', c2);
+    }
+
+    // Bottom sheets: the grab handle (and the header) drag the sheet down; past a
+    // threshold, or a quick flick, it closes. A tap on the handle closes it too.
+    private static sheetGestures() {
+        let sheet: HTMLElement | null = null;
+        let modal: HTMLElement | null = null;
+        let startY = 0;
+        let startT = 0;
+        let dy = 0;
+        let handle = false;
+        const phone = () => window.matchMedia('(max-width: 699.98px)').matches;
+        document.addEventListener('touchstart', (e) => {
+            if (!phone() || e.touches.length !== 1) return;
+            const t = e.target as Element;
+            const content = t.closest?.('.modal.show .modal-content') as HTMLElement | null;
+            if (!content) return;
+            const y = e.touches[0].clientY;
+            const top = content.getBoundingClientRect().top;
+            const onHandle = y - top < 28;
+            const onHeader = !!t.closest('.modal-header') && !t.closest('button, a, input, select, textarea, [data-toggle]');
+            if (!onHandle && !onHeader) return;
+            handle = onHandle;
+            sheet = content.closest('.modal-dialog') as HTMLElement;
+            modal = content.closest('.modal') as HTMLElement;
+            startY = y;
+            startT = Date.now();
+            dy = 0;
+            sheet.style.transition = 'none';
+        }, { passive: true });
+        document.addEventListener('touchmove', (e) => {
+            if (!sheet) return;
+            dy = Math.max(0, e.touches[0].clientY - startY);
+            sheet.style.transform = `translateY(${dy}px)`;
+        }, { passive: true });
+        const end = () => {
+            if (!sheet) return;
+            const fast = dy > 40 && dy / Math.max(1, Date.now() - startT) > 0.5;
+            const tap = handle && dy < 4 && Date.now() - startT < 300;
+            sheet.style.transition = '';
+            sheet.style.transform = '';
+            if (dy > 120 || fast || tap) w.$(modal).modal('hide');
+            sheet = null;
+            modal = null;
+        };
+        document.addEventListener('touchend', end);
+        document.addEventListener('touchcancel', end);
     }
 
     // Phones: allow pinch zoom (upstream blocks it) and draw under the notch.
@@ -356,6 +501,12 @@ export default class RedesignShell {
             if (shell) RedesignShell.guardKeys(shell);
             RedesignShell.fixViewport();
             RedesignShell.relocate();
+            RedesignShell.sheetGestures();
+            // Choosing an achievement to track also travels to its place, when unlocked.
+            document.addEventListener('click', (e) => {
+                const row = (e.target as Element)?.closest?.('#achievementsModal .achievement-row');
+                if (row) RedesignShell.travelTo(ko.dataFor(row));
+            });
         };
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', onReady);

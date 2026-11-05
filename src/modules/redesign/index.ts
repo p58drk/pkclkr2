@@ -19,6 +19,28 @@ const RedesignAutomation = {
         .map((f) => [f.name(), f.statusText()].filter(Boolean).join(' ')).join(' · ')),
 };
 
+// Quick toggles above the fight (Combat page): auto clicker, auto gym, auto dungeon.
+const QUICK = [
+    { id: 'autoClick', key: 'autoClickShort', applicable: () => true },
+    { id: 'autoGym', key: 'autoGymShort', applicable: () => RedesignShell.canAutoGym() },
+    { id: 'autoDungeon', key: 'autoDungeonShort', applicable: () => RedesignShell.canAutoDungeon() },
+] as const;
+const quick = QUICK.map((q) => {
+    const feature = Automation.find(q.id);
+    return {
+        feature,
+        label: () => RedesignShell.label(q.key),
+        status: ko.pureComputed(() => (q.id === 'autoClick' && feature?.enabled() ? feature.statusText() : '')),
+        // A running toggle can always be switched off; an idle one only where it applies.
+        usable: ko.pureComputed(() => !!feature && (feature.enabled() || q.applicable())),
+    };
+}).filter((q) => q.feature);
+const quickIds: string[] = QUICK.map((q) => q.id);
+Object.assign(RedesignAutomation, {
+    quick,
+    othersActive: ko.pureComputed(() => Automation.active().filter((f) => !quickIds.includes(f.id)).length),
+});
+
 Object.assign(window, { RedesignShell, RedesignAutomation });
 
 export default RedesignShell;

@@ -1,0 +1,517 @@
+// Fork: second layout pass. Combat page order and quick toggles, battle stage with a
+// fixed geometry (nothing jumps between fight, catch, chest and exploration), dungeon
+// board, Poké Ball header tools, Progress tabs, compact Menu, hatchery, farm, Pokémon
+// list height.
+
+@chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+html.rd {
+    // ----- Quick automation toggles, above the fight -----
+    #rd-quick {
+        display: flex;
+        gap: 8px;
+        padding: 12px 16px 0;
+        overflow-x: auto;
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+    }
+    .rd-chip {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--n3);
+        border-radius: 20px;
+        background: transparent;
+        color: var(--n7);
+        font: 500 14px/1 var(--font-ui);
+        cursor: pointer;
+        transition: background-color .15s var(--ease), color .15s var(--ease);
+        small { font: 600 13px/1 var(--font-fig); }
+        svg { width: 18px; height: 18px; }
+        b { font: 600 13px/1 var(--font-fig); }
+        &:hover:not(:disabled) { background: var(--n2); color: var(--n9); }
+        &.is-on { background: var(--n9); border-color: var(--n9); color: var(--n1); }
+        &:disabled { opacity: .4; cursor: default; }
+    }
+    .rd-chip-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--n5); }
+    .rd-chip.is-on .rd-chip-dot { background: var(--ok); }
+    .rd-chip-more { margin-left: auto; padding: 0 12px; }
+
+    // The card line keeps its height whether a foe is shown or not.
+    #rd-foehead { min-height: 70px; }
+    #rd-page-combat .rd-page-title { padding: 16px 16px 8px; font-size: 20px; }
+}
+
+// Phones and tablets, Combat page: toggles, fight, map, currencies, Poké Balls.
+@media (max-width: 1099.98px) {
+    html.rd #rd-main[data-page='combat'] {
+        display: flex;
+        flex-direction: column;
+        #rd-dock { display: contents; }
+        #rd-quick { order: 1; }
+        #rd-foehead { order: 2; }
+        #rd-dock-fight { order: 3; }
+        #rd-page-combat { order: 4; }
+        #rd-dock-currency { order: 5; padding-top: 12px; }
+        #rd-dock-balls { order: 6; }
+    }
+}
+
+// ----- Town view: a compact Start button (one line) -----
+html.rd #battleContainer #townView {
+    button[onclick^='DungeonRunner.initializeDungeon'] {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px !important;
+        padding: 0 12px !important;
+        color: var(--n9) !important;
+        font: 500 15px/1 var(--font-ui);
+        br { display: none; }
+        span, img { vertical-align: middle; }
+        img { height: 18px; width: 18px; }
+    }
+    .btn-dungeon-guide { min-height: 40px !important; min-width: 40px; }
+}
+
+// ----- Battle stage: gyms, dungeons, temporary battles, Battle Frontier -----
+html.rd #rd-shell:is([data-state='gym'], [data-state='dungeon'], [data-state='temporaryBattle'], [data-state='battleFrontier']) #battleContainer .battle-view > .row > .col {
+    position: relative;
+    display: flex !important;
+    flex-direction: column;
+    height: 300px !important;
+    min-height: 0 !important;
+    padding: 4px 16px 0 !important;
+    overflow: hidden;
+
+    // Title row: trainer name, Pokémon left, then the timer with its seconds.
+    > .pageItemTitle {
+        flex: none;
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px 12px;
+        height: auto !important;
+        min-height: 0;
+        margin: 0;
+        padding: 0 !important;
+        background: transparent !important;
+        color: var(--n7);
+        font: 600 15px/1.2 var(--font-fig) !important;
+        > knockout:not(.left):not(.right) { display: none; }
+        .left, .right { position: static !important; margin: 0 !important; font: inherit; color: var(--n7) !important; }
+        .right { margin-left: auto !important; display: inline-flex; gap: 2px; }
+        .right h4 { display: none; }
+        .pokeball-smallest { width: 14px; height: 14px; }
+    }
+    .progress.timer {
+        position: relative !important;
+        top: auto !important;
+        flex: 0 0 100%;
+        width: 100% !important;
+        height: 20px !important;
+        min-height: 0;
+        margin: 2px 0 0;
+        padding-right: 56px;
+        border-radius: 0;
+        overflow: visible;
+        background: linear-gradient(var(--n3), var(--n3)) no-repeat left center / ~"calc(100% - 56px)" 4px !important;
+        .progress-bar {
+            align-self: center;
+            height: 4px;
+            border-radius: 2px;
+            background: var(--n7) !important;
+            transition: none;
+        }
+        .progress-bar.bg-danger { background: var(--bad) !important; }
+        span {
+            position: absolute !important;
+            top: 0 !important;
+            right: 0;
+            left: auto !important;
+            width: 52px !important;
+            line-height: 20px !important;
+            text-align: right !important;
+            color: var(--n9) !important;
+            font: 600 15px/20px var(--font-fig) !important;
+            font-variant-numeric: tabular-nums;
+            text-shadow: none;
+        }
+        .progress-bar.bg-danger span { color: var(--bad) !important; }
+    }
+
+    // Sprite, catch, chest and buttons share one area under the title.
+    .trainer {
+        position: absolute !important;
+        top: 44px !important;
+        right: 12px;
+        left: auto !important;
+        z-index: 0;
+        pointer-events: none;
+        img { max-height: 96px; width: auto; image-rendering: pixelated; }
+    }
+    img.enemy {
+        position: relative;
+        z-index: 1;
+        width: 120px !important;
+        height: 120px !important;
+        min-height: 0 !important;
+        margin: 12px auto 0 !important;
+    }
+    .dungeon-enemy { margin: 0 !important; }
+    .progress.hitpoints {
+        position: static !important;
+        width: 100% !important;
+        margin: 8px 0 0 !important;
+    }
+    .stop-auto {
+        position: absolute !important;
+        top: 44px !important;
+        left: 12px !important;
+        z-index: 2;
+        min-height: 32px;
+        padding: 0 12px !important;
+        border: 1px solid var(--n3) !important;
+        border-radius: 16px !important;
+        background: transparent !important;
+        color: var(--n7) !important;
+        font: 500 13px/30px var(--font-ui) !important;
+        &:hover { color: var(--n9) !important; background: var(--n2) !important; }
+    }
+    #gymGoContainer {
+        position: absolute;
+        top: 44px;
+        left: 0;
+        right: 0;
+        z-index: 3;
+        pointer-events: none;
+        .row { display: block !important; margin: 0; }
+        .col-sm-6 { max-width: 50%; margin: 0 auto; }
+    }
+    .dungeon-chest {
+        position: static !important;
+        display: flex;
+        justify-content: center;
+        height: 104px !important;
+        margin: 16px 0 0 !important;
+        img { max-height: 96px; width: auto; image-rendering: pixelated; }
+    }
+    .chest-button {
+        position: static !important;
+        display: block;
+        min-height: 44px;
+        margin: 8px auto 0 !important;
+        padding: 6px 16px !important;
+        p { margin: 0; font-size: 14px; line-height: 1.3; text-transform: capitalize; }
+        p + p { color: var(--n7); font-size: 12px; text-transform: none; }
+    }
+    .dungeon-button { display: block; min-height: 44px; margin: 64px auto 0 !important; padding: 0 20px; }
+    > .pageItemFooter { position: static !important; margin-top: auto !important; }
+}
+
+// Catching: the ball sits where the sprite was, centred, on every battle type.
+html.rd #battleContainer .catchChance {
+    height: 164px;
+    padding-top: 24px;
+    color: var(--n9) !important;
+    font: 600 15px/20px var(--font-fig);
+    text-align: center;
+    br { display: none; }
+}
+html.rd #battleContainer .pokeball-animated { display: block; width: 88px; height: 88px; margin: 0 auto 8px !important; padding: 0; }
+html.rd #rd-shell:is([data-state='gym'], [data-state='dungeon'], [data-state='temporaryBattle'], [data-state='battleFrontier']) #battleContainer {
+    .catchChance { height: 132px; padding-top: 20px; }
+    .pokeball-animated { width: 72px; height: 72px; }
+}
+
+// ----- Dungeon board: neutral tiles, meaning by tint -----
+html.rd #dungeonMap {
+    .dungeon-board { border-collapse: separate; border-spacing: 4px; padding: 0; width: 100%; }
+    .tile {
+        height: 52px;
+        margin: 0;
+        border: 0;
+        border-radius: 8px;
+        filter: none !important;
+        background-color: var(--n3);
+        &:hover { opacity: 1; box-shadow: inset 0 0 0 2px var(--n6); }
+    }
+    .tile-invisible { background-color: var(--n2); }
+    .tile-visited { background-color: var(--n1); box-shadow: inset 0 0 0 1px var(--n3); }
+    .tile-entrance { background-color: var(--n2); box-shadow: inset 0 0 0 2px var(--n5); }
+    .tile-enemy { background-color: color-mix(in oklab, var(--bad) 32%, var(--n2)); }
+    .tile-chest { background-color: color-mix(in oklab, var(--warn) 30%, var(--n2)); }
+    .tile-boss { background-color: color-mix(in oklab, #a33ea1 50%, var(--n2)); }
+    .tile-ladder { background-color: color-mix(in oklab, var(--warn) 16%, var(--n3)); }
+    .tile-player { background-color: var(--n4); box-shadow: inset 0 0 0 2px var(--n9); }
+}
+
+// ----- Poké Balls: a header with the tools, nothing over the filters -----
+html.rd #pokeballSelector {
+    > .card-header { display: flex !important; padding-right: 196px !important; }
+    > img.clickable[href='#pokeballSelectorAdvModal'] { right: 44px !important; }
+    > .btn[style*='position: absolute'] { right: 4px !important; }
+    .rd-balls-tools {
+        position: absolute;
+        top: 4px;
+        right: 88px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+    }
+}
+html.rd .rd-mini-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 8px;
+    border: 0;
+    border-radius: var(--radius-s);
+    background: transparent;
+    color: var(--n7);
+    font: 500 13px/1 var(--font-ui);
+    cursor: pointer;
+    i {
+        position: relative;
+        width: 32px;
+        height: 20px;
+        border-radius: 10px;
+        background: var(--n4);
+        &::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--n7);
+            transition: transform .2s var(--ease);
+        }
+    }
+    &[aria-checked='true'] { color: var(--n9); i { background: var(--n9); &::after { transform: translateX(12px); background: var(--n1); } } }
+    &:hover { background: var(--n2); }
+}
+
+// ----- Collapsible module headers show their state -----
+html.rd .card-header[data-toggle='collapse']::after {
+    content: '';
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin-left: 8px;
+    background: currentColor;
+    -webkit-mask: @chevron center / 16px no-repeat;
+    mask: @chevron center / 16px no-repeat;
+    transition: transform .2s var(--ease);
+}
+html.rd .card-header[data-toggle='collapse'].collapsed::after { transform: rotate(-90deg); }
+
+// ----- Progress: one tab at a time -----
+html.rd {
+    .rd-tabs {
+        display: flex;
+        gap: 4px;
+        margin: 4px 16px 8px;
+        padding: 4px;
+        border-radius: 12px;
+        background: var(--n2);
+        button {
+            flex: 1;
+            min-width: 0;
+            min-height: 40px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--n7);
+            font: 500 14px/1.1 var(--font-ui);
+            cursor: pointer;
+            &[aria-selected='true'] { background: var(--n4); color: var(--n9); }
+        }
+    }
+    #rd-page-progress {
+        .rd-actions { padding-bottom: 4px; }
+        .rd-action { display: none; }
+        &[data-tab='quests'] .rd-tab-quests,
+        &[data-tab='achievements'] .rd-tab-achievements { display: inline-flex; }
+        &[data-tab='lines'] .rd-actions { display: none; }
+
+        // The chips above replace the modules' own List buttons.
+        #questDisplayContainer > .btn,
+        #achivementTrackerContainer > .btn { display: none !important; }
+
+        &[data-tab='quests'] {
+            #achivementTrackerContainer,
+            .card-header[href='#questLineDisplayBody'],
+            #questLineDisplayBody { display: none !important; }
+        }
+        &[data-tab='lines'] {
+            #achivementTrackerContainer,
+            .card-header[href='#dailyQuestDisplayBody'],
+            #dailyQuestDisplayBody { display: none !important; }
+            .card-header[href='#questLineDisplayBody'] { display: none !important; }
+        }
+        &[data-tab='achievements'] #questDisplayContainer { display: none !important; }
+
+        // Quest lines: name, current step, bar; the description stays behind ⓘ.
+        #questLineDisplayBody .questLine > .card-header {
+            min-height: 44px;
+            color: var(--n9);
+            font: 600 15px/1.25 var(--font-ui);
+            letter-spacing: 0;
+            text-transform: none;
+        }
+        #questLineDisplayBody .mx-2.my-2 { margin: 0 16px 12px !important; color: var(--n7); font-size: 13px; }
+        .rd-tracker-go { padding: 8px 16px 4px; }
+    }
+}
+@media (min-width: 1100px) {
+    html.rd #rd-page-progress #rd-slot-progress { display: block; max-width: 760px; }
+}
+
+// ----- Menu: one-line automation rows, settings as a grid -----
+html.rd {
+    .rd-auto-main { justify-content: center; min-height: 52px; padding: 8px 0 8px 16px; }
+    .rd-auto-name { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; }
+    .rd-auto-caret { width: 16px; height: 16px; color: var(--n6); transition: transform .2s var(--ease); }
+    .rd-auto.is-open .rd-auto-caret { transform: rotate(180deg); }
+    .rd-auto-sub { -webkit-line-clamp: 1; }
+
+    .rd-grid,
+    #rd-menu-game > .rd-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        padding: 4px 16px;
+        > li { display: contents; }
+    }
+    .rd-grid > .rd-row,
+    #rd-menu-game > .rd-list .dropdown-item {
+        min-height: 48px;
+        padding: 8px 12px;
+        gap: 10px;
+        border: 0;
+        border-radius: var(--radius);
+        background: var(--n2);
+        font-size: 14px;
+        &:hover, &:focus { background: var(--n3); }
+    }
+    .rd-grid .rd-row-hint { display: none; }
+    .rd-grid .rd-row-value { font-size: 13px; }
+    #rd-menu-game > .rd-list .dropdown-divider { display: none; }
+    #rd-menu-game > .rd-list .dropdown-header { grid-column: 1 / -1; }
+}
+@media (min-width: 700px) {
+    html.rd #rd-menu-automation .rd-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 16px; }
+    html.rd .rd-grid, html.rd #rd-menu-game > .rd-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+// ----- Hatchery: neutral cells, egg and bar centred -----
+html.rd #breedingDisplay {
+    #eggList { background: transparent !important; }
+    #eggList > .row {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin: 0 !important;
+        padding: 8px 16px 12px;
+    }
+    .eggSlot {
+        flex: none;
+        width: auto;
+        max-width: none;
+        border-radius: var(--radius);
+        background: var(--n2) !important;
+        overflow: hidden;
+    }
+    .eggSlot .content {
+        > .clickable {
+            position: absolute;
+            inset: 0;
+            margin: 0 !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 8px 10px;
+        }
+        svg.egg { width: 58%; height: auto; }
+        .progress {
+            position: relative !important;
+            left: auto !important;
+            bottom: auto !important;
+            width: 100% !important;
+            height: 16px;
+            flex: none;
+        }
+        > div[data-bind^='visible'] {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        img.lockedSlotImage { width: 34%; height: auto; margin: 0; opacity: .35; }
+        > div:first-child:not(:empty) {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            p { margin: 0; color: var(--n7); font-size: 13px; }
+            br { display: none; }
+            .btn { min-height: 36px; padding: 0 12px; font-size: 14px; }
+        }
+    }
+}
+
+// ----- Farm: tools and plots on one centred grid -----
+html.rd #farmDisplay {
+    #plotListCard { padding: 0 16px 12px !important; }
+    #plotListCard > .row {
+        display: grid !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        > [class*='col'] { flex: none; width: auto; max-width: none; padding: 0 !important; }
+    }
+    #plotListCard > .row.py-0 { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 8px 0 !important; }
+    #plotListCard > .row.py-1 { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+    #plotListCard > .row.py-1 > .w-100 { display: none; }
+    #plotListCard > .row.py-1 > .plot { padding: 0 !important; }
+    // Limited module: the berry picker moves into the header's tool area.
+    > .dropdown[style*='position: absolute'] { left: auto !important; right: 64px; top: 4px !important; .btn { height: 40px !important; } }
+}
+
+// ----- Pokémon: the list fills the screen down to the mini bar -----
+html.rd #rd-main[data-page='pokemon'] {
+    #rd-page-pokemon { display: flex; flex-direction: column; }
+    #rd-slot-pokemon,
+    #pokemonListContainer,
+    #pokemonListBody,
+    #pokemonListBody > .table-responsive {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        margin: 0 !important;
+    }
+    #pokemonListContainer[style*='display: none'] { display: none !important; }
+    #pokemonListContainer .flex-grow-1[style*='overflow'] { flex: 1 1 auto; min-height: 0; max-height: none !important; }
+}
+@media (max-width: 1099.98px) {
+    html.rd #rd-main[data-page='pokemon'] {
+        padding-bottom: 0;
+        #rd-page-pokemon { height: ~"calc(100dvh - var(--top-h) - var(--safe-t) - var(--nav-h) - var(--safe-b))"; }
+        #pokemonListContainer .flex-grow-1[style*='overflow'] { padding-bottom: ~"calc(var(--mini-h) + 16px)"; }
+    }
+}
+@media (min-width: 1100px) {
+    html.rd #rd-main[data-page='pokemon'] #rd-page-pokemon { height: ~"calc(100vh - var(--top-h))"; padding-bottom: 16px; }
+}

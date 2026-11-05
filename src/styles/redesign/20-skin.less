@@ -144,11 +144,16 @@ html.rd {
         font: 600 12px var(--font-fig);
         color: var(--n9);
     }
-    .progress-bar { background-color: var(--n7) !important; color: var(--n1); }
-    .progress-bar.bg-success { background-color: var(--ok) !important; }
-    .progress-bar.bg-danger { background-color: var(--bad) !important; }
-    .progress-bar.bg-warning { background-color: var(--warn) !important; }
-    .progress-bar.bg-info, .progress-bar.bg-primary { background-color: var(--n9) !important; }
+    // Fills stay mid-tone so the label printed across them (« 5 / 320 », « MAX LEVEL! »)
+    // reads in light text on both the fill and the track.
+    .progress-bar { background-color: var(--n6) !important; color: var(--n9); }
+    .progress-bar.bg-success { background-color: color-mix(in oklab, var(--ok) 55%, var(--n2)) !important; }
+    .progress-bar.bg-danger { background-color: color-mix(in oklab, var(--bad) 60%, var(--n2)) !important; }
+    .progress-bar.bg-warning { background-color: color-mix(in oklab, var(--warn) 55%, var(--n2)) !important; }
+    .progress-bar.bg-info, .progress-bar.bg-primary { background-color: var(--n6) !important; }
+    .progress .progress-bar span,
+    .progress .progress-bar { text-shadow: 0 1px 2px rgba(0, 0, 0, .6); }
+    .progress .progress-bar span { color: var(--n9) !important; }
 
     // ----- Tables: hairline rows, no stripes -----
     .table {

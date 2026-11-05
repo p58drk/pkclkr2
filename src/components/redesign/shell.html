@@ -1,6 +1,6 @@
 <!-- Fork: redesign shell. Upstream modules are moved into the rd-* slots at boot (see modules/redesign/Shell.ts).
      Never use `if`/`ifnot`/`with` bindings around slots: they would destroy the relocated modules. -->
-<div id="rd-shell">
+<div id="rd-shell" data-bind="attr: { 'data-state': RedesignShell.stateName() }">
     <header id="rd-top">
         <div class="rd-where">
             <small>
@@ -53,33 +53,44 @@
     <main id="rd-main" data-bind="attr: { 'data-page': RedesignShell.page() }">
         <!-- Combat dock: the fight, Poké Balls and currencies. Docked on desktop, top of the Combat page on mobile. -->
         <section id="rd-dock" aria-label="Combat">
-            <!-- Trading-card top line: name left, HP right, energy marks below. -->
-            <!-- ko if: RedesignShell.foe() -->
+            <!-- Quick automation toggles, above the fight. -->
+            <div id="rd-quick" role="group" data-bind="attr: { 'aria-label': RedesignShell.label('automation') }">
+                <!-- ko foreach: RedesignAutomation.quick -->
+                <button type="button" class="rd-chip" data-bind="click: () => feature.toggle(), enable: usable(), css: { 'is-on': feature.enabled() }, attr: { 'aria-pressed': feature.enabled() ? 'true' : 'false', title: usable() ? feature.description() : RedesignShell.label('notHere') }">
+                    <i class="rd-chip-dot" aria-hidden="true"></i>
+                    <span data-bind="text: label()"></span>
+                    <!-- ko if: status() --><small class="rd-num" data-bind="text: status()"></small><!-- /ko -->
+                </button>
+                <!-- /ko -->
+                <button type="button" class="rd-chip rd-chip-more" data-bind="click: () => RedesignShell.goToAutomation(), css: { 'is-on': RedesignAutomation.othersActive() > 0 }, attr: { 'aria-label': RedesignShell.label('autoMore') }">
+                    <!-- ko if: RedesignAutomation.othersActive() --><b class="rd-num" data-bind="text: '+' + RedesignAutomation.othersActive()"></b><!-- /ko -->
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-sliders"></use></svg>
+                </button>
+            </div>
+            <!-- Trading-card top line: name left, HP right, energy marks below. Present for the
+                 whole battle (also while exploring a dungeon) so nothing below it jumps. -->
+            <!-- ko if: RedesignShell.isFighting() -->
             <div id="rd-foehead">
                 <div class="rd-foe-id">
-                    <span class="rd-foe-name" data-bind="text: RedesignShell.foe().displayName"></span>
+                    <span class="rd-foe-name" data-bind="text: RedesignShell.headName()"></span>
+                    <!-- ko if: RedesignShell.foe() -->
                     <span class="rd-foe-types" data-bind="foreach: RedesignShell.foeTypes()">
                         <span class="rd-energy-type"><i class="rd-energy" data-bind="style: { backgroundColor: $data.color }"></i><span data-bind="text: $data.name"></span></span>
                     </span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: RedesignShell.foe() -->
+                    <span class="rd-foe-types"><span class="rd-energy-type" data-bind="text: RedesignShell.headSub()"></span></span>
+                    <!-- /ko -->
                 </div>
+                <!-- ko if: RedesignShell.foe() -->
                 <div class="rd-foe-hp">
                     <small data-bind="text: RedesignShell.label('hp')"></small>
                     <b class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.foe().health())"></b>
                 </div>
+                <!-- /ko -->
             </div>
             <!-- /ko -->
             <div id="rd-dock-fight" class="rd-slot"></div>
-            <button type="button" class="rd-autopill" data-bind="click: () => RedesignShell.go('menu'), css: { 'is-on': RedesignAutomation.Automation.active().length > 0 }">
-                <span class="rd-autopill-dot" aria-hidden="true"></span>
-                <!-- ko if: RedesignAutomation.Automation.active().length -->
-                <b>Auto</b>
-                <span class="rd-autopill-text" data-bind="text: RedesignAutomation.summary()"></span>
-                <!-- /ko -->
-                <!-- ko ifnot: RedesignAutomation.Automation.active().length -->
-                <span class="rd-autopill-text" data-bind="text: RedesignShell.label('automationOff')"></span>
-                <!-- /ko -->
-                <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
-            </button>
             <div id="rd-dock-currency" class="rd-slot"></div>
             <div id="rd-dock-balls" class="rd-slot"></div>
         </section>
@@ -89,15 +100,20 @@
             <div id="rd-slot-combat" class="rd-slot"></div>
         </section>
 
-        <section class="rd-page" id="rd-page-progress">
+        <section class="rd-page" id="rd-page-progress" data-bind="attr: { 'data-tab': RedesignShell.progressTab() }">
             <h2 class="rd-page-title" data-bind="text: RedesignShell.label('progress')"></h2>
+            <div class="rd-tabs" role="tablist">
+                <button type="button" role="tab" data-bind="click: () => RedesignShell.progressTab('quests'), attr: { 'aria-selected': RedesignShell.progressTab() === 'quests' ? 'true' : 'false' }, text: RedesignShell.label('quests')"></button>
+                <button type="button" role="tab" data-bind="click: () => RedesignShell.progressTab('lines'), attr: { 'aria-selected': RedesignShell.progressTab() === 'lines' ? 'true' : 'false' }, text: RedesignShell.label('questLines')"></button>
+                <button type="button" role="tab" data-bind="click: () => RedesignShell.progressTab('achievements'), attr: { 'aria-selected': RedesignShell.progressTab() === 'achievements' ? 'true' : 'false' }, text: RedesignShell.label('achievements')"></button>
+            </div>
             <div class="rd-actions">
-                <button type="button" class="rd-action" data-toggle="modal" href="#achievementsModal" onclick="AchievementHandler.filterAchievementList(true);">
-                    <span data-bind="text: RedesignShell.label('achievementsAll')"></span>
+                <button type="button" class="rd-action rd-tab-quests" data-toggle="modal" href="#QuestModal">
+                    <span data-bind="text: RedesignShell.label('questsAll')"></span>
                     <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
                 </button>
-                <button type="button" class="rd-action" data-toggle="modal" href="#QuestModal">
-                    <span data-bind="text: RedesignShell.label('questsAll')"></span>
+                <button type="button" class="rd-action rd-tab-achievements" data-toggle="modal" href="#achievementsModal" onclick="AchievementHandler.filterAchievementList(true);">
+                    <span data-bind="text: RedesignShell.label('achievementsAll')"></span>
                     <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
                 </button>
             </div>
@@ -132,11 +148,13 @@
                     <div class="rd-auto" data-bind="css: { 'is-on': enabled(), 'is-unavailable': !available(), 'is-open': expanded() }">
                         <div class="rd-auto-row">
                             <button type="button" class="rd-auto-main" data-bind="click: () => expanded(!expanded()), attr: { 'aria-expanded': expanded() ? 'true' : 'false' }">
-                                <span class="rd-auto-name" data-bind="text: name()"></span>
+                                <span class="rd-auto-name"><span data-bind="text: name()"></span><svg class="rd-auto-caret" aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-down"></use></svg></span>
+                                <!-- ko if: lastError() || statusText() -->
                                 <span class="rd-auto-sub">
                                     <!-- ko if: lastError() --><span class="rd-auto-error" data-bind="text: lastError()"></span><!-- /ko -->
-                                    <!-- ko ifnot: lastError() --><span data-bind="text: statusText() || description()"></span><!-- /ko -->
+                                    <!-- ko ifnot: lastError() --><span data-bind="text: statusText()"></span><!-- /ko -->
                                 </span>
+                                <!-- /ko -->
                             </button>
                             <button type="button" role="switch" class="rd-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false', 'aria-label': name() }"><i></i></button>
                         </div>
@@ -172,7 +190,7 @@
             </div>
 
             <h3 class="rd-section-title" data-bind="text: RedesignShell.label('interface')"></h3>
-            <div class="rd-list">
+            <div class="rd-list rd-grid">
                 <button type="button" class="rd-row" data-bind="click: () => Settings.getSetting('sound.muted').toggle()">
                     <svg aria-hidden="true"><use data-bind="attr: { href: Settings.getSetting('sound.muted').observableValue() ? 'assets/images/redesign/icons.svg#i-volume-x' : 'assets/images/redesign/icons.svg#i-volume-2' }"></use></svg>
                     <span data-bind="text: RedesignShell.label('sound')"></span>
@@ -194,7 +212,7 @@
             <h3 class="rd-section-title" data-bind="text: RedesignShell.label('gameMenu')"></h3>
             <div id="rd-menu-game"></div>
 
-            <div class="rd-list">
+            <div class="rd-list rd-grid">
                 <button type="button" class="rd-row" data-toggle="modal" href="#rdSourceModal">
                     <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-code"></use></svg>
                     <span>
@@ -205,6 +223,23 @@
             </div>
         </section>
     </main>
+
+    <!-- Shell-owned controls relocated into upstream modules at boot (see relocate()). -->
+    <div class="rd-parking" hidden>
+        <div id="rd-balls-tools" class="rd-balls-tools" data-bind="with: RedesignAutomation.Automation.find('catchSpeed')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('zeroDelay')"></span>
+            </button>
+        </div>
+        <div id="rd-tracker-go" class="rd-tracker-go">
+            <!-- ko if: RedesignShell.trackedDestination() -->
+            <button type="button" class="rd-action" data-bind="click: () => RedesignShell.travelTo(App.game.achievementTracker.trackedAchievement())">
+                <span data-bind="text: RedesignShell.label('goThere')"></span>
+                <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-chevron-right"></use></svg>
+            </button>
+            <!-- /ko -->
+        </div>
+    </div>
 
     <!-- Mini combat bar: the fight stays one tap away on every other page (mobile). -->
     <div id="rd-mini" data-bind="css: { 'has-foe': !!RedesignShell.foe() }">
