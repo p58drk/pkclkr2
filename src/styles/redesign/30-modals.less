@@ -59,10 +59,14 @@ html.rd {
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            transform: translateY(24px);
-            transition: transform .32s var(--ease) !important;
+            // A real sheet: it slides from below the screen on the compositor (transform
+            // only, no shadow to repaint), and the window stays opaque while it slides out.
+            transform: translate3d(0, 100%, 0);
+            transition: transform .34s cubic-bezier(.32, .72, 0, 1) !important;
+            will-change: transform;
         }
-        .modal.show .modal-dialog { transform: none; }
+        .modal.fade { opacity: 1; transition: none; }
+        .modal.show .modal-dialog { transform: translate3d(0, 0, 0); }
         .modal-dialog-centered { align-items: stretch; }
         .modal-content {
             width: 100%;
@@ -71,6 +75,8 @@ html.rd {
             border-radius: 20px 20px 0 0;
             padding-bottom: var(--safe-b);
             overflow: hidden;
+            box-shadow: none;
+            contain: layout paint;
             &::before {
                 content: '';
                 display: block;
@@ -110,3 +116,10 @@ html.rd .rd-source {
     .rd-row { text-decoration: none; }
     .rd-source-credits { color: var(--n7); font-size: 14px; }
 }
+
+// Collapsible lists open and close at once (Bootstrap animates their height, which
+// lays out the whole page on every frame); the content fades in instead.
+html.rd .collapsing { transition: none !important; }
+html.rd .collapse.show { animation: rd-collapse-in .18s ease-out; }
+@keyframes rd-collapse-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { html.rd .collapse.show { animation: none; } }
