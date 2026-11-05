@@ -100,8 +100,8 @@ L'audit complet a été fait le 05/11/2026 contre la v0.10.26. Les scripts vienn
 | catchspeedadjuster | Intégré (règle modifiée) | Le délai d'origine est restauré quand on désactive. |
 | oakitemsunlimited | Intégré (règle modifiée) | Rien n'est écrit dans la sauvegarde. |
 | (propre au fork) Pension : 12 œufs | Règle modifiée | 12 œufs en même temps. Les emplacements sont ajoutés avant la lecture de la sauvegarde ; la sauvegarde garde le nombre d’emplacements achetés. Le jeu officiel ignore les œufs 5 à 12 et rend leurs Pokémon à l’équipe. À la désactivation, les œufs en cours finissent. |
-| (propre au fork) Ferme accélérée | Règle modifiée | ×2 à ×100, seulement jusqu’à maturité : une baie mûre dure le temps habituel avant de flétrir. Le compte à rebours suit. Rien dans la sauvegarde. |
-| (propre au fork) Mine : recharge rapide | Règle modifiée | ×2 à ×50 sur la recharge des outils ; le temps affiché suit. Rien dans la sauvegarde. |
+| (propre au fork) Ferme accélérée | Règle modifiée | Instantanée par défaut (la baie passe au début de sa maturité), ou ×2 à ×100 jusqu’à maturité. Une baie mûre dure le temps habituel avant de flétrir. Interrupteur dans le module Ferme et la fenêtre de la ferme. Rien dans la sauvegarde. |
+| (propre au fork) Mine : recharge rapide | Règle modifiée | Instantanée par défaut (outils toujours à 100 %, sans coût de durabilité), ou ×2 à ×50. Interrupteur dans le module Souterrain et l’onglet Dig. Rien dans la sauvegarde. |
 
 ### À faire
 
