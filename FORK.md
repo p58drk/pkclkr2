@@ -26,7 +26,7 @@ export PATH=~/.local/node/bin:$PATH
 NODE_ENV=production npx gulp build
 rsync -a --delete --exclude .vercel --exclude vercel.json --exclude .vercelignore --exclude .env.local --exclude .gitignore build/ dist/
 cd dist && vercel deploy          # preview, protégée par l'authentification Vercel
-# vercel deploy --prod            # production : seulement après validation
+vercel deploy --prod              # production publique : https://pkclkr2.vercel.app
 ```
 
 ## Architecture : une couche posée sur le jeu
