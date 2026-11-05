@@ -88,7 +88,7 @@ L'audit complet a été fait le 05/11/2026 contre la v0.10.26. Les scripts vienn
 
 | Script d'origine | État | Réparation |
 |---|---|---|
-| enhancedautoclicker | Intégré : clic | Respecte la limite du jeu (20 clics/s). Auto-arène et auto-donjon restent à faire. |
+| enhancedautoclicker | Intégré : clic, 1 à 200 clics/s (mesuré) | Au-delà de 20/s, dépasse la limite du jeu, comme le script d’origine (100/s). Auto-arène et auto-donjon restent à faire. |
 | enhancedautohatchery | Intégré | Mode fossile retiré (les œufs fossiles n'existent plus depuis 0.10.24). Boucle bornée. |
 | simpleautofarmer | Intégré | `farming.berryData` remplacé par `plot.berryData`. Choix de la replantation. |
 | enhancedautomine | Réécrit | Nouveau souterrain : mine en instance, durabilité des outils. Relance la mine si l'auto-relance du jeu est coupée. |

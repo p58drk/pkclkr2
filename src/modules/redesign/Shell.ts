@@ -22,6 +22,7 @@ const resolveScriptGlobals = (): any => {
         Save: get('Save'),
         GymBattle: get('GymBattle'),
         DungeonRunner: get('DungeonRunner'),
+        DungeonBattle: get('DungeonBattle'),
         TemporaryBattleBattle: get('TemporaryBattleBattle'),
         AchievementHandler: get('AchievementHandler'),
         BreedingController: get('BreedingController'),
