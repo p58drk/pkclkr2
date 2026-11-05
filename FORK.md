@@ -98,7 +98,7 @@ L'audit complet a été fait le 05/11/2026 contre la v0.10.26. Les scripts vienn
 | autoquestcompleter | Intégré | Respecte le nombre d'emplacements. Rafraîchissement payant seulement sur option. |
 | autobattleitems | Intégré | Choix des objets, rachat optionnel. |
 | catchspeedadjuster | Intégré (règle modifiée) | Le délai d'origine est restauré quand on désactive. |
-| oakitemsunlimited | Intégré (règle modifiée) | Rien n'est écrit dans la sauvegarde. |
+| oakitemsunlimited | Intégré (règle modifiée), étendu | « Objets Oak : sans limite » : tous les objets Oak équipables à la fois (au lieu de 3). Interrupteur dans l’en-tête du module. À la désactivation, les objets au-delà de la limite normale sont retirés. |
 | (propre au fork) Pension : 12 œufs | Règle modifiée | 12 œufs en même temps. Les emplacements sont ajoutés avant la lecture de la sauvegarde ; la sauvegarde garde le nombre d’emplacements achetés. Le jeu officiel ignore les œufs 5 à 12 et rend leurs Pokémon à l’équipe. À la désactivation, les œufs en cours finissent. |
 | (propre au fork) Éclosion instantanée | Règle modifiée | Les œufs sont prêts dès qu’ils sont posés ; l’auto-éclosion les fait éclore aussitôt. Interrupteurs de la pension (Auto-éclosion, Éclosion instantanée, 12 œufs) en rangée sous le titre du module. |
 | (propre au fork) Ferme accélérée | Règle modifiée | Instantanée par défaut (la baie passe au début de sa maturité), ou ×2 à ×100 jusqu’à maturité. Une baie mûre dure le temps habituel avant de flétrir. Interrupteur dans le module Ferme et la fenêtre de la ferme. Rien dans la sauvegarde. |

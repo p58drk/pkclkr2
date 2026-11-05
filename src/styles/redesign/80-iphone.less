@@ -177,6 +177,8 @@ html.rd .breedingListItem {
 // ----- Farm and mine: accelerator switches, centred pager -----
 html.rd {
     #undergroundDisplay > .card-header { padding-right: 196px !important; }
+    #oakItemsContainer > .card-header { padding-right: 176px !important; }
+    #oakItemsContainer > .rd-module-tools { right: 60px; }
     #undergroundDisplay > .rd-module-tools { right: 64px; }
     // Farm switches: one row, under the header (module) or at the start of the footer (window).
     .rd-switch-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
@@ -189,3 +191,25 @@ html.rd {
     [data-bind*='navigateIndex()+1'], [data-bind*='navigateIndex() + 1'] { text-align: center; font: 600 15px/1 var(--font-fig); }
 }
 html.rd #findNewMineModal .rd-inline-tools { margin: 0 0 0 12px; display: inline-flex; vertical-align: middle; }
+
+// ----- Pokédex counter in the top bar, left of the menu button -----
+html.rd #rd-top {
+    .rd-dex {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: auto;
+        margin-right: 4px;
+        color: var(--n7);
+        white-space: nowrap;
+    }
+    .rd-dex-item { display: inline-flex; align-items: baseline; gap: 3px; }
+    .rd-dex-item img { width: 14px; height: 14px; align-self: center; margin-right: 2px; }
+    .rd-dex-item b { color: var(--n9); font: 600 15px/1 var(--font-fig); }
+    .rd-dex-item small { font: 500 12px/1 var(--font-fig); }
+    .rd-dex-star { color: var(--warn); font-size: 13px; line-height: 1; margin-right: 1px; }
+    .rd-where { min-width: 0; }
+    .rd-where b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+// Desktop: the counter sits at the right of the top bar (no menu button there).
+@media (min-width: 1100px) { html.rd #rd-top .rd-dex { margin-right: 16px; } }

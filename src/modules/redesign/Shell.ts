@@ -279,6 +279,25 @@ export default class RedesignShell {
         window.setInterval(() => RedesignShell.checkForUpdate(), 10 * 60 * 1000);
     }
 
+    // Pokédex counter in the top bar: distinct species caught (forms count once) out of
+    // every species in the game, and species caught shiny. Recomputed at most once a second.
+    static dexStats = ko.pureComputed(() => {
+        const r = RedesignShell.refs();
+        const party = r?.App?.game?.party;
+        if (!party) return null;
+        const caught = new Set<number>();
+        const shiny = new Set<number>();
+        party.caughtPokemon.forEach((p: any) => {
+            const id = Math.floor(p.id);
+            if (id <= 0) return;
+            caught.add(id);
+            if (p.shiny) shiny.add(id);
+        });
+        const GC = w.GameConstants;
+        const total = GC?.MaxIDPerRegion?.[GC.MAX_AVAILABLE_REGION] ?? 1025;
+        return { caught: caught.size, total, shiny: shiny.size };
+    }).extend({ rateLimit: 1000 });
+
     // The mini bar floats above the tabs on pages other than Combat (phones).
     static miniVisible = ko.pureComputed(() => !!RedesignShell.foe() && RedesignShell.page() !== 'combat');
 
@@ -466,6 +485,7 @@ export default class RedesignShell {
         const farmTools = document.getElementById('rd-farm-tools');
         if (farmBody && farmTools && farmTools.parentElement !== farmBody) farmBody.prepend(farmTools);
         moveTo('rd-mine-tools', '#undergroundDisplay');
+        moveTo('rd-oak-tools', '#oakItemsContainer');
         moveTo('rd-minemodal-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
         moveTo('rd-minefind-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
         // Find mine window: next to « Search for mine ».
@@ -618,6 +638,40 @@ export default class RedesignShell {
         document.addEventListener('touchcancel', end);
     }
 
+    // Tooltips open on hover; a touch screen never sends the "hover ends" event, so they
+    // stayed on screen across pages. They now close on a page change, on a window
+    // opening or closing, on the next touch elsewhere, and after 3 s on touch screens.
+    private static tooltipHygiene() {
+        const $ = w.$;
+        const hide = (except?: Element | null) => {
+            document.querySelectorAll('[aria-describedby^="tooltip"]').forEach((el) => {
+                if (el === except) return;
+                try { $(el).tooltip('hide'); } catch { /* not a tooltip owner */ }
+            });
+            document.querySelectorAll('.tooltip').forEach((tip) => {
+                if (except && except.getAttribute('aria-describedby') === tip.id) return;
+                tip.remove();
+            });
+        };
+        RedesignShell.page.subscribe(() => hide());
+        $(document).on('show.bs.modal hide.bs.modal', () => hide());
+        if (!window.matchMedia('(hover: none)').matches) return;
+        document.addEventListener('touchstart', (e) => {
+            const owner = (e.target as Element)?.closest?.('[aria-describedby^="tooltip"]') ?? null;
+            hide(owner);
+        }, { passive: true, capture: true });
+        new MutationObserver((records) => records.forEach((r) => r.addedNodes.forEach((n) => {
+            if (n instanceof HTMLElement && n.classList.contains('tooltip')) {
+                window.setTimeout(() => {
+                    if (!n.isConnected) return;
+                    const owner = document.querySelector(`[aria-describedby="${n.id}"]`);
+                    try { if (owner) $(owner).tooltip('hide'); } catch { /* ignore */ }
+                    n.remove();
+                }, 3000);
+            }
+        }))).observe(document.body, { childList: true });
+    }
+
     // Lazy lists (Pokémon, hatchery): load more rows per step and start well before the
     // end of the list, so fast scrolling rarely reaches the loader.
     private static tuneLazyLists() {
@@ -716,6 +770,7 @@ export default class RedesignShell {
             RedesignShell.sheetGestures();
             RedesignShell.homeScreen();
             RedesignShell.toastGestures();
+            RedesignShell.tooltipHygiene();
             // The lock is dropped when the page is hidden: take it again on return.
             document.addEventListener('visibilitychange', () => RedesignShell.applyWakeLock());
             // Choosing an achievement to track also travels to its place, when unlocked.

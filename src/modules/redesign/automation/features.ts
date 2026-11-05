@@ -229,19 +229,20 @@ let originalOakRequirements: number[] | null = null;
 Automation.register({
     id: 'oakItemsUnlimited',
     group: 'custom',
-    name: { fr: 'Objets Oak : tous les emplacements', en: 'Oak Items: all slots' },
+    name: { fr: 'Objets Oak : sans limite', en: 'Oak Items: no limit' },
     description: {
-        fr: 'Débloque tous les emplacements d’objets Oak sans attendre le nombre de Pokémon requis.',
-        en: 'Unlocks every Oak Item slot without the caught-Pokémon requirement.',
+        fr: 'Tous les objets Oak peuvent être équipés en même temps, au lieu de 3.',
+        en: 'Every Oak Item can be equipped at once, instead of 3.',
     },
     warning: {
-        fr: 'Change les règles du jeu tant que c’est actif. Les objets activés en plus sont enregistrés dans la sauvegarde ; à la désactivation, ceux qui dépassent la limite normale sont retirés.',
-        en: 'Changes the game rules while enabled. Extra active items are saved; disabling removes the ones above the normal limit.',
+        fr: 'Change les règles du jeu tant que c’est actif. Les objets équipés en plus sont enregistrés dans la sauvegarde ; à la désactivation, ceux qui dépassent la limite normale sont retirés.',
+        en: 'Changes the game rules while enabled. Extra equipped items are saved; disabling removes the ones above the normal limit.',
     },
     enable: (ctx) => {
         const oak = ctx.g.App.game.oakItems;
         if (!originalOakRequirements) originalOakRequirements = [...oak.unlockRequirements];
-        oak.unlockRequirements = oak.unlockRequirements.map(() => 0);
+        // One slot per Oak Item, all open: the limit becomes the number of items.
+        oak.unlockRequirements = oak.itemList.map(() => 0);
     },
     disable: (ctx) => {
         const oak = ctx.g.App.game.oakItems;
@@ -249,6 +250,10 @@ Automation.register({
         // Drop active items above the normal limit, last ones first.
         const active = oak.itemList.filter((item: any) => item.isActive);
         active.slice(oak.maxActiveCount()).reverse().forEach((item: any) => { item.isActive = false; });
+    },
+    status: (ctx) => {
+        const oak = ctx.g.App.game.oakItems;
+        return `${oak.activeCount()}/${oak.itemList.length}`;
     },
 });
 

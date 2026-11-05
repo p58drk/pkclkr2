@@ -18,6 +18,13 @@
                 <!-- /ko -->
             </b>
         </div>
+        <!-- ko if: RedesignShell.dexStats() -->
+        <div class="rd-dex" data-bind="attr: { title: RedesignShell.label('dexTitle') }">
+            <span class="rd-dex-item"><img src="assets/images/pokeball/Pokeball.svg" alt="" aria-hidden="true"><b class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.dexStats().caught)"></b><small class="rd-num" data-bind="text: '/' + RedesignShell.formatNumber(RedesignShell.dexStats().total)"></small></span>
+            <span class="rd-dex-item"><span class="rd-dex-star" aria-hidden="true">✶</span><b class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.dexStats().shiny)"></b></span>
+            <span class="sr-only" data-bind="text: RedesignShell.label('dexSr').replace('{c}', RedesignShell.dexStats().caught).replace('{t}', RedesignShell.dexStats().total).replace('{s}', RedesignShell.dexStats().shiny)"></span>
+        </div>
+        <!-- /ko -->
         <button type="button" class="rd-icon-btn rd-top-menu" data-bind="click: () => RedesignShell.toggleMenu(), attr: { 'aria-label': RedesignShell.page() === 'menu' ? RedesignShell.label('close') : RedesignShell.label('menu'), 'aria-expanded': RedesignShell.page() === 'menu' ? 'true' : 'false' }, css: { 'is-active': RedesignShell.page() === 'menu' }">
             <svg aria-hidden="true"><use data-bind="attr: { href: RedesignShell.page() === 'menu' ? 'assets/images/redesign/icons.svg#i-x' : 'assets/images/redesign/icons.svg#i-menu' }"></use></svg>
         </button>
@@ -302,6 +309,11 @@
         <div id="rd-findmine-tools" class="rd-inline-tools" data-bind="with: RedesignAutomation.Automation.find('mineInstantFind')">
             <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
                 <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('mineFindInstant')"></span>
+            </button>
+        </div>
+        <div id="rd-oak-tools" class="rd-module-tools" data-bind="with: RedesignAutomation.Automation.find('oakItemsUnlimited')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('oakNoLimit')"></span>
             </button>
         </div>
         <div id="rd-tracker-go" class="rd-tracker-go">
