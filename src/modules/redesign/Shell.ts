@@ -461,6 +461,11 @@ export default class RedesignShell {
         moveTo('rd-farm-tools', '#farmDisplay');
         moveTo('rd-mine-tools', '#undergroundDisplay');
         moveTo('rd-minemodal-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
+        moveTo('rd-minefind-tools', '#mineModal #dig .row.p-2 > .col-6.d-flex');
+        // Find mine window: next to « Search for mine ».
+        const search = document.querySelector('#findNewMineModal button[data-bind*="generateMine"]');
+        const findTools = document.getElementById('rd-findmine-tools');
+        if (search?.parentElement && findTools && findTools.parentElement !== search.parentElement) search.parentElement.appendChild(findTools);
         // The farm window footer: first, before the info button.
         const farmFooter = document.querySelector('#farmModal .modal-footer');
         const farmModalTools = document.getElementById('rd-farmmodal-tools');

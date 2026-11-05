@@ -464,3 +464,25 @@ Automation.register({
     disable: () => { mineSpeed(1); },
     status: (ctx) => (ctx.opt('mode') === 'instant' ? '⚡' : `×${ctx.opt('mode')}`),
 });
+
+// Underground: a searched mine is found at once (rule change). The discovery countdown
+// is brought to its end; the game's next tick announces the mine as usual.
+Automation.register({
+    id: 'mineInstantFind',
+    group: 'custom',
+    name: { fr: 'Mine : découverte instantanée', en: 'Mine: instant find' },
+    description: {
+        fr: 'Une nouvelle mine est trouvée aussitôt la recherche lancée, sans attendre le compte à rebours.',
+        en: 'A new mine is found as soon as the search starts, without the countdown.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. Rien d’autre n’est modifié dans la sauvegarde.',
+        en: 'Changes the game rules while enabled. Nothing else in the save is changed.',
+    },
+    available: (ctx) => ctx.g.App.game.underground.canAccess(),
+    intervalMs: 250,
+    tick: (ctx) => {
+        const mine = ctx.g.App.game.underground.mine;
+        if (mine && !mine.completed && mine.timeUntilDiscovery > 0.001) mine._timeUntilDiscovery(0.001);
+    },
+});

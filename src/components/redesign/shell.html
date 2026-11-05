@@ -268,6 +268,16 @@
                 <i aria-hidden="true"></i><span data-bind="text: options.mode() === 'instant' ? RedesignShell.label('mineInstant') : RedesignShell.label('mineBoost') + ' ×' + options.mode()"></span>
             </button>
         </div>
+        <div id="rd-minefind-tools" class="rd-inline-tools" data-bind="with: RedesignAutomation.Automation.find('mineInstantFind')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('mineFindInstant')"></span>
+            </button>
+        </div>
+        <div id="rd-findmine-tools" class="rd-inline-tools" data-bind="with: RedesignAutomation.Automation.find('mineInstantFind')">
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false' }">
+                <i aria-hidden="true"></i><span data-bind="text: RedesignShell.label('mineFindInstant')"></span>
+            </button>
+        </div>
         <div id="rd-tracker-go" class="rd-tracker-go">
             <!-- ko if: RedesignShell.trackedDestination() -->
             <button type="button" class="rd-action" data-bind="click: () => RedesignShell.travelTo(App.game.achievementTracker.trackedAchievement())">
