@@ -350,3 +350,64 @@ html.rd #battleContainer #townView .list-group {
 }
 // Frontier before a run: no empty battle frame above the welcome sheet.
 html.rd #rd-shell.bf-idle #battleContainer { display: none !important; }
+
+// ----- Berrydex: the same neutral tiles as the other lists -----
+html.rd #berryDexView {
+    > div > ul.row {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+        margin: 0 !important;
+        padding: 12px 16px !important;
+    }
+    li.pokedexEntry {
+        position: relative;
+        flex: none;
+        width: auto;
+        max-width: none;
+        margin: 0;
+        padding: 22px 6px 10px;
+        border-radius: var(--radius);
+        background: var(--n2) !important;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        text-align: center;
+        &:hover { background: var(--n3) !important; }
+        > img { width: 64px !important; height: 64px; padding: 0 !important; object-fit: contain; }
+        > span {
+            position: static !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            color: var(--n9);
+            font: 500 13px/1.2 var(--font-ui);
+        }
+        > span.id {
+            position: absolute !important;
+            top: 6px !important;
+            left: 8px;
+            right: auto;
+            color: var(--n7);
+            font: 500 12px/1 var(--font-fig);
+            &::before { content: '#'; }
+        }
+        .pokemon-not-seen { filter: brightness(0) invert(.25); }
+    }
+    // Preview mode: same tiles, the selected berry outlined.
+    #berryDexPreviewList ul { gap: 8px; padding: 8px !important; }
+    #berryDexPreviewList li.berryDexButtons {
+        flex: 0 0 calc(33.333% - 8px);
+        max-width: none;
+        margin: 0 !important;
+        padding: 8px 4px !important;
+        border: 0;
+        border-radius: var(--radius);
+        background: var(--n2) !important;
+        color: var(--n9) !important;
+        font: 500 13px/1.2 var(--font-ui);
+        > span:first-child { color: var(--n7); font: 500 12px/1 var(--font-fig); }
+        &.btn-primary { box-shadow: inset 0 0 0 2px var(--n9); }
+    }
+}
