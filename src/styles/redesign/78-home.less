@@ -1,4 +1,7 @@
-// Fork: home screen (save selector and loader), region map header, bottom spacing.
+// Fork: home screen (save selector and loader), region map header, bottom spacing,
+// subregional travel and the route window.
+
+@chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
 
 // ----- Home: logo, saves as a list, actions pinned to the bottom -----
 html.rd #saveSelector,
@@ -255,4 +258,120 @@ html.rd #rd-slot-combat #mapBody { margin: 0 16px; border-radius: var(--radius);
     html.rd #rd-shell:not(.has-mini) #rd-main { padding-bottom: ~"calc(var(--nav-h) + var(--safe-b) + 16px)"; }
     html.rd #rd-shell:not(.has-mini) #rd-main[data-page='pokemon'] { padding-bottom: 0; }
     html.rd #rd-shell:not(.has-mini) #pokemonListContainer .flex-grow-1[style*='overflow'] { padding-bottom: 16px !important; }
+}
+
+// ----- Subregional travel: under the map header, full width; its window as a list -----
+html.rd #subregion-travel-buttons {
+    width: 100% !important;
+    margin: 0 0 8px !important;
+    gap: 4px;
+    .btn { min-height: 40px; margin: 0 !important; border-radius: var(--radius-s) !important; }
+    .btn-secondary { flex: 0 0 44px; }
+    .btn-primary { flex: 1 1 auto; width: auto !important; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+html.rd #SubregionModal {
+    .modal-content > h5 {
+        margin: 0;
+        padding: 12px 20px 0;
+        color: var(--n7);
+        font: 600 13px/1.2 var(--font-fig);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+    .modal-body.bg-ocean { background: transparent !important; animation: none !important; padding: 8px 16px 16px; text-align: center; }
+    .modal-body > img { display: block; width: 88px !important; margin: 4px auto 16px !important; image-rendering: pixelated; }
+    .modal-body > div { margin-top: 0 !important; display: flex; flex-direction: column; gap: 8px; }
+    .modal-body .btn-block {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        margin: 0 !important;
+        color: var(--n9);
+        font: 500 15px/1.2 var(--font-ui);
+        img { position: absolute !important; left: 8px !important; height: 36px; image-rendering: pixelated; }
+        &:disabled { background: var(--n3); color: var(--n9); opacity: 1; }
+    }
+}
+
+// ----- Route window: Encounters and Roaming as neutral tiles -----
+html.rd #routeInfoModal {
+    .modal-header { justify-content: flex-start !important; padding-right: 60px; }
+    .modal-header .btn-danger.position-absolute {
+        top: 8px !important;
+        right: 8px !important;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        border-radius: var(--radius);
+        background: transparent !important;
+        color: var(--n7) !important;
+        font: 400 26px/1 var(--font-ui) !important;
+        &:hover { background: var(--n2) !important; color: var(--n9) !important; }
+    }
+    .modal-body { padding: 0 16px 16px !important; }
+    .modal-body > [data-toggle='collapse'] {
+        margin: 0 !important;
+        padding: 16px 0 8px !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        h5 { margin: 0 !important; color: var(--n9) !important; font: 600 13px/1.2 var(--font-fig) !important; letter-spacing: .08em; text-transform: uppercase; }
+        .text-light, .small { color: var(--n7) !important; font: 500 13px/1.2 var(--font-fig); }
+        &::after {
+            content: '';
+            flex: none;
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            background: var(--n7);
+            -webkit-mask: @chevron center / 16px no-repeat;
+            mask: @chevron center / 16px no-repeat;
+            transition: transform .2s var(--ease);
+        }
+        &.collapsed::after { transform: rotate(-90deg); }
+    }
+    ul.row {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    li.pokedexEntry {
+        position: relative;
+        flex: none;
+        width: auto;
+        max-width: none;
+        margin: 0;
+        padding: 20px 4px 8px;
+        border-radius: var(--radius);
+        background: var(--n2) !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        &.clickable:hover { background: var(--n3) !important; }
+        img { padding: 0; }
+        > div[style*='position: absolute'] { z-index: 1; }
+        > div[style*='right: 2px'] { top: 6px !important; right: 6px !important; img { width: 14px !important; } }
+        > div[style*='left: 2px;top: -11px'] { top: 22px !important; left: 4px !important; img { width: 22px !important; } }
+        > div[style*='bottom: 5px'] { left: auto !important; right: 4px !important; bottom: 30px !important; img { width: 18px !important; } }
+    }
+    .pokedex-pokemon-sprite { width: 80px; height: 80px; margin: -4px 0 -6px; object-fit: contain; image-rendering: pixelated; }
+    li.pokedexEntry span {
+        position: static;
+        background: transparent;
+        color: var(--n9);
+    }
+    span.pokedex-top-text {
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        color: var(--n7);
+        font: 500 12px/1 var(--font-fig);
+    }
+    span.pokedex-bottom-text { max-width: 100%; font: 500 13px/1.2 var(--font-ui); }
+    .pokemon-not-seen { filter: brightness(0) invert(.25); }
 }

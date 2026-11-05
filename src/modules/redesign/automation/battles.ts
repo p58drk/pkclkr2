@@ -40,10 +40,12 @@ const MSG = {
 // ---------------------------------------------------------------- auto clicker
 
 // enhancedautoclicker.user.js: click attack on every battle type.
-// Rate 1-200/s (the original script went to 100/s with a ×5 multiplier). Up to 20/s
+// Rate 1-1000/s (the original script went to 100/s with a ×5 multiplier). Up to 20/s
 // the average stays within the game's own limit; above, it exceeds it. Every click goes
 // through the game's real click code path (statistics, challenges, catching, defeat).
 const GAME_CLICK_CAP = 20;
+const MAX_RATE = 1000;
+const RATES = [1, 5, 10, 20, 50, 100, 200, 500, 1000];
 let clickDebt = 0;
 let lastClickTick = 0;
 Automation.register({
@@ -56,14 +58,21 @@ Automation.register({
     },
     intervalMs: 0,
     options: [
-        { key: 'rate', label: { fr: 'Clics par seconde', en: 'Clicks per second' }, type: 'number', default: 20, min: 1, max: 200, step: 1 },
+        {
+            key: 'rate',
+            label: { fr: 'Clics par seconde', en: 'Clicks per second' },
+            type: 'select',
+            default: 20,
+            choices: RATES.map((n) => ({ value: n, label: { fr: `${n}/s`, en: `${n}/s` } })),
+        },
     ],
     tick: (ctx) => {
-        const rate = Math.max(1, Math.min(200, Number(ctx.opt('rate')) || GAME_CLICK_CAP));
+        const rate = Math.max(1, Math.min(MAX_RATE, Number(ctx.opt('rate')) || GAME_CLICK_CAP));
         const now = Date.now();
         const elapsed = lastClickTick ? Math.min(now - lastClickTick, 1000) : 0;
         lastClickTick = now;
-        clickDebt = Math.min(clickDebt + (rate * elapsed) / 1000, 20);
+        // Up to a quarter second of clicks per tick (250 at 1000/s), so background ticks keep pace.
+        clickDebt = Math.min(clickDebt + (rate * elapsed) / 1000, Math.max(20, rate / 4));
         const clicks = Math.floor(clickDebt);
         if (clicks < 1) return;
         clickDebt -= clicks;
