@@ -571,3 +571,33 @@ html.rd .rd-gymbar {
 @media (max-width: 1099.98px) {
     html.rd #rd-main[data-page='combat'] .rd-gymbar { order: 2; }
 }
+
+// ----- Dungeon battle: the wild Pokémon's caught and Pokérus marks -----
+// The battle stage hides the upstream title block (its name moved to the card line); in a
+// dungeon that block also holds the caught mark. Shown again, name still hidden, so a
+// dungeon fight says whether the Pokémon is caught, like a route fight.
+html.rd #rd-shell[data-state='dungeon'] #battleContainer .battle-view > .row > .col > .pageItemTitle > knockout[data-bind^='if: DungeonBattle.enemyPokemon()']:not(.left):not(.right) {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    .pokeball-smallest { width: 18px; height: 18px; }
+}
+
+// ----- Not caught or not seen yet: a grey silhouette -----
+// Upstream draws them black (20 to 60 % opacity), invisible on the dark ground: dungeon
+// and town Pokémon lists, wandering Pokémon, Battle Café, Pokédex, Berrydex, route window.
+html.rd {
+    .dungeon-pokemon-locked:not(.uncaught-shadow),
+    .pokemon-not-seen {
+        filter: brightness(0) invert(.45);
+        opacity: 1;
+    }
+
+    // "Not caught" ball: drawn dark for light themes; the dark Bootswatch themes invert it,
+    // and the redesign drops them. Inverted here, battle titles included (they reset filters).
+    img[src$='pokeball/None.svg'],
+    #battleContainer .pageItemTitle img[src$='pokeball/None.svg'] {
+        filter: invert(1) brightness(.9);
+    }
+}

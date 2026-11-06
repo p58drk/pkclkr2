@@ -331,6 +331,11 @@ html.rd #routeInfoModal {
         }
         &.collapsed::after { transform: rotate(-90deg); }
     }
+}
+
+// Pokémon tiles, route window, Pokédex and hatchery list alike: neutral cells. Upstream paints
+// each tile with the Pokémon's type colours (or flat grey when not seen yet).
+html.rd :is(#routeInfoModal, #pokedexModal, #breedingModal) {
     ul.row {
         display: grid !important;
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -373,7 +378,11 @@ html.rd #routeInfoModal {
         font: 500 12px/1 var(--font-fig);
     }
     span.pokedex-bottom-text { max-width: 100%; font: 500 13px/1.2 var(--font-ui); }
-    .pokemon-not-seen { filter: brightness(0) invert(.25); }
+    // The top line (number, or name in the hatchery) stays above the sprite.
+    li.pokedexEntry span.pokedex-top-text { order: -1; max-width: 100%; }
+    .pokemon-not-seen { filter: brightness(0) invert(.45); opacity: 1; }
+    // Seen, not caught: a grey sprite (upstream darkens it too, lost on the dark ground).
+    .pokemon-seen-but-not-caught { filter: grayscale(1); opacity: .55; }
 }
 
 // Map hover label: a centred tag in its own row, between the subregional travel bar and

@@ -475,14 +475,22 @@ export default class RedesignShell {
             .map((t: number) => ({ name: typeLabel(t), color: ENERGY[t] }));
     });
 
-    // Route completion as a mark: ● all caught, ✶ all caught shiny.
+    // Completion of the current route or dungeon as a mark: ● all caught, ✶ all caught shiny.
+    // Dungeons count in the dungeon and in front of it (its town).
     static routeMark = ko.pureComputed(() => {
         try {
-            const { RouteHelper, player } = RedesignShell.refs();
+            const { RouteHelper, DungeonRunner, player } = RedesignShell.refs();
             const GS = w.GameConstants.GameState;
-            if (RedesignShell.state() !== GS.fighting) return '';
-            if (RouteHelper.routeCompleted(player.route, player.region, true)) return '✶';
-            if (RouteHelper.routeCompleted(player.route, player.region, false)) return '●';
+            const s = RedesignShell.state();
+            if (s === GS.fighting) {
+                if (RouteHelper.routeCompleted(player.route, player.region, true)) return '✶';
+                if (RouteHelper.routeCompleted(player.route, player.region, false)) return '●';
+                return '';
+            }
+            const dungeon = s === GS.dungeon ? DungeonRunner.dungeon : (s === GS.town ? player.town?.dungeon : null);
+            if (!dungeon) return '';
+            if (DungeonRunner.dungeonCompleted(dungeon, true)) return '✶';
+            if (DungeonRunner.dungeonCompleted(dungeon, false)) return '●';
             return '';
         } catch {
             return '';

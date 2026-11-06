@@ -1,0 +1,87 @@
+// Fork: lists and tables in every window, one look. Leftovers of the upstream look found by
+// opening every window and tab of the game (audit of 06/11/2026). The Pokédex tiles share
+// the route window's neutral tiles (78-home.less).
+
+html.rd {
+    // ----- Tables: hairline rows only -----
+    // Bordered tables (log book, Berrydex, dungeon guides...) drew a grid of boxes.
+    .table-bordered { border: 0; }
+
+    .table-bordered th,
+    .table-bordered td {
+        border-left: 0;
+        border-right: 0;
+    }
+
+    // Status as a mark, not a tinted row or cell: achievements (done / not done), log book
+    // and changelog types. Meaning colours are for text and small marks only.
+    .table-success,
+    .table-danger,
+    .table-warning { background-color: transparent !important; }
+    td.table-success, th.table-success { color: var(--ok) !important; }
+    td.table-danger, th.table-danger { color: var(--bad) !important; }
+    td.table-warning, th.table-warning { color: var(--warn) !important; }
+    tr.table-success > td:first-child { box-shadow: inset 3px 0 0 var(--ok); }
+    tr.table-warning > td:first-child { box-shadow: inset 3px 0 0 var(--warn); }
+
+    // Bootstrap <code> is pink and monospaced: values in the Berrydex sheet, Pokémon
+    // statistics, log book dates, Underground info... Read as plain figures instead.
+    code {
+        padding: 0;
+        background: transparent;
+        color: var(--n9);
+        font-family: var(--font-ui);
+        font-size: inherit;
+        font-variant-numeric: tabular-nums;
+    }
+
+    // Hotkey fields (Settings > Hotkeys): a field like the others, not a grey slab.
+    kbd {
+        padding: 10px 12px;
+        border-radius: var(--radius-s);
+        background: var(--n2);
+        box-shadow: none;
+        color: var(--n9);
+        font: 600 14px/1.2 var(--font-fig);
+    }
+
+    // ----- Switches: upstream togglers (Bootstrap blue, white knob) as the shell's switch -----
+    .toggler-wrapper:not(.gender-toggle) {
+        .toggler-slider { background-color: var(--n4); }
+        .toggler-knob { background-color: var(--n7); }
+
+        input[type='checkbox']:checked + .toggler-slider {
+            background-color: var(--n9);
+
+            .toggler-knob { background-color: var(--n1); }
+        }
+    }
+
+    // ----- Berrydex sheet: the Flavor and Growth Stages tables nested in the main one -----
+    #berryDexModal td.p-0 > table {
+        width: 100%;
+
+        th {
+            color: var(--n7);
+            font: 600 12px var(--font-fig);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        td { border-left: 0; border-right: 0; }
+    }
+
+    // ----- Castform App: the forecast grid used the HTML border attribute (white) -----
+    #weatherAppModal table[border] {
+        border: 0;
+        border-collapse: collapse;
+
+        th, td { border: 1px solid var(--line); }
+    }
+
+    // ----- Safari battle: the dark stage of the other battles, not the grass landscape -----
+    #safariBattleModal .battle-view {
+        background-image: none !important;
+        background-color: var(--n1) !important;
+    }
+}
