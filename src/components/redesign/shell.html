@@ -224,6 +224,22 @@
                     <span data-bind="text: RedesignShell.label('sound')"></span>
                     <span class="rd-row-value" data-bind="text: Settings.getSetting('sound.muted').observableValue() ? 'Off' : 'On'"></span>
                 </button>
+                <button type="button" class="rd-row" role="switch" data-bind="click: () => RedesignShell.toggleMini(), attr: { 'aria-checked': RedesignShell.miniEnabled() ? 'true' : 'false' }">
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-swords"></use></svg>
+                    <span>
+                        <span data-bind="text: RedesignShell.label('miniBanner')"></span>
+                        <small class="rd-row-hint" data-bind="text: RedesignShell.label('miniBannerHint')"></small>
+                    </span>
+                    <span class="rd-row-value" data-bind="text: RedesignShell.miniEnabled() ? 'On' : 'Off'"></span>
+                </button>
+                <button type="button" class="rd-row" role="switch" data-bind="click: () => RedesignShell.toggleTypeColours(), attr: { 'aria-checked': RedesignShell.typeColours() ? 'true' : 'false' }">
+                    <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-sliders"></use></svg>
+                    <span>
+                        <span data-bind="text: RedesignShell.label('typeColours')"></span>
+                        <small class="rd-row-hint" data-bind="text: RedesignShell.label('typeColoursHint')"></small>
+                    </span>
+                    <span class="rd-row-value" data-bind="text: RedesignShell.typeColours() ? 'On' : 'Off'"></span>
+                </button>
                 <!-- ko if: RedesignShell.keepAwakeSupported -->
                 <button type="button" class="rd-row" role="switch" data-bind="click: () => RedesignShell.toggleKeepAwake(), attr: { 'aria-checked': RedesignShell.keepAwake() ? 'true' : 'false' }">
                     <svg aria-hidden="true"><use href="assets/images/redesign/icons.svg#i-sun"></use></svg>
@@ -429,17 +445,17 @@
     </div>
 
     <!-- Mini combat bar: the fight stays one tap away on every other page (mobile). -->
-    <div id="rd-mini" data-bind="css: { 'has-foe': !!RedesignShell.foe() }">
-        <!-- ko if: RedesignShell.foe() -->
+    <div id="rd-mini" data-bind="css: { 'has-foe': RedesignShell.miniVisible(), 'is-idle': !RedesignShell.foe() }">
+        <!-- ko if: RedesignShell.miniFoe() -->
         <button type="button" class="rd-mini-hit" data-bind="click: () => RedesignShell.attack(), enable: RedesignShell.canAttack(), attr: { 'aria-label': RedesignShell.label('attack') }">
-            <img alt="" data-bind="attr: { src: RedesignShell.foe().getImage() }">
+            <img alt="" data-bind="attr: { src: RedesignShell.miniFoe().getImage() }">
         </button>
         <button type="button" class="rd-mini-info" data-bind="click: () => RedesignShell.go('combat'), attr: { title: RedesignShell.label('goToCombat') }">
             <span class="rd-mini-line">
-                <span class="rd-mini-name" data-bind="text: RedesignShell.foe().displayName"></span>
-                <span class="rd-num rd-mini-hp" data-bind="text: RedesignShell.formatNumber(RedesignShell.foe().health())"></span>
+                <span class="rd-mini-name" data-bind="text: RedesignShell.foe() ? RedesignShell.foe().displayName : RedesignShell.headName()"></span>
+                <span class="rd-num rd-mini-hp" data-bind="text: RedesignShell.foe() ? RedesignShell.formatNumber(RedesignShell.foe().health()) : ''"></span>
             </span>
-            <span class="rd-hpbar"><i data-bind="style: { width: RedesignShell.foe().healthPercentage() + '%' }"></i></span>
+            <span class="rd-hpbar"><i data-bind="style: { width: (RedesignShell.foe() ? RedesignShell.foe().healthPercentage() : 0) + '%' }"></i></span>
         </button>
         <!-- /ko -->
     </div>

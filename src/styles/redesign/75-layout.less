@@ -361,11 +361,8 @@ html.rd {
         #questDisplayContainer > .btn,
         #achivementTrackerContainer > .btn { display: none !important; }
 
-        &[data-tab='quests'] {
-            #achivementTrackerContainer,
-            .card-header[href='#questLineDisplayBody'],
-            #questLineDisplayBody { display: none !important; }
-        }
+        // Quests tab: daily quests, then the active quest lines, each folding under its header.
+        &[data-tab='quests'] #achivementTrackerContainer { display: none !important; }
         &[data-tab='lines'] {
             #achivementTrackerContainer,
             .card-header[href='#dailyQuestDisplayBody'],
@@ -600,4 +597,13 @@ html.rd {
     #battleContainer .pageItemTitle img[src$='pokeball/None.svg'] {
         filter: invert(1) brightness(.9);
     }
+}
+
+// ----- Combat module folds under its own header (added by RedesignShell.battleCollapse) -----
+html.rd-type-colours #rd-shell { --hp: var(--foe); }
+
+html.rd {
+    #battleContainer > .battle-view.collapse:not(.show) { display: none !important; }
+    // Upstream gives the module a 200px floor for the battle stage: not when folded.
+    #battleContainer:has(> .rd-battle-head.collapsed) { min-height: 0 !important; }
 }

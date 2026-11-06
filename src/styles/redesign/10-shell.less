@@ -248,11 +248,15 @@ html.rd {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(70% 140% at 0% 50%, color-mix(in oklab, var(--foe) 26%, transparent), transparent 70%);
+            background: radial-gradient(70% 140% at 0% 50%, color-mix(in oklab, var(--hp) 26%, transparent), transparent 70%);
             pointer-events: none;
         }
     }
-    #rd-main:not([data-page='combat']) ~ #rd-mini.has-foe { display: flex; }
+    // Shown on every page during a battle, and on Combat when the battle module is folded
+    // (RedesignShell.miniVisible).
+    #rd-mini.has-foe { display: flex; }
+    // Between two foes and while exploring a dungeon: the last foe, dimmed.
+    #rd-mini.is-idle .rd-mini-hit img { opacity: .4; filter: grayscale(1); }
 
     .rd-mini-hit {
         position: relative;
@@ -290,7 +294,7 @@ html.rd {
         border-radius: 2px;
         background: var(--n4);
         overflow: hidden;
-        i { display: block; height: 100%; background: var(--foe); }
+        i { display: block; height: 100%; background: var(--hp); }
     }
 
     // ----- Tablet: centred column -----

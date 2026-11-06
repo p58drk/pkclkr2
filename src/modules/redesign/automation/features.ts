@@ -271,6 +271,45 @@ Automation.register({
     },
 });
 
+// Quests: every quest of the list at once instead of the 1 to 4 slots of the quest level
+// (rule change, no userscript equivalent). questSlots is wrapped once; the flag switches
+// between the game's value and the size of the list. Quests started above the normal limit
+// keep running after switching off, the game just won't start new ones until below it.
+const allQuestsOn = ko.observable(false);
+let questSlotsWrapped = false;
+Automation.register({
+    id: 'questsAllAtOnce',
+    group: 'custom',
+    name: { fr: 'Quêtes : toutes à la fois', en: 'Quests: all at once' },
+    description: {
+        fr: 'Toutes les quêtes du jour peuvent être en cours en même temps, au lieu de 1 à 4. Avec Auto-quêtes, elles démarrent toutes d’un coup.',
+        en: 'Every daily quest can be in progress at once, instead of 1 to 4. With Auto quests, they all start together.',
+    },
+    warning: {
+        fr: 'Change les règles du jeu tant que c’est actif. À la désactivation, les quêtes en cours continuent jusqu’à la fin.',
+        en: 'Changes the game rules while enabled. When switched off, quests in progress run to the end.',
+    },
+    enable: (ctx) => {
+        const quests = ctx.g.App.game.quests;
+        if (!questSlotsWrapped) {
+            questSlotsWrapped = true;
+            const original = quests.questSlots;
+            quests.questSlots = ko.pureComputed(() => (allQuestsOn() ? Math.max(original(), quests.questList().length) : original()));
+        }
+        allQuestsOn(true);
+        // Bindings read questSlots when their dependencies change: make them read it again.
+        quests.questList.valueHasMutated();
+    },
+    disable: (ctx) => {
+        allQuestsOn(false);
+        ctx.g.App.game.quests.questList.valueHasMutated();
+    },
+    status: (ctx) => {
+        const quests = ctx.g.App.game.quests;
+        return `${quests.currentQuests().length}/${quests.questSlots()}`;
+    },
+});
+
 // Hatchery: 12 eggs at once instead of 4 (rule change, no userscript equivalent).
 // The extra slots exist only in this fork: they are added to the hatchery before the
 // save is read, so eggs 5-12 survive a reload. The save keeps the number of slots the

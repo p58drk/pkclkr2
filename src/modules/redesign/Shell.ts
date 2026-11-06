@@ -388,7 +388,40 @@ export default class RedesignShell {
     }
 
     // The mini bar floats above the tabs on pages other than Combat (phones).
-    static miniVisible = ko.pureComputed(() => !!RedesignShell.foe() && RedesignShell.page() !== 'combat');
+    // Combat module folded on the Combat page (header added in battleCollapse()).
+    static battleOpen = ko.observable(localStorage.getItem('rd.battleOpen') !== '0');
+
+    // Combat banner (bottom bar): can be switched off in the Menu.
+    static miniEnabled = ko.observable(localStorage.getItem('rd.mini') !== '0');
+
+    static toggleMini() {
+        RedesignShell.miniEnabled(!RedesignShell.miniEnabled());
+        localStorage.setItem('rd.mini', RedesignShell.miniEnabled() ? '1' : '0');
+    }
+
+    // Last foe of the current battle: the banner keeps it, dimmed, between two foes and while
+    // exploring a dungeon, instead of vanishing and coming back. Cleared on any state change.
+    static lastFoe = ko.observable<any>(null);
+
+    static miniFoe = ko.pureComputed(() => {
+        const foe = RedesignShell.foe();
+        if (foe) return foe;
+        return RedesignShell.isFighting() ? RedesignShell.lastFoe() : null;
+    });
+
+    static miniVisible = ko.pureComputed(() => RedesignShell.miniEnabled()
+        && !!RedesignShell.miniFoe()
+        && (RedesignShell.page() !== 'combat' || !RedesignShell.battleOpen()));
+
+    // Health bars and the banner tint take the foe's type colour only when asked: by default
+    // one colour, so a new foe doesn't flash a different hue every second.
+    static typeColours = ko.observable(localStorage.getItem('rd.typeColours') === '1');
+
+    static toggleTypeColours() {
+        RedesignShell.typeColours(!RedesignShell.typeColours());
+        localStorage.setItem('rd.typeColours', RedesignShell.typeColours() ? '1' : '0');
+        document.documentElement.classList.toggle('rd-type-colours', RedesignShell.typeColours());
+    }
 
     static progressTab = ko.observable<'quests' | 'lines' | 'achievements'>('quests');
 
@@ -649,6 +682,46 @@ export default class RedesignShell {
         host.setProperty('--foe-2', c2);
     }
 
+    // The battle module has no header upstream: give it one that folds it like the other
+    // modules. Folded, the mini bar stands in for it on the Combat page. Remembered per device.
+    private static battleCollapse() {
+        const box = document.getElementById('battleContainer');
+        const view = box?.querySelector<HTMLElement>(':scope > .battle-view');
+        if (!box || !view || box.querySelector(':scope > .rd-battle-head')) return;
+        const open = RedesignShell.battleOpen.peek();
+        view.id = 'rdBattleBody';
+        view.classList.add('collapse');
+        view.classList.toggle('show', open);
+        const head = document.createElement('div');
+        head.className = `card-header p-0 rd-battle-head${open ? '' : ' collapsed'}`;
+        head.setAttribute('data-toggle', 'collapse');
+        head.setAttribute('href', '#rdBattleBody');
+        head.setAttribute('aria-expanded', String(open));
+        const title = document.createElement('span');
+        title.textContent = label('combat');
+        head.append(title);
+        box.prepend(head);
+        const $ = w.jQuery ?? w.$;
+        $?.(view).on('show.bs.collapse hide.bs.collapse', (e: any) => {
+            if (e.target !== view) return;
+            const isOpen = e.type === 'show';
+            RedesignShell.battleOpen(isOpen);
+            localStorage.setItem('rd.battleOpen', isOpen ? '1' : '0');
+        });
+    }
+
+    // Upstream restores folded modules from the settings without marking their header:
+    // keep the chevron in step with the body.
+    private static syncCollapseHeads() {
+        document.querySelectorAll<HTMLElement>('.card-header[data-toggle="collapse"][href^="#"]').forEach((head) => {
+            const body = document.querySelector(head.getAttribute('href'));
+            if (!body) return;
+            const open = body.classList.contains('show');
+            head.classList.toggle('collapsed', !open);
+            head.setAttribute('aria-expanded', String(open));
+        });
+    }
+
     // Phones: a notification banner follows the finger upwards and is dismissed past 40px.
     private static toastGestures() {
         let toast: HTMLElement | null = null;
@@ -905,6 +978,9 @@ export default class RedesignShell {
             return;
         }
         document.documentElement.classList.add('rd');
+        document.documentElement.classList.toggle('rd-type-colours', RedesignShell.typeColours.peek());
+        RedesignShell.foe.subscribe((foe) => { if (foe) RedesignShell.lastFoe(foe); });
+        RedesignShell.stateName.subscribe(() => RedesignShell.lastFoe(RedesignShell.foe.peek()));
 
         const onReady = () => {
             // Bootswatch themes are replaced by the redesign skin.
@@ -920,6 +996,7 @@ export default class RedesignShell {
             RedesignShell.homeScreen();
             RedesignShell.toastGestures();
             RedesignShell.toastDedupe();
+            RedesignShell.battleCollapse();
             RedesignShell.tooltipHygiene();
             // The lock is dropped when the page is hidden: take it again on return.
             document.addEventListener('visibilitychange', () => RedesignShell.applyWakeLock());
@@ -943,6 +1020,7 @@ export default class RedesignShell {
         GameLoadState.onLoadState(GameLoadState.states.running, () => {
             Automation.start(RedesignShell.refs());
             RedesignShell.applyWakeLock();
+            RedesignShell.syncCollapseHeads();
             RedesignShell.watchForUpdates();
         });
         GameLoadState.onLoadState(GameLoadState.states.appliedBindings, () => {
