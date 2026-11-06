@@ -466,6 +466,28 @@ export default class RedesignShell {
         }
     });
 
+    // Times the current dungeon was cleared or the current gym beaten: inside the battle, and in
+    // its town before entering (towns with several gyms, like the Elite Four, show none).
+    static placeClears = ko.pureComputed((): { n: number; key: 'cleared' | 'gymWins' } | null => {
+        try {
+            const r = RedesignShell.refs();
+            const GS = w.GameConstants.GameState;
+            const s = RedesignShell.state();
+            const stats = r.App.game.statistics;
+            const dungeon = s === GS.dungeon ? r.DungeonRunner.dungeon : (s === GS.town ? r.player.town?.dungeon : null);
+            if (dungeon) return { n: stats.dungeonsCleared[w.GameConstants.getDungeonIndex(dungeon.name)](), key: 'cleared' };
+            let gym = s === GS.gym ? r.GymRunner.gymObservable() : null;
+            if (s === GS.town) {
+                const gyms = (r.player.town?.content ?? []).filter((c: any) => c instanceof r.Gym);
+                if (gyms.length === 1) [gym] = gyms;
+            }
+            if (gym) return { n: stats.gymsDefeated[w.GameConstants.getGymIndex(gym.town)](), key: 'gymWins' };
+            return null;
+        } catch {
+            return null;
+        }
+    });
+
     static foeTypes = ko.pureComputed(() => {
         const foe = RedesignShell.foe();
         if (!foe) return [];

@@ -9,6 +9,10 @@
                 · <span class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.routeKills())"></span>
                 <span data-bind="text: RedesignShell.label('defeated')"></span>
                 <!-- /ko -->
+                <!-- ko if: RedesignShell.placeClears() -->
+                · <span class="rd-num" data-bind="text: RedesignShell.formatNumber(RedesignShell.placeClears().n)"></span>
+                <span data-bind="text: RedesignShell.label(RedesignShell.placeClears().key)"></span>
+                <!-- /ko -->
             </small>
             <b>
                 <span data-bind="text: RedesignShell.locationName()"></span>
