@@ -434,6 +434,49 @@
                 <!-- /ko -->
             </div>
         </div>
+        <!-- Safari: status bar (moved under the Safari window header) and encounter odds
+             (moved under the encounter stage). -->
+        <div id="rd-safari-bar" class="rd-safari-bar" data-bind="css: { 'is-auto': RedesignAutomation.Automation.find('autoSafari')?.enabled() }">
+            <div class="rd-safari-stats">
+                <!-- ko if: Safari.inProgress() -->
+                <div>
+                    <small data-bind="text: RedesignShell.label('safariBalls')"></small>
+                    <b class="rd-num"><img src="assets/images/pokeball/Safariball.svg" alt=""><span data-bind="text: Safari.balls()"></span></b>
+                </div>
+                <!-- /ko -->
+                <!-- ko ifnot: Safari.inProgress() -->
+                <div>
+                    <small data-bind="text: RedesignShell.label('safariQP')"></small>
+                    <b class="rd-num"><img src="assets/images/currency/questPoint.svg" alt=""><span data-bind="text: RedesignShell.formatNumber(App.game.wallet.currencies[GameConstants.Currency.questPoint]())"></span></b>
+                </div>
+                <!-- /ko -->
+                <div class="rd-safari-level" data-bind="attr: { title: Safari.safariProgressTooltip().title }">
+                    <small data-bind="text: RedesignShell.label('safariLevel')"></small>
+                    <b class="rd-num" data-bind="text: Safari.safariLevel()"></b>
+                    <span class="rd-safari-xp" aria-hidden="true"><i data-bind="style: { width: Safari.percentToNextSafariLevel() + '%' }"></i></span>
+                </div>
+            </div>
+            <!-- ko with: RedesignAutomation.Automation.find('autoSafari') -->
+            <button type="button" role="switch" class="rd-mini-switch" data-bind="click: () => toggle(), attr: { 'aria-checked': enabled() ? 'true' : 'false', title: description() }">
+                <i aria-hidden="true"></i><span data-bind="text: name()"></span>
+            </button>
+            <!-- /ko -->
+        </div>
+        <div id="rd-safari-odds" class="rd-safari-odds">
+            <!-- ko if: Safari.inBattle() && SafariBattle.enemy -->
+            <div class="rd-safari-odd">
+                <small data-bind="text: RedesignShell.label('safariCatch')"></small>
+                <b class="rd-num" data-bind="text: RedesignShell.formatPercent(SafariBattle.enemy.catchFactor)"></b>
+                <span class="rd-safari-meter" aria-hidden="true"><i data-bind="style: { width: Math.min(100, SafariBattle.enemy.catchFactor) + '%' }"></i></span>
+            </div>
+            <div class="rd-safari-odd">
+                <small data-bind="text: RedesignShell.label('safariFlee')"></small>
+                <b class="rd-num" data-bind="text: RedesignShell.formatPercent(SafariBattle.enemy.escapeFactor)"></b>
+                <span class="rd-safari-meter is-flee" aria-hidden="true"><i data-bind="style: { width: Math.min(100, SafariBattle.enemy.escapeFactor) + '%' }"></i></span>
+            </div>
+            <span class="rd-safari-mood" data-bind="text: SafariBattle.enemy.eating > 0 ? RedesignShell.label('safariEating') : (SafariBattle.enemy.angry > 0 ? RedesignShell.label('safariAngry') : RedesignShell.label('safariWatching')), css: { 'is-eating': SafariBattle.enemy.eating > 0, 'is-angry': SafariBattle.enemy.eating <= 0 && SafariBattle.enemy.angry > 0 }"></span>
+            <!-- /ko -->
+        </div>
         <div id="rd-tracker-go" class="rd-tracker-go">
             <!-- ko if: RedesignShell.trackedDestination() -->
             <button type="button" class="rd-action" data-bind="click: () => RedesignShell.travelTo(App.game.achievementTracker.trackedAchievement())">

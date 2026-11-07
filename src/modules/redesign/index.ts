@@ -3,6 +3,7 @@ import RedesignShell from './Shell';
 import Automation, { lang } from './automation/Automation';
 import './automation/battles';
 import './automation/features';
+import './automation/safari';
 
 const GROUP_TITLES = {
     vanilla: { fr: 'Automatisation', en: 'Automation' },

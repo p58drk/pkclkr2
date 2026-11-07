@@ -101,6 +101,7 @@ L'audit complet a été fait le 05/11/2026 contre la v0.10.26. Les scripts vienn
 | autoquestcompleter | Intégré | Respecte le nombre d'emplacements. Rafraîchissement payant seulement sur option. |
 | autobattleitems | Intégré | Choix des objets, rachat optionnel. |
 | autobattlefrontier | Intégré : « Auto Frontier » | Relance une partie depuis l’étape 1 après une défaite ; une partie quittée garde son point de reprise et attend. |
+| autosafarizone | Intégré : « Auto Safari » | `berryList` devenu `berryInventory`. Un seul planificateur, attentes en temps et non en ticks. Entre et paie l’entrée (points de quête) depuis la ville du Safari, va vers les shiny visibles, ramasse les objets avant la dernière Ball, cherche les rencontres (herbe ou eau), caillou puis Ball ; options : objets, appâts, non capturés, Pokérus contagieux, animations ×2, nouvelle entrée à la fin des Balls. Le bouton Leave l’arrête. Interrupteur dans la barre d’état de la fenêtre Safari. |
 | catchspeedadjuster | Intégré (règle modifiée) | Le délai d'origine est restauré quand on désactive. |
 | oakitemsunlimited | Intégré (règle modifiée), étendu | « Objets Oak : sans limite » : tous les objets Oak équipables à la fois (au lieu de 3). Interrupteur dans l’en-tête du module. À la désactivation, les objets au-delà de la limite normale sont retirés. |
 | (propre au fork) Pension : 12 œufs | Règle modifiée | 12 œufs en même temps. Les emplacements sont ajoutés avant la lecture de la sauvegarde ; la sauvegarde garde le nombre d’emplacements achetés. Le jeu officiel ignore les œufs 5 à 12 et rend leurs Pokémon à l’équipe. À la désactivation, les œufs en cours finissent. |
@@ -114,7 +115,6 @@ L'audit complet a été fait le 05/11/2026 contre la v0.10.26. Les scripts vienn
 
 | Script | Ce qu'il faut corriger |
 |---|---|
-| autosafarizone | `berryList` devient `berryInventory`, gérer le Pinap, chemins vides |
 | infiniteseasonalevents | Construire la liste depuis `App.game.specialEvents.events` |
 | syntheticshinysynapse | Envelopper les vrais points d'appel au lieu d'analyser la pile d'appels |
 | debugcheatstools | `PokemonLocations.getPokemonLocations`. Sauvegarde automatique avant toute modification. |

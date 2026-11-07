@@ -34,6 +34,12 @@ const resolveScriptGlobals = (): any => {
         DungeonTown: get('DungeonTown'),
         DungeonGuides: get('DungeonGuides'),
         BattleFrontierRunner: get('BattleFrontierRunner'),
+        Safari: get('Safari'),
+        SafariBattle: get('SafariBattle'),
+        SafariPokemonList: get('SafariPokemonList'),
+        SafariTownContent: get('SafariTownContent'),
+        BaitList: get('BaitList'),
+        BaitType: get('BaitType'),
     };
 };
 
@@ -565,6 +571,12 @@ export default class RedesignShell {
         }
     }
 
+    static formatPercent(n: number): string {
+        if (n == null || Number.isNaN(n)) return '';
+        const locale = label('hp') === 'PV' ? 'fr-FR' : 'en-US';
+        return `${Math.min(100, Math.max(0, n)).toLocaleString(locale, { maximumFractionDigits: 1 })}\u2009%`;
+    }
+
     static formatNumber(n: number): string {
         if (n == null || Number.isNaN(n)) return '';
         const locale = label('hp') === 'PV' ? 'fr-FR' : 'en-US';
@@ -657,6 +669,11 @@ export default class RedesignShell {
         const farmModalTools = document.getElementById('rd-farmmodal-tools');
         if (farmFooter && farmModalTools && farmModalTools.parentElement !== farmFooter) farmFooter.prepend(farmModalTools);
         moveTo('rd-tracker-go', '#achievementTrackerBody');
+        // Safari: status bar under the window header, odds under the encounter stage.
+        const safariBar = document.getElementById('rd-safari-bar');
+        const safariHeader = document.querySelector('#safariModal .modal-header');
+        if (safariBar && safariHeader && safariBar.previousElementSibling !== safariHeader) safariHeader.after(safariBar);
+        moveTo('rd-safari-odds', '#safariBattleModal .modal-body');
         // The start menu's item list becomes the Menu page's game section.
         const list = document.querySelector('#startMenu .dropdown-menu');
         const menuSlot = document.getElementById('rd-menu-game');
