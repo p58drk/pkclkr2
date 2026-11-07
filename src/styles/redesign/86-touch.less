@@ -140,3 +140,14 @@ html.rd {
     // Credits: the sprite lists kept one line each and pushed the window to 823 px wide.
     #creditsModal td.tight.text-muted { width: 55%; white-space: normal; }
 }
+
+// Touch screens: the Underground tool preview drawn on hover made iOS spend the first tap on
+// it (see RedesignShell.singleTap for tooltips).
+@media (hover: none) {
+    html.rd #mineBody .mineSquare:hover::after {
+        width: 0;
+        height: 0;
+        border: 0;
+        background: none;
+    }
+}

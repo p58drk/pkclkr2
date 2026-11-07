@@ -863,6 +863,46 @@ export default class RedesignShell {
     // Tooltips open on hover; a touch screen never sends the "hover ends" event, so they
     // stayed on screen across pages. They now close on a page change, on a window
     // opening or closing, on the next touch elsewhere, and after 3 s on touch screens.
+    // Touch screens: iOS turns the first tap into a hover when that hover changes the page
+    // (a tooltip appears, a menu or detail panel updates), and only clicks on the second tap.
+    // Hover tooltips on controls are dropped (their action is the point of the tap); on plain
+    // text they open on tap instead. The town map keeps its own behaviour. Oak Items show
+    // their details on tap rather than on hover.
+    private static singleTap() {
+        // The emulated hover events of a tap never reach the game: nothing can change the
+        // page between the finger and the click (menus, lists, tooltips, details panels).
+        // Clicks, touches and pointer events are untouched; the town map keeps its hover.
+        ['mouseover', 'mouseout', 'mouseenter', 'mouseleave', 'mousemove'].forEach((type) => {
+            document.addEventListener(type, (e) => {
+                if (!(e.target as Element)?.closest?.('#townMap')) e.stopImmediatePropagation();
+            }, { capture: true });
+        });
+        const Tooltip = w.$?.fn?.tooltip?.Constructor;
+        if (Tooltip && !Tooltip.__rdSingleTap) {
+            Tooltip.__rdSingleTap = true;
+            const CONTROLS = 'a[href], button, input, select, textarea, label, [role="button"], .clickable, [data-bind*="click:"], [onclick], [data-toggle]';
+            const getConfig = Tooltip.prototype._getConfig;
+            Tooltip.prototype._getConfig = function rdGetConfig(config: any) {
+                const out = getConfig.call(this, config);
+                const el = this.element as Element | undefined;
+                if (typeof out?.trigger === 'string' && out.trigger.includes('hover') && !el?.closest?.('#townMap')) {
+                    out.trigger = el?.closest?.(CONTROLS) ? 'manual' : 'click';
+                }
+                return out;
+            };
+        }
+        const Oak = w.OakItemController;
+        if (Oak && !Oak.__rdSingleTap) {
+            Oak.__rdSingleTap = true;
+            const click = Oak.click;
+            Oak.hover = () => { /* details follow the tap, see click */ };
+            Oak.click = function rdOakClick(item: any) {
+                click.call(this, item);
+                this.inspectedItem = item;
+            };
+        }
+    }
+
     private static tooltipHygiene() {
         const $ = w.$;
         const hide = (except?: Element | null) => {
@@ -878,6 +918,7 @@ export default class RedesignShell {
         RedesignShell.page.subscribe(() => hide());
         $(document).on('show.bs.modal hide.bs.modal', () => hide());
         if (!window.matchMedia('(hover: none)').matches) return;
+        RedesignShell.singleTap();
         document.addEventListener('touchstart', (e) => {
             const owner = (e.target as Element)?.closest?.('[aria-describedby^="tooltip"]') ?? null;
             hide(owner);
