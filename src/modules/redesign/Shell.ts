@@ -863,6 +863,32 @@ export default class RedesignShell {
     // Tooltips open on hover; a touch screen never sends the "hover ends" event, so they
     // stayed on screen across pages. They now close on a page change, on a window
     // opening or closing, on the next touch elsewhere, and after 3 s on touch screens.
+    // Bottom bar on iPhone: a tap that stops a scroll still in motion gets no click, so the
+    // page changed only on the second tap. The page changes when the finger lifts instead
+    // (a still tap on the same button), and the click Safari may add afterwards is dropped.
+    private static navOnTouch() {
+        const nav = document.getElementById('rd-nav');
+        if (!nav) return;
+        let start: { x: number; y: number; button: HTMLButtonElement } | null = null;
+        nav.addEventListener('touchstart', (e) => {
+            const button = (e.target as Element)?.closest?.('button') as HTMLButtonElement | null;
+            start = button && e.touches.length === 1
+                ? { x: e.touches[0].clientX, y: e.touches[0].clientY, button }
+                : null;
+        }, { passive: true });
+        nav.addEventListener('touchend', (e) => {
+            const s = start;
+            start = null;
+            if (!s) return;
+            const t = e.changedTouches[0];
+            if (Math.abs(t.clientX - s.x) > 12 || Math.abs(t.clientY - s.y) > 12) return;
+            if ((document.elementFromPoint(t.clientX, t.clientY) as Element)?.closest?.('button') !== s.button) return;
+            e.preventDefault();
+            s.button.click();
+        }, { passive: false });
+        nav.addEventListener('touchcancel', () => { start = null; }, { passive: true });
+    }
+
     private static tooltipHygiene() {
         const $ = w.$;
         const hide = (except?: Element | null) => {
@@ -998,6 +1024,7 @@ export default class RedesignShell {
             RedesignShell.toastDedupe();
             RedesignShell.battleCollapse();
             RedesignShell.tooltipHygiene();
+            RedesignShell.navOnTouch();
             // The lock is dropped when the page is hidden: take it again on return.
             document.addEventListener('visibilitychange', () => RedesignShell.applyWakeLock());
             // Choosing an achievement to track also travels to its place, when unlocked.

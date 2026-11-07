@@ -55,7 +55,8 @@ html.rd {
             // content, which left a gap under the sheet: the sheet hugs its content.
             height: auto !important;
             max-height: 94vh;
-            max-height: 94dvh;
+            // Never under the status bar / notch: the close button stays reachable.
+            max-height: ~"min(94dvh, calc(100dvh - var(--safe-t) - 24px))";
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -65,13 +66,16 @@ html.rd {
             transition: transform .34s cubic-bezier(.32, .72, 0, 1) !important;
             will-change: transform;
         }
+        // The Pokémon detail window's dialog also carries the `modal` class upstream, whose
+        // top: 0 stretched the sheet to the full screen height, close button under the notch.
+        .modal-dialog.modal { top: auto; overflow: visible; }
         .modal.fade { opacity: 1; transition: none; }
         .modal.show .modal-dialog { transform: translate3d(0, 0, 0); }
         .modal-dialog-centered { align-items: stretch; }
         .modal-content {
             width: 100%;
             max-height: 94vh;
-            max-height: 94dvh;
+            max-height: ~"min(94dvh, calc(100dvh - var(--safe-t) - 24px))";
             border-radius: 20px 20px 0 0;
             padding-bottom: var(--safe-b);
             overflow: hidden;
