@@ -1,0 +1,142 @@
+// Fork: touch targets and phone gutters, from a touch audit of every page and window at
+// 390 x 844 (07/11/2026). Targets aim at 44 px (Apple), never under 24 px (WCAG 2.5.8);
+// content keeps the 16 px page gutter instead of touching the screen edges.
+
+html.rd {
+    // ----- Native checkboxes and radios: 13 px squares become 24 px, in the shell's colours -----
+    input[type='checkbox']:not(.custom-control-input),
+    input[type='radio']:not(.custom-control-input) {
+        width: 24px;
+        height: 24px;
+        margin: 0;
+        vertical-align: middle;
+        accent-color: var(--n9);
+        cursor: pointer;
+    }
+
+    // Bootstrap form checks: box and label on one 44 px line, the whole line tappable.
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 44px;
+        padding-left: 0;
+    }
+
+    .form-check-inline { display: inline-flex; margin-right: 16px; }
+    .form-check-input { position: static; margin: 0 !important; }
+    .form-check-label { padding: 10px 0; cursor: pointer; }
+
+    // Settings, log book filters, Poké Ball filter tests: `<td><label for>` rows.
+    .modal td > label {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .modal td.tight > label { min-width: 44px; justify-content: center; }
+
+    // A label right before or after a checkbox (Underground auto restart, sound settings).
+    .modal input[type='checkbox'] + label,
+    .modal label:has(+ input[type='checkbox']) {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        margin-bottom: 0;
+    }
+
+    // Volume sliders: the thumb is easier to catch on a 44 px track area.
+    .custom-range { height: 44px; }
+
+    // ----- Window controls: footer, header and tabs at 44 px -----
+    .modal-footer .btn,
+    .modal-header .btn:not(.close) { min-height: 44px; }
+
+    .modal .nav-tabs .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .modal .form-control:not(.vitamin-input),
+    .modal .custom-select,
+    .modal-body select { min-height: 44px; }
+
+    kbd.btn-block { display: flex; align-items: center; min-height: 44px; }
+
+    // Settings: the ⓘ help buttons next to each option.
+    #settingsModal td.tight > .btn { min-width: 40px; min-height: 40px; }
+
+    // Text links (FAQ, external links, changelog, credits): taller hit area, same layout.
+    .modal-body a:not(.btn, .nav-link, .dropdown-item) { padding-block: 8px; }
+
+    // Small round buttons (Poké Ball filters ? + − ℹ).
+    button.btn-circle { flex: none; width: 32px; height: 32px; font-size: 16px; }
+
+    // ----- Rows that were 23-28 px tall -----
+    #consumableModal tr.clickable > td,
+    #categoryModal tbody td,
+    #statisticsModal td.clickable { padding-top: 10px !important; padding-bottom: 10px !important; }
+
+    #categoryModal button.close { min-width: 40px; min-height: 40px; }
+    #categoryModal td .btn-group > .btn { min-width: 36px; min-height: 36px; }
+
+    #rd-page-progress #dailyQuestDisplayBody .btn { min-height: 36px; }
+
+    // ----- Poké Ball filters: delete column and settings toggle -----
+    .pokeballFilterWrapper .pokeballFilterDelete { flex: none; width: 40px !important; }
+    .pokeballFilterWrapper .pokeballFilterExpandBtn { min-height: 40px; }
+
+    // ----- Vitamins: − and + around each amount -----
+    #pokemonVitaminExpandedModal td.tight > .btn-link {
+        min-width: 32px;
+        min-height: 40px;
+        padding: 0;
+        line-height: 40px !important;
+        vertical-align: middle !important;
+    }
+
+    #pokemonVitaminExpandedModal .vitamin-input { height: 32px !important; vertical-align: middle; }
+
+    // ----- Pokédex and hatchery tiles: the category dots open a menu through a 4 px strip -----
+    .pokemonCategory {
+        left: 0;
+        bottom: 14px;
+        height: auto;
+        padding-top: 0;
+
+        > [data-toggle='dropdown'] {
+            display: flex;
+            align-items: center;
+            min-width: 36px;
+            height: 36px !important;
+            padding-left: 4px;
+        }
+
+        .category-display button { pointer-events: none; }
+    }
+
+    // ----- Gutters: content flush with the screen edges -----
+    #statisticsModal,
+    #settingsModal {
+        .table th:first-child,
+        .table td:first-child { padding-left: 16px !important; }
+
+        .table th:last-child,
+        .table td:last-child { padding-right: 16px !important; }
+    }
+
+    #multivitamin-filters { padding: 0 12px !important; }
+    #multivitamin-filters > .form-group { padding: 0 4px !important; }
+    #pokemonVitaminExpandedModal .modal-body > .sticky-top > div:not(#multivitamin-filters) { padding-left: 16px; padding-right: 16px; }
+    #consumableModal .modal-body > .sticky-top > :not(.btn-group) { padding-left: 12px !important; padding-right: 12px !important; }
+
+    // Hatchery window: a Bootstrap row (-15 px margins) in an 8 px padded pane, 7 px too wide.
+    #breedingModal #breeding-pokemon > .row { margin-left: 0; margin-right: 0; }
+
+    // Credits: the sprite lists kept one line each and pushed the window to 823 px wide.
+    #creditsModal td.tight.text-muted { width: 55%; white-space: normal; }
+}
